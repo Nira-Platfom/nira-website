@@ -31,7 +31,7 @@ const plans = [
   },
   {
     name: 'Pro',
-    price: 'TZS 25,000',
+    price: 'TZS 35,000',
     period: '/month',
     desc: 'Everything you need to grow your beauty business.',
     highlight: true,
@@ -54,9 +54,9 @@ const plans = [
   },
   {
     name: 'Business',
-    price: 'TZS 50,000',
-    period: '/month',
-    desc: 'For established businesses that need more power.',
+    price: 'TZS 350,000',
+    period: '/year',
+    desc: 'For established businesses that need more power. TZS 29,167/month — save TZS 70,000 vs monthly.',
     highlight: false,
     features: [
       { text: 'Unlimited WhatsApp messages', included: true },

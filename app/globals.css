@@ -92,3 +92,93 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SPA SCENE — KEYFRAMES
+═══════════════════════════════════════════════════════════ */
+
+@keyframes blob1 {
+  0%,100% { border-radius: 71% 29% 60% 40% / 40% 55% 45% 60%; }
+  33%     { border-radius: 40% 60% 35% 65% / 55% 40% 60% 45%; }
+  66%     { border-radius: 55% 45% 70% 30% / 35% 65% 40% 60%; }
+}
+@keyframes blob2 {
+  0%,100% { border-radius: 40% 60% 45% 55% / 55% 40% 60% 45%; }
+  50%     { border-radius: 60% 40% 55% 45% / 40% 60% 45% 55%; }
+}
+@keyframes blob3 {
+  0%,100% { border-radius: 60% 40% 55% 45% / 45% 60% 40% 55%; }
+  50%     { border-radius: 45% 55% 40% 60% / 60% 45% 55% 40%; }
+}
+@keyframes leaf-sway-1 {
+  0%,100% { transform: rotate(-3deg); }
+  50%     { transform: rotate(2deg);  }
+}
+@keyframes leaf-sway-2 {
+  0%,100% { transform: rotate(2deg);  }
+  50%     { transform: rotate(-4deg); }
+}
+@keyframes leaf-float {
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-8px); }
+}
+@keyframes cluster-breathe {
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-8px); }
+}
+@keyframes badge-float {
+  0%,100% { transform: translateY(0px);   }
+  50%     { transform: translateY(-10px); }
+}
+@keyframes flame-flicker {
+  0%,100% { transform: scaleX(1)    scaleY(1)    rotate(-2deg); }
+  50%     { transform: scaleX(0.88) scaleY(0.88) rotate(3deg);  }
+}
+@keyframes drop-fall {
+  0%   { transform: translateY(0px);  opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+@keyframes petal-drift {
+  0%,100% { transform: translateY(0px)   rotate(0deg);   }
+  50%     { transform: translateY(-14px) rotate(12deg);  }
+}
+@keyframes sparkle-twinkle {
+  0%,100% { opacity: 0;   transform: scale(0.4); }
+  50%     { opacity: 1;   transform: scale(1.1); }
+}
+@keyframes dot-pulse {
+  0%,100% { opacity: 1;   transform: scale(1);   }
+  50%     { opacity: 0.4; transform: scale(0.7); }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0px);  }
+}
+@keyframes reed-sway {
+  0%,100% { transform: rotate(-2deg); }
+  50%     { transform: rotate(2deg);  }
+}
+
+/* ─── Spa scene responsive ────────────────────────────────── */
+.spa-canvas {
+  transform-origin: top center;
+}
+@media (max-width: 767px) {
+  .spa-canvas  { height: 320px !important; }
+  .spa-cluster { transform: scale(0.70); transform-origin: center bottom; }
+  .spa-badge   { display: none !important; }
+}
+@media (max-width: 479px) {
+  .spa-canvas  { height: 260px !important; }
+  .spa-cluster { transform: scale(0.60); transform-origin: center bottom; }
+  .spa-sparkle { display: none !important; }
+}
+
+/* ─── Reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
