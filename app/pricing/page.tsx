@@ -8,23 +8,22 @@ export const metadata: Metadata = {
 
 const plans = [
   {
-    name: 'Free',
+    name: 'Free ',
     price: 'TZS 0',
     period: '/month',
     desc: 'Perfect for getting started. No credit card needed.',
     highlight: false,
     features: [
-      { text: '100 WhatsApp messages/month', included: true },
-      { text: '1 team member', included: true },
+      { text: 'unlimited  WhatsApp messages/month', included: true },
+      { text: 'mutliple  team member', included: true },
       { text: 'Auto-reply & basic bot flows', included: true },
       { text: 'Bookings management', included: true },
       { text: 'Product & order management', included: true },
       { text: 'Customer profiles', included: true },
-      { text: 'AI skincare advice', included: false },
-      { text: 'Advanced analytics', included: false },
-      { text: 'Broadcast campaigns', included: false },
-      { text: 'Custom bot flows', included: false },
-      { text: 'Priority support', included: false },
+      { text: 'AI skincare advice', included: true },
+      { text: 'Advanced analytics', included: true },
+      { text: 'Broadcast campaigns', included: true },
+      { text: 'Priority support', included: true},
     ],
     cta: 'Get started free',
     ctaStyle: 'bg-coral hover:bg-coral-dark text-white',
@@ -38,7 +37,7 @@ const plans = [
     badge: 'Most Popular',
     features: [
       { text: 'Unlimited WhatsApp messages', included: true },
-      { text: 'Up to 3 team members', included: true },
+      { text: 'multiple team members', included: true },
       { text: 'Auto-reply & basic bot flows', included: true },
       { text: 'Bookings management', included: true },
       { text: 'Product & order management', included: true },
@@ -46,8 +45,7 @@ const plans = [
       { text: 'AI skincare advice', included: true },
       { text: 'Advanced analytics', included: true },
       { text: 'Broadcast campaigns', included: true },
-      { text: 'Custom bot flows', included: false },
-      { text: 'Priority support', included: false },
+      { text: 'Priority support', included: true },
     ],
     cta: 'Start 30-day free trial',
     ctaStyle: 'bg-white hover:bg-coral-light text-coral',
@@ -127,16 +125,16 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto px-6">
           <span className="text-xs font-medium text-coral uppercase tracking-widest">Pricing</span>
           <h1 className="font-serif text-5xl text-[#1E293B] mt-3 mb-4">
-            Simple, Honest Pricing
+            Pick your power level
           </h1>
           <p className="text-lg text-slate-500 leading-relaxed">
-            Start for free. No credit card needed. Upgrade when your business is ready to grow.
+            Start for free. Upgrade when your business is ready to grow.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 bg-mint-light text-mint-dark text-sm font-medium px-4 py-2 rounded-full">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            30-day free trial on all paid plans — no credit card required
+            30-day free trial for one month — no credit card required
           </div>
         </div>
       </section>

@@ -735,7 +735,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6">
           <Reveal className="text-center mb-14">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">Pricing</span>
-            <h2 className="font-serif text-4xl text-[#1E293B] mt-3">Simple, Honest Pricing</h2>
+            <h2 className="font-serif text-4xl text-[#1E293B] mt-3">Pick your power level</h2>
             <p className="text-slate-500 mt-4">Start free. Upgrade when you&apos;re ready to grow.</p>
           </Reveal>
 
@@ -744,25 +744,28 @@ export default function HomePage() {
               {
                 name: 'Free',
                 price: 'TZS 0',
-                desc: 'Perfect for getting started',
-                features: ['100 messages/month', '1 user', 'Basic bot replies', 'Bookings & orders'],
+                period: '/month',
+                desc: 'Perfect for getting started. No credit card needed.',
+                features: ['Unlimited messages', 'Multiple team members', 'Auto-reply & AI advice', 'Bookings & orders'],
                 cta: 'Get started free',
                 highlight: false,
               },
               {
                 name: 'Pro',
-                price: 'TZS 25,000',
-                desc: 'For growing businesses',
-                features: ['Unlimited messages', '3 users', 'AI skincare advice', 'Full analytics', 'Broadcasts'],
-                cta: 'Start free trial',
+                price: 'TZS 35,000',
+                period: '/month',
+                desc: 'Everything you need to grow your beauty business.',
+                features: ['Unlimited messages', 'Multiple team members', 'AI skincare advice', 'Full analytics & broadcasts'],
+                cta: 'Get Plan',
                 highlight: true,
               },
               {
                 name: 'Business',
-                price: 'TZS 50,000',
-                desc: 'For established businesses',
-                features: ['Unlimited messages', '10 users', 'Everything in Pro', 'Custom bot flows', 'Priority support'],
-                cta: 'Start free trial',
+                price: 'TZS 350,000',
+                period: '/year',
+                desc: 'TZS 29,167/month — save TZS 70,000 vs monthly.',
+                features: ['Unlimited messages', 'Up to 10 team members', 'Everything in Pro', 'Custom bot flows & priority support'],
+                cta: 'Get Plan',
                 highlight: false,
               },
             ].map((plan, i) => (
@@ -780,7 +783,7 @@ export default function HomePage() {
                     </div>
                   )}
                   <h3 className={`text-sm font-medium mb-1 ${plan.highlight ? 'text-white/70' : 'text-slate-400'}`}>{plan.name}</h3>
-                  <p className={`font-serif text-3xl mb-1 ${plan.highlight ? 'text-white' : 'text-[#1E293B]'}`}>{plan.price}<span className={`text-sm font-sans ml-1 ${plan.highlight ? 'text-white/60' : 'text-slate-400'}`}>/mo</span></p>
+                  <p className={`font-serif text-3xl mb-1 ${plan.highlight ? 'text-white' : 'text-[#1E293B]'}`}>{plan.price}<span className={`text-sm font-sans ml-1 ${plan.highlight ? 'text-white/60' : 'text-slate-400'}`}>{plan.period}</span></p>
                   <p className={`text-sm mb-5 ${plan.highlight ? 'text-white/80' : 'text-slate-500'}`}>{plan.desc}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
