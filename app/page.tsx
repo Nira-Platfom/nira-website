@@ -3,6 +3,7 @@ import AnimatedChat    from '../components/AnimatedChat'
 import AnimatedRevenue from '../components/AnimatedRevenue'
 import BusinessTypeFeatures from '../components/BusinessTypeFeatures'
 import Reveal          from '../components/Reveal'
+import BeautyShowcase  from '../components/BeautyShowcase'
 
 function Check({ className = '' }: { className?: string }) {
   return (
@@ -519,9 +520,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right — spa scene */}
-            <div className="flex justify-center lg:justify-end">
-              <SpaScene />
+            {/* Right — beauty showcase */}
+            <div className="flex justify-center lg:justify-end" style={{ position: 'relative', paddingRight: 20 }}>
+              <div style={{ width: '100%', maxWidth: 560 }}>
+                <BeautyShowcase />
+              </div>
             </div>
           </div>
         </div>
