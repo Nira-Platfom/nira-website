@@ -2,8 +2,19 @@ import Link from 'next/link'
 import AnimatedChat    from '../components/AnimatedChat'
 import AnimatedRevenue from '../components/AnimatedRevenue'
 import BusinessTypeFeatures from '../components/BusinessTypeFeatures'
-import Reveal          from '../components/Reveal'
 import BeautyShowcase  from '../components/BeautyShowcase'
+import {
+  FadeUp,
+  FadeIn,
+  SlideLeft,
+  SlideRight,
+  StaggerContainer,
+  StaggerItem,
+  ScaleIn,
+  Parallax,
+  CountUp,
+  MagneticButton,
+} from '../components/animations'
 
 function Check({ className = '' }: { className?: string }) {
   return (
@@ -121,11 +132,9 @@ function SpaScene() {
         }}>
           <svg width={220} height={200} viewBox="0 0 220 200">
             <path d={monsteraPath} fill="#6BCFB8" opacity={0.85} />
-            {/* Characteristic monstera holes */}
             <ellipse cx={58} cy={108} rx={20} ry={32} fill="rgba(255,255,255,0.90)" transform="rotate(-16 58 108)" />
             <ellipse cx={162} cy={106} rx={18} ry={30} fill="rgba(255,255,255,0.90)" transform="rotate(16 162 106)" />
             <ellipse cx={110} cy={150} rx={13} ry={19} fill="rgba(255,255,255,0.82)" />
-            {/* Veins */}
             <path d="M 110 196 C 109 155 108 92 110 38" stroke="rgba(255,255,255,0.42)" strokeWidth={1.5} fill="none" />
             <path d="M 110 94 C 88 84 62 75 38 72"  stroke="rgba(255,255,255,0.28)" strokeWidth={1} fill="none" />
             <path d="M 110 114 C 82 102 55 95 30 94" stroke="rgba(255,255,255,0.28)" strokeWidth={1} fill="none" />
@@ -164,7 +173,7 @@ function SpaScene() {
           </svg>
         </div>
 
-        {/* Leaf 3 — small, z-index 4 (partial depth in front of products) */}
+        {/* Leaf 3 — small, z-index 4 */}
         <div style={{
           position: 'absolute', bottom: 95, right: 375, zIndex: 4,
           animation: 'leaf-float 5s ease-in-out 2s infinite', pointerEvents: 'none',
@@ -182,9 +191,8 @@ function SpaScene() {
           animation: 'cluster-breathe 7s ease-in-out infinite',
         }}>
 
-          {/* Reed Diffuser — back-center, tallest */}
+          {/* Reed Diffuser */}
           <div style={{ position: 'absolute', left: 122, top: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* Sticks */}
             <div style={{ position: 'relative', width: 64, height: 104, transformOrigin: 'bottom center', animation: 'reed-sway 6s ease-in-out infinite' }}>
               {[-25,-14,-4,5,15,25].map((deg, i) => (
                 <div key={i} style={{
@@ -194,7 +202,6 @@ function SpaScene() {
                 }} />
               ))}
             </div>
-            {/* Vase */}
             <div style={{
               width: 44, height: 70, background: '#F5F0E8', border: '1.5px solid #E8DDD4',
               borderRadius: '4px 4px 8px 8px', boxShadow: 'inset -3px 0 8px rgba(0,0,0,0.08)',
@@ -208,7 +215,7 @@ function SpaScene() {
             </div>
           </div>
 
-          {/* Pump Bottle — tall, left of diffuser */}
+          {/* Pump Bottle */}
           <div style={{ position: 'absolute', left: 58, top: 18, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: 28, height: 4, background: '#B8745A', borderRadius: 2, alignSelf: 'flex-start', marginLeft: 5, transform: 'rotate(-5deg)', marginBottom: -2 }} />
             <div style={{ width: 16, height: 24, background: '#C4845A', borderRadius: 2 }} />
@@ -224,7 +231,7 @@ function SpaScene() {
             </div>
           </div>
 
-          {/* Dark Dropper Bottle — amber glass, left side */}
+          {/* Dark Dropper Bottle */}
           <div style={{ position: 'absolute', left: 10, top: 42, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: 18, height: 22, background: '#8B6F5E', borderRadius: '3px 3px 2px 2px' }} />
             <div style={{ width: 14, height: 16, background: '#5A3422', marginTop: -1 }} />
@@ -234,7 +241,6 @@ function SpaScene() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: -1,
             }}>
               <div style={{ width: 18, height: 22, background: 'rgba(245,230,208,0.25)', borderRadius: 2 }} />
-              {/* Golden drop */}
               <div style={{
                 position: 'absolute', top: 32, left: '50%', transform: 'translateX(-50%)',
                 width: 6, height: 8, background: '#F5C842',
@@ -244,11 +250,9 @@ function SpaScene() {
             </div>
           </div>
 
-          {/* Cream Jar — hero product, front-center */}
+          {/* Cream Jar */}
           <div style={{ position: 'absolute', left: 85, top: 198 }}>
-            {/* Lid (angled, slightly behind) */}
             <div style={{ width: 84, height: 18, background: '#E8D5C0', borderRadius: '6px 6px 2px 2px', transform: 'rotate(-8deg)', position: 'absolute', top: -14, left: -2 }} />
-            {/* Body */}
             <div style={{
               position: 'relative', width: 80, height: 36, background: '#FAF6F0', border: '1.5px solid #E8DDD4',
               borderRadius: '8px 8px 12px 12px', boxShadow: '0px 6px 16px rgba(0,0,0,0.10)',
@@ -256,11 +260,10 @@ function SpaScene() {
             }}>
               <div style={{ width: 58, height: 10, background: 'rgba(255,255,255,0.92)', borderRadius: '50%' }} />
             </div>
-            {/* Spatula */}
             <div style={{ position: 'absolute', right: -18, top: -12, width: 4, height: 42, background: '#B8A9E0', borderRadius: 2, transform: 'rotate(28deg)' }} />
           </div>
 
-          {/* Serum Bottle — mint cap, right side */}
+          {/* Serum Bottle */}
           <div style={{ position: 'absolute', left: 198, top: 112, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: 16, height: 14, background: '#6BCFB8', borderRadius: '3px 3px 1px 1px' }} />
             <div style={{ width: 12, height: 10, background: '#A0522D', marginTop: -1 }} />
@@ -276,9 +279,8 @@ function SpaScene() {
             </div>
           </div>
 
-          {/* Candle Jar — right, front, flickering flame */}
+          {/* Candle Jar */}
           <div style={{ position: 'absolute', left: 212, top: 184 }}>
-            {/* Flame + wick */}
             <div style={{ position: 'absolute', top: -26, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div style={{
                 width: 8, height: 14, background: '#FF6B6B',
@@ -290,9 +292,7 @@ function SpaScene() {
               </div>
               <div style={{ width: 2, height: 8, background: '#4A3728' }} />
             </div>
-            {/* Wax surface */}
             <div style={{ width: 44, height: 8, background: '#F5EDD8', borderRadius: '50%', margin: '0 auto' }} />
-            {/* Jar */}
             <div style={{
               width: 54, height: 48, background: '#FAF6F0', border: '1px solid #E8DDD4',
               borderRadius: '6px 6px 10px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -306,7 +306,7 @@ function SpaScene() {
             </div>
           </div>
 
-          {/* Stacked Lavender Stones — far left, decorative */}
+          {/* Stacked Lavender Stones */}
           <div style={{ position: 'absolute', left: -8, top: 193 }}>
             {(['#F0ECFB','#D4C5F0','#B8A9E0'] as const).map((c, i) => (
               <div key={i} style={{
@@ -319,9 +319,7 @@ function SpaScene() {
 
         </div>{/* end cluster */}
 
-        {/* ═══ LAYER 4 — FRONT LEAVES (depth overlap) ═══ */}
-
-        {/* Fern branch — bottom-left, in front of products */}
+        {/* ═══ LAYER 4 — FRONT LEAVES ═══ */}
         <div style={{
           position: 'absolute', bottom: -10, right: 325, zIndex: 5,
           transformOrigin: 'bottom center', animation: 'leaf-sway-2 8s ease-in-out 0.5s infinite', pointerEvents: 'none',
@@ -339,8 +337,6 @@ function SpaScene() {
             ))}
           </svg>
         </div>
-
-        {/* Small sprig — right, in front of jar */}
         <div style={{
           position: 'absolute', bottom: 78, right: 58, zIndex: 5,
           animation: 'leaf-float 5s ease-in-out 3s infinite', pointerEvents: 'none',
@@ -394,7 +390,7 @@ function SpaScene() {
 
         {/* ═══ LAYER 6 — FLOATING STAT BADGES ═══ */}
 
-        {/* Badge 1 — Bot active (top-left) */}
+        {/* Badge 1 — Bot active */}
         <div className="spa-badge" style={{ position: 'absolute', top: 30, left: 8, zIndex: 8, animation: 'badge-float 4s ease-in-out infinite' }}>
           <div style={{ width: 172, background: 'white', borderRadius: 14, boxShadow: '0px 8px 20px rgba(0,0,0,0.10)', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.8)', animation: 'fade-in-up 0.5s ease-out 0.6s both' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
@@ -408,7 +404,7 @@ function SpaScene() {
           </div>
         </div>
 
-        {/* Badge 2 — New booking (right side, middle) */}
+        {/* Badge 2 — New booking */}
         <div className="spa-badge" style={{ position: 'absolute', top: 258, right: 5, zIndex: 8, animation: 'badge-float 5s ease-in-out 1.2s infinite' }}>
           <div style={{ width: 166, background: 'white', borderRadius: 14, boxShadow: '0px 8px 20px rgba(0,0,0,0.10)', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.8)', animation: 'fade-in-up 0.5s ease-out 0.8s both' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
@@ -423,7 +419,7 @@ function SpaScene() {
           </div>
         </div>
 
-        {/* Badge 3 — Rating (right side, upper) */}
+        {/* Badge 3 — Rating */}
         <div className="spa-badge" style={{ position: 'absolute', top: 88, right: 5, zIndex: 8, animation: 'badge-float 3.5s ease-in-out 2.5s infinite' }}>
           <div style={{ width: 152, background: 'white', borderRadius: 14, boxShadow: '0px 8px 20px rgba(0,0,0,0.10)', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.8)', animation: 'fade-in-up 0.5s ease-out 1.0s both' }}>
             <div style={{ display: 'flex', gap: 2, marginBottom: 4 }}>
@@ -467,8 +463,10 @@ export default function HomePage() {
     <div className="font-sans">
 
       {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-20 overflow-hidden bg-white">
-        {/* Background decoration */}
+      <section
+        className="relative pt-28 pb-20 overflow-hidden nira-section-light"
+        style={{ backgroundColor: 'var(--bg-surface)' }}
+      >
         <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-coral opacity-[0.04] translate-x-1/3 -translate-y-1/4 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-lavender opacity-[0.06] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
@@ -477,72 +475,239 @@ export default function HomePage() {
 
             {/* Left */}
             <div>
-              <div className="hero-anim-1 inline-flex items-center gap-2 bg-coral-light text-coral text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-                <span>🇹🇿</span>
-                <span>Built for East Africa</span>
-              </div>
-              <h1 className="hero-anim-2 font-serif text-5xl lg:text-[58px] text-[#1E293B] leading-[1.1] mb-6">
-                Your Beauty Business,{' '}
-                <span className="text-coral">On Autopilot.</span>
-              </h1>
-              <p className="hero-anim-3 text-lg text-slate-500 leading-relaxed mb-8 max-w-lg">
-                Connect WhatsApp. Let Nira handle bookings, product inquiries and customer support — in Swahili or English — while you focus on your craft.
-              </p>
-              <div className="hero-anim-4 flex flex-wrap gap-4 mb-10">
-                <Link
-                  href="/#download"
-                  className="btn-shimmer inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
+              <FadeIn delay={0.1}>
+                <div className="inline-flex items-center gap-2 bg-coral-light text-coral text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+                  <span>🇹🇿</span>
+                  <span>Built for East Africa</span>
+                </div>
+              </FadeIn>
+
+              <FadeUp delay={0.2}>
+                <h1
+                  className="font-serif text-5xl lg:text-[58px] leading-[1.1] mb-6"
+                  style={{ color: 'var(--text-primary)' }}
                 >
-                  Download Free App
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-                <Link
-                  href="/#how-it-works"
-                  className="inline-flex items-center gap-2 border border-nira-border text-slate-600 hover:border-coral hover:text-coral font-medium px-7 py-3.5 rounded-full transition-colors"
-                >
-                  See how it works
-                </Link>
-              </div>
-              {/* Stats */}
-              <div className="hero-anim-4 flex flex-wrap gap-8">
-                {[
-                  { value: '500+', label: 'Active businesses' },
-                  { value: '24/7', label: 'AI support' },
-                  { value: 'Free', label: 'To get started' },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="font-serif text-2xl text-[#1E293B]">{s.value}</p>
-                    <p className="text-sm text-slate-400">{s.label}</p>
-                  </div>
-                ))}
-              </div>
+                  Your Beauty Business,{' '}
+                  <span className="text-coral">On Autopilot.</span>
+                </h1>
+              </FadeUp>
+
+              <FadeUp delay={0.4}>
+                <p className="text-lg leading-relaxed mb-8 max-w-lg" style={{ color: 'var(--text-secondary)' }}>
+                  Connect WhatsApp. Let Nira handle bookings, product inquiries and customer support — in Swahili or English — while you focus on your craft.
+                </p>
+              </FadeUp>
+
+              <FadeUp delay={0.55}>
+                <div className="flex flex-wrap gap-4 mb-10">
+                  <MagneticButton>
+                    <Link
+                      href="/#download"
+                      className="btn-shimmer inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
+                    >
+                      Download Free App
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </Link>
+                  </MagneticButton>
+                  <Link
+                    href="/#how-it-works"
+                    className="inline-flex items-center gap-2 border border-nira-border font-medium px-7 py-3.5 rounded-full transition-colors hover:border-coral hover:text-coral"
+                    style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)' }}
+                  >
+                    See how it works
+                  </Link>
+                </div>
+              </FadeUp>
+
+              <FadeUp delay={0.7}>
+                <div className="flex flex-wrap gap-8">
+                  {[
+                    { value: 500, suffix: '+', label: 'Active businesses' },
+                    { value: null, display: '24/7', label: 'AI support' },
+                    { value: null, display: 'Free', label: 'To get started' },
+                  ].map((s) => (
+                    <div key={s.label}>
+                      <p className="font-serif text-2xl" style={{ color: 'var(--text-primary)' }}>
+                        {s.value !== null
+                          ? <CountUp to={s.value} suffix={s.suffix} />
+                          : s.display
+                        }
+                      </p>
+                      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </FadeUp>
             </div>
 
             {/* Right — beauty showcase */}
-            <div className="flex justify-center lg:justify-end" style={{ position: 'relative', paddingRight: 20 }}>
-              <div style={{ width: '100%', maxWidth: 560 }}>
+            <ScaleIn delay={0.3} className="flex justify-center lg:justify-end" >
+              <div style={{ width: '100%', maxWidth: 560, position: 'relative', paddingRight: 20 }}>
                 <BeautyShowcase />
               </div>
-            </div>
+            </ScaleIn>
           </div>
         </div>
       </section>
 
       {/* ── TRUST BAR ─────────────────────────────────────────────────── */}
-      <section className="py-10 border-y border-nira-border bg-nira-bg">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-center text-[11px] text-slate-400 font-medium uppercase tracking-widest mb-5">
-            Trusted by beauty businesses across Tanzania &amp; Kenya
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['💇 Salons', '🧖 Spas', '💄 Cosmetic Shops', '💅 Nail Bars', '✂️ Hair Studios', '🪒 Barbershops'].map((t) => (
-              <span key={t} className="text-sm font-medium text-slate-600 bg-white border border-nira-border px-4 py-2 rounded-full">
-                {t}
-              </span>
-            ))}
+      <FadeIn>
+        <section
+          className="py-10 border-y"
+          style={{ backgroundColor: 'var(--bg-surface-2)', borderColor: 'var(--border)' }}
+        >
+          <div className="max-w-6xl mx-auto px-6">
+            <p className="text-center text-[11px] font-medium uppercase tracking-widest mb-5" style={{ color: 'var(--text-muted)' }}>
+              Trusted by beauty businesses across Tanzania &amp; Kenya
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {['💇 Salons', '🧖 Spas', '💄 Cosmetic Shops', '💅 Nail Bars', '✂️ Hair Studios', '🪒 Barbershops'].map((t) => (
+                <span
+                  key={t}
+                  className="text-sm font-medium px-4 py-2 rounded-full"
+                  style={{
+                    backgroundColor: 'var(--bg-surface)',
+                    color: 'var(--text-secondary)',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
+        </section>
+      </FadeIn>
+
+      {/* ── STORY SECTION ─────────────────────────────────────────────── */}
+      <section
+        className="py-24 overflow-hidden"
+        style={{ backgroundColor: 'var(--bg-surface)' }}
+      >
+        <div className="max-w-6xl mx-auto px-6">
+
+          {/* Section label */}
+          <FadeUp className="text-center">
+            <p className="text-xs font-medium uppercase tracking-[3px] text-coral mb-4">Our Story</p>
+          </FadeUp>
+
+          {/* Heading */}
+          <FadeUp delay={0.1} className="text-center">
+            <h2
+              className="font-serif text-4xl lg:text-5xl leading-[1.2] mb-6"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Built for the women who
+              <br />
+              power East Africa&apos;s beauty industry
+            </h2>
+          </FadeUp>
+
+          {/* Subtext */}
+          <FadeUp delay={0.2} className="text-center">
+            <p
+              className="text-lg leading-[1.7] max-w-[580px] mx-auto mb-16"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Millions of talented women run salons, spas, and beauty shops across Tanzania and Kenya.
+              They work hard, serve their communities, and deserve technology that works as hard as they do.
+            </p>
+          </FadeUp>
+
+          {/* Three-column image story */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 mb-16">
+
+            {/* Column 1 */}
+            <FadeUp delay={0}>
+              <div className="group">
+                <div className="overflow-hidden rounded-[20px] mb-4" style={{ height: 320 }}>
+                  <Parallax offset={30} className="h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=85"
+                      alt="Grace runs 3 salons in Dar es Salaam"
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </Parallax>
+                </div>
+                <p className="text-[11px] font-medium uppercase tracking-[1.5px] text-coral mb-1">Dar es Salaam</p>
+                <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--text-primary)' }}>Grace runs 3 salons</h3>
+                <p className="text-sm leading-[1.6]" style={{ color: 'var(--text-secondary)' }}>
+                  She uses Nira to manage bookings across all locations from one phone.
+                </p>
+              </div>
+            </FadeUp>
+
+            {/* Column 2 — offset down on desktop */}
+            <FadeUp delay={0.15}>
+              <div className="group md:mt-10">
+                <div className="overflow-hidden rounded-[20px] mb-4" style={{ height: 320 }}>
+                  <Parallax offset={20} className="h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=700&q=85"
+                      alt="Amina doubled her revenue in Nairobi"
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </Parallax>
+                </div>
+                <p className="text-[11px] font-medium uppercase tracking-[1.5px] text-coral mb-1">Nairobi</p>
+                <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--text-primary)' }}>Amina doubled her revenue</h3>
+                <p className="text-sm leading-[1.6]" style={{ color: 'var(--text-secondary)' }}>
+                  Her WhatsApp bot now handles 80% of customer enquiries automatically.
+                </p>
+              </div>
+            </FadeUp>
+
+            {/* Column 3 */}
+            <FadeUp delay={0.3}>
+              <div className="group">
+                <div className="overflow-hidden rounded-[20px] mb-4" style={{ height: 320 }}>
+                  <Parallax offset={40} className="h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=700&q=85"
+                      alt="Zainab sells products online in Mombasa"
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </Parallax>
+                </div>
+                <p className="text-[11px] font-medium uppercase tracking-[1.5px] text-coral mb-1">Mombasa</p>
+                <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--text-primary)' }}>Zainab sells products online</h3>
+                <p className="text-sm leading-[1.6]" style={{ color: 'var(--text-secondary)' }}>
+                  Customers order skincare through WhatsApp. Nira tracks every order automatically.
+                </p>
+              </div>
+            </FadeUp>
+          </div>
+
+          {/* Bottom quote */}
+          <FadeUp delay={0.1} className="text-center">
+            <div className="relative max-w-[600px] mx-auto">
+              <p
+                className="font-serif absolute -top-8 left-0 select-none pointer-events-none"
+                style={{ fontSize: 80, lineHeight: 1, color: 'var(--coral)', opacity: 0.18 }}
+              >
+                &ldquo;
+              </p>
+              <p
+                className="font-serif text-2xl lg:text-[28px] leading-[1.5] italic px-8"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                Technology should empower every woman,
+                not just women in Silicon Valley.
+              </p>
+              <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
+                — Nira team, Dar es Salaam
+              </p>
+            </div>
+          </FadeUp>
+
         </div>
       </section>
 
@@ -550,121 +715,133 @@ export default function HomePage() {
       <section id="features">
 
         {/* Feature 1 — Auto-reply */}
-        <div className="py-24 bg-white">
+        <div className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <Reveal>
+              <FadeUp>
                 <span className="text-xs font-medium text-coral uppercase tracking-widest">01 — Instant Replies</span>
-                <h2 className="font-serif text-4xl text-[#1E293B] mt-3 mb-5 leading-snug">
+                <h2 className="font-serif text-4xl mt-3 mb-5 leading-snug" style={{ color: 'var(--text-primary)' }}>
                   Never Miss a Customer Message Again
                 </h2>
-                <p className="text-slate-500 leading-relaxed mb-7">
+                <p className="leading-relaxed mb-7" style={{ color: 'var(--text-secondary)' }}>
                   Nira responds to every WhatsApp message in seconds — even at 3 AM. Prices, availability, product details — answered instantly in your customer&apos;s language.
                 </p>
-                <ul className="space-y-3">
-                  {[
-                    'Swahili + English — customer chooses their language',
-                    'Instant replies to pricing, services & product questions',
-                    'Custom welcome messages that match your brand voice',
-                    'Smart AI handles anything outside the standard menu',
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-slate-600">
-                      <Check className="text-mint-dark" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-              <Reveal delay={150} className="flex justify-center">
+                <StaggerContainer>
+                  <ul className="space-y-3">
+                    {[
+                      'Swahili + English — customer chooses their language',
+                      'Instant replies to pricing, services & product questions',
+                      'Custom welcome messages that match your brand voice',
+                      'Smart AI handles anything outside the standard menu',
+                    ].map((item) => (
+                      <StaggerItem key={item}>
+                        <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <Check className="text-mint-dark" />
+                          {item}
+                        </li>
+                      </StaggerItem>
+                    ))}
+                  </ul>
+                </StaggerContainer>
+              </FadeUp>
+              <SlideRight delay={0.15} className="flex justify-center">
                 <AnimatedChat />
-              </Reveal>
+              </SlideRight>
             </div>
           </div>
         </div>
 
         {/* Feature 2 — Bookings */}
-        <div className="py-24 bg-nira-bg">
+        <div className="py-24" style={{ backgroundColor: 'var(--bg-surface)' }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <Reveal delay={150} className="flex justify-center order-2 lg:order-1">
+              <SlideLeft delay={0.15} className="flex justify-center order-2 lg:order-1">
                 <DashboardPhone />
-              </Reveal>
-              <Reveal className="order-1 lg:order-2">
+              </SlideLeft>
+              <FadeUp className="order-1 lg:order-2">
                 <span className="text-xs font-medium text-lavender-dark uppercase tracking-widest">02 — Smart Bookings</span>
-                <h2 className="font-serif text-4xl text-[#1E293B] mt-3 mb-5 leading-snug">
+                <h2 className="font-serif text-4xl mt-3 mb-5 leading-snug" style={{ color: 'var(--text-primary)' }}>
                   Fill Your Calendar Without Lifting a Finger
                 </h2>
-                <p className="text-slate-500 leading-relaxed mb-7">
+                <p className="leading-relaxed mb-7" style={{ color: 'var(--text-secondary)' }}>
                   Customers book appointments directly through WhatsApp. Nira handles the entire flow — service selection, date, time, and confirmation — automatically.
                 </p>
-                <ul className="space-y-3">
-                  {[
-                    'Guided booking flow entirely inside WhatsApp chat',
-                    'All appointments sync to your mobile dashboard instantly',
-                    'See today\'s full schedule at a glance on your phone',
-                    'Customers get automatic booking confirmation messages',
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-slate-600">
-                      <Check className="text-lavender-dark" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
+                <StaggerContainer>
+                  <ul className="space-y-3">
+                    {[
+                      'Guided booking flow entirely inside WhatsApp chat',
+                      'All appointments sync to your mobile dashboard instantly',
+                      'See today\'s full schedule at a glance on your phone',
+                      'Customers get automatic booking confirmation messages',
+                    ].map((item) => (
+                      <StaggerItem key={item}>
+                        <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <Check className="text-lavender-dark" />
+                          {item}
+                        </li>
+                      </StaggerItem>
+                    ))}
+                  </ul>
+                </StaggerContainer>
+              </FadeUp>
             </div>
           </div>
         </div>
 
         {/* Feature 3 — Revenue */}
-        <div className="py-24 bg-white">
+        <div className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <Reveal>
-                <span className="text-xs font-medium text-mint-dark uppercase tracking-widest">03 — Revenue & Analytics</span>
-                <h2 className="font-serif text-4xl text-[#1E293B] mt-3 mb-5 leading-snug">
+              <FadeUp>
+                <span className="text-xs font-medium text-mint-dark uppercase tracking-widest">03 — Revenue &amp; Analytics</span>
+                <h2 className="font-serif text-4xl mt-3 mb-5 leading-snug" style={{ color: 'var(--text-primary)' }}>
                   Real-Time Revenue. Beautiful Results.
                 </h2>
-                <p className="text-slate-500 leading-relaxed mb-7">
+                <p className="leading-relaxed mb-7" style={{ color: 'var(--text-secondary)' }}>
                   Watch your revenue grow on a live dashboard. Track bookings, top products, and customer trends — all from your phone with animated, easy-to-read charts.
                 </p>
-                <ul className="space-y-3">
-                  {[
-                    'Animated revenue bar chart updates in real time',
-                    'Best-selling products & most popular services',
-                    'Customer activity — who spends most with you',
-                    'Weekly & monthly comparisons at a glance',
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-slate-600">
-                      <Check className="text-mint-dark" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-              <Reveal delay={150} className="flex justify-center">
+                <StaggerContainer>
+                  <ul className="space-y-3">
+                    {[
+                      'Animated revenue bar chart updates in real time',
+                      'Best-selling products & most popular services',
+                      'Customer activity — who spends most with you',
+                      'Weekly & monthly comparisons at a glance',
+                    ].map((item) => (
+                      <StaggerItem key={item}>
+                        <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <Check className="text-mint-dark" />
+                          {item}
+                        </li>
+                      </StaggerItem>
+                    ))}
+                  </ul>
+                </StaggerContainer>
+              </FadeUp>
+              <SlideRight delay={0.15} className="flex justify-center">
                 <AnimatedRevenue />
-              </Reveal>
+              </SlideRight>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── BUSINESS TYPE FEATURES ────────────────────────────────────── */}
-      <section className="py-24 bg-nira-bg">
+      <section className="py-24" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
+          <FadeUp className="text-center mb-14">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">04 — Built for Your Business</span>
-            <h2 className="font-serif text-4xl text-[#1E293B] mt-3 mb-4">
+            <h2 className="font-serif text-4xl mt-3 mb-4" style={{ color: 'var(--text-primary)' }}>
               Tailored for Salons &amp; Cosmetic Shops
             </h2>
-            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            <p className="max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               Nira adapts to your business type. Whether you run a salon, spa, or cosmetic shop — every feature is built around how your customers interact with you on WhatsApp.
             </p>
-          </Reveal>
+          </FadeUp>
 
-          <Reveal delay={100}>
+          <FadeUp delay={0.1}>
             <BusinessTypeFeatures />
-          </Reveal>
+          </FadeUp>
         </div>
       </section>
 
@@ -674,15 +851,15 @@ export default function HomePage() {
         <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-lavender opacity-[0.05] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-6 relative">
-          <Reveal className="text-center mb-16">
+          <FadeUp className="text-center mb-16">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">Simple Setup</span>
             <h2 className="font-serif text-4xl text-white mt-3">Up and Running in Minutes</h2>
             <p className="text-slate-400 mt-4 max-w-xl mx-auto">
               No technical skills required. If you have a WhatsApp Business number, you&apos;re ready.
             </p>
-          </Reveal>
+          </FadeUp>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 step: '01',
@@ -693,7 +870,6 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3m-3 4.5h3" />
                   </svg>
                 ),
-                delay: 0,
               },
               {
                 step: '02',
@@ -704,7 +880,6 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                   </svg>
                 ),
-                delay: 100,
               },
               {
                 step: '03',
@@ -715,11 +890,10 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                   </svg>
                 ),
-                delay: 200,
               },
             ].map((item) => (
-              <Reveal key={item.step} delay={item.delay}>
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 hover:border-white/20 transition-all">
+              <StaggerItem key={item.step}>
+                <div className="card-hover bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 hover:border-white/20 h-full">
                   <div className="w-12 h-12 rounded-xl bg-coral/10 border border-coral/20 flex items-center justify-center text-coral mb-5">
                     {item.icon}
                   </div>
@@ -727,22 +901,22 @@ export default function HomePage() {
                   <h3 className="font-serif text-xl text-white mb-3">{item.title}</h3>
                   <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
-              </Reveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* ── PRICING PREVIEW ───────────────────────────────────────────── */}
-      <section className="py-24 bg-nira-bg">
+      <section className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
         <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
+          <FadeUp className="text-center mb-14">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">Pricing</span>
-            <h2 className="font-serif text-4xl text-[#1E293B] mt-3">Pick your power level</h2>
-            <p className="text-slate-500 mt-4">Start free. Upgrade when you&apos;re ready to grow.</p>
-          </Reveal>
+            <h2 className="font-serif text-4xl mt-3" style={{ color: 'var(--text-primary)' }}>Pick your power level</h2>
+            <p className="mt-4" style={{ color: 'var(--text-secondary)' }}>Start free. Upgrade when you&apos;re ready to grow.</p>
+          </FadeUp>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {[
               {
                 name: 'Free',
@@ -771,26 +945,33 @@ export default function HomePage() {
                 cta: 'Get Plan',
                 highlight: false,
               },
-            ].map((plan, i) => (
-              <Reveal key={plan.name} delay={i * 80}>
+            ].map((plan) => (
+              <StaggerItem key={plan.name}>
                 <div
-                  className={`relative rounded-2xl p-7 h-full ${
+                  className={`relative rounded-2xl p-7 h-full card-hover ${
                     plan.highlight
                       ? 'bg-coral text-white shadow-2xl shadow-coral/30 md:-mt-3 md:mb-3'
-                      : 'bg-white border border-nira-border'
+                      : ''
                   }`}
+                  style={!plan.highlight ? {
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border)',
+                  } : undefined}
                 >
                   {plan.highlight && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#1E293B] text-white text-[11px] font-medium px-3 py-1 rounded-full">
                       Most Popular
                     </div>
                   )}
-                  <h3 className={`text-sm font-medium mb-1 ${plan.highlight ? 'text-white/70' : 'text-slate-400'}`}>{plan.name}</h3>
-                  <p className={`font-serif text-3xl mb-1 ${plan.highlight ? 'text-white' : 'text-[#1E293B]'}`}>{plan.price}<span className={`text-sm font-sans ml-1 ${plan.highlight ? 'text-white/60' : 'text-slate-400'}`}>{plan.period}</span></p>
-                  <p className={`text-sm mb-5 ${plan.highlight ? 'text-white/80' : 'text-slate-500'}`}>{plan.desc}</p>
+                  <h3 className={`text-sm font-medium mb-1 ${plan.highlight ? 'text-white/70' : ''}`} style={!plan.highlight ? { color: 'var(--text-muted)' } : undefined}>{plan.name}</h3>
+                  <p className={`font-serif text-3xl mb-1 ${plan.highlight ? 'text-white' : ''}`} style={!plan.highlight ? { color: 'var(--text-primary)' } : undefined}>
+                    {plan.price}
+                    <span className={`text-sm font-sans ml-1 ${plan.highlight ? 'text-white/60' : ''}`} style={!plan.highlight ? { color: 'var(--text-muted)' } : undefined}>{plan.period}</span>
+                  </p>
+                  <p className={`text-sm mb-5 ${plan.highlight ? 'text-white/80' : ''}`} style={!plan.highlight ? { color: 'var(--text-secondary)' } : undefined}>{plan.desc}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
-                      <li key={f} className={`flex items-center gap-2.5 text-sm ${plan.highlight ? 'text-white/90' : 'text-slate-600'}`}>
+                      <li key={f} className={`flex items-center gap-2.5 text-sm ${plan.highlight ? 'text-white/90' : ''}`} style={!plan.highlight ? { color: 'var(--text-secondary)' } : undefined}>
                         <svg className={`w-4 h-4 flex-shrink-0 ${plan.highlight ? 'text-white' : 'text-mint-dark'}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
@@ -807,79 +988,114 @@ export default function HomePage() {
                     {plan.cta}
                   </Link>
                 </div>
-              </Reveal>
+              </StaggerItem>
             ))}
-          </div>
-          <Reveal>
-            <p className="text-center text-sm text-slate-400">
+          </StaggerContainer>
+
+          <FadeUp>
+            <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>
               All paid plans include a 30-day free trial. No credit card required.{' '}
               <Link href="/pricing" className="text-coral hover:underline font-medium">View full pricing →</Link>
             </p>
-          </Reveal>
+          </FadeUp>
         </div>
       </section>
 
       {/* ── TESTIMONIALS ──────────────────────────────────────────────── */}
-      <section className="py-24 bg-white">
+      <section className="py-24 overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
+
+          <FadeUp className="text-center mb-14">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">Testimonials</span>
-            <h2 className="font-serif text-4xl text-[#1E293B] mt-3">Loved by Beauty Businesses</h2>
-          </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <h2 className="font-serif text-4xl mt-3" style={{ color: 'var(--text-primary)' }}>
+              Loved by Beauty Businesses
+            </h2>
+          </FadeUp>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                quote: 'Before Nira, I spent 3 hours every day just answering WhatsApp. Now the bot handles everything and I focus on my clients. Bookings increased by 40% in the first month!',
-                name: 'Fatuma Hassan',
-                role: 'Owner, Glam Beauty Salon — Dar es Salaam',
-                initials: 'FH',
-                bg: 'bg-lavender-light',
-                delay: 0,
+                quote: 'Nira imebadilisha biashara yangu kabisa. Sasa wateja wanaweza kupanga miadi usiku wa manane na bot inawajibu papo hapo!',
+                name: 'Grace Mwangi',
+                business: 'Glam Beauty Salon · Dar es Salaam',
+                avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80',
               },
               {
-                quote: 'My shop gets 200+ WhatsApp messages daily. Nira answers product questions, recommends the right creams for each skin type, and even takes orders. I no longer miss a single sale.',
-                name: 'Grace Wanjiku',
-                role: 'Owner, GlowUp Cosmetics — Nairobi',
-                initials: 'GW',
-                bg: 'bg-coral-light',
-                delay: 100,
+                quote: 'I used to spend 3 hours a day just answering WhatsApp messages. Now Nira handles everything and I focus on my clients. Best decision I made.',
+                name: 'Amina Hassan',
+                business: 'Pure Glow Spa · Nairobi',
+                avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&q=80',
+              },
+              {
+                quote: 'My cosmetics shop doubled orders in 2 months. Customers love how easy it is to order through WhatsApp. Nira is simply the best.',
+                name: 'Zainab Ali',
+                business: 'Zainab Beauty · Mombasa',
+                avatar: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=100&q=80',
               },
             ].map((t) => (
-              <Reveal key={t.name} delay={t.delay}>
-                <div className="bg-nira-bg border border-nira-border rounded-2xl p-8 h-full flex flex-col">
-                  <div className="flex gap-1 mb-5">
+              <StaggerItem key={t.name}>
+                <div
+                  className="rounded-2xl p-7 h-full flex flex-col card-hover"
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border)',
+                    boxShadow: 'var(--shadow-md)',
+                  }}
+                >
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-4">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <svg key={i} className="w-4 h-4 text-coral" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                     ))}
                   </div>
-                  <p className="text-slate-600 leading-relaxed mb-6 flex-1">&ldquo;{t.quote}&rdquo;</p>
+
+                  {/* Quote marks */}
+                  <p
+                    className="font-serif leading-none mb-3 select-none"
+                    style={{ fontSize: 48, color: 'var(--coral)', opacity: 0.3 }}
+                  >
+                    &ldquo;
+                  </p>
+
+                  {/* Quote text */}
+                  <p className="leading-[1.7] mb-6 flex-1 text-[15px]" style={{ color: 'var(--text-primary)' }}>
+                    {t.quote}
+                  </p>
+
+                  {/* Author */}
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full ${t.bg} flex items-center justify-center flex-shrink-0`}>
-                      <span className="text-sm font-medium text-[#1E293B]">{t.initials}</span>
-                    </div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      width={44}
+                      height={44}
+                      className="rounded-full object-cover flex-shrink-0"
+                      style={{ border: '2px solid var(--coral)' }}
+                      loading="lazy"
+                    />
                     <div>
-                      <p className="font-medium text-[#1E293B] text-sm">{t.name}</p>
-                      <p className="text-slate-400 text-xs">{t.role}</p>
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t.name}</p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.business}</p>
                     </div>
                   </div>
                 </div>
-              </Reveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* ── DOWNLOAD CTA ──────────────────────────────────────────────── */}
       <section id="download" className="py-20 relative overflow-hidden">
-        {/* Coral gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-coral via-[#ff8585] to-[#E55555]" />
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white opacity-[0.06] translate-x-1/3 -translate-y-1/4 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-white opacity-[0.06] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
         <div className="max-w-2xl mx-auto px-6 text-center relative">
-          <Reveal>
+          <FadeUp>
             <p className="text-white/70 text-sm font-medium uppercase tracking-widest mb-4">Start Today — It&apos;s Free</p>
             <h2 className="font-serif text-4xl md:text-5xl text-white mb-5">
               Grow Your Beauty Business with AI
@@ -887,28 +1103,40 @@ export default function HomePage() {
             <p className="text-white/80 text-lg mb-10 leading-relaxed">
               Join 500+ beauty businesses in East Africa using Nira to serve customers 24/7. Free to start, no technical skills needed.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              <a href="#" className="flex items-center gap-3 bg-[#1E293B] hover:bg-[#2D3F57] text-white px-6 py-3.5 rounded-xl transition-colors shadow-lg">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] text-white/60 leading-none mb-0.5">Download on the</p>
-                  <p className="text-sm font-medium leading-none">App Store</p>
-                </div>
-              </a>
-              <a href="#" className="flex items-center gap-3 bg-[#1E293B] hover:bg-[#2D3F57] text-white px-6 py-3.5 rounded-xl transition-colors shadow-lg">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3.18 23.76c.28.15.6.19.91.12l11.64-11.64L12 8.5 3.18 23.76zM20.68 9.8L17.5 8l-3.7 3.7 3.7 3.7 3.22-1.83c.92-.52.92-2.25-.04-2.77zM2.01.37C1.73.56 1.55.87 1.55 1.24v21.52c0 .37.18.68.46.87L13.5 12 2.01.37zM15.6 3.8L4.1.07c-.31-.1-.63-.06-.91.12L15.5 12.2 19.5 8.2l-3.9-4.4z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] text-white/60 leading-none mb-0.5">Get it on</p>
-                  <p className="text-sm font-medium leading-none">Google Play</p>
-                </div>
-              </a>
-            </div>
-            <p className="text-white/50 text-sm">Free · iOS & Android · No credit card required</p>
-          </Reveal>
+            <StaggerContainer className="flex flex-wrap justify-center gap-4 mb-6">
+              <StaggerItem>
+                <a
+                  href="#"
+                  className="flex items-center gap-3 bg-[#1E293B] hover:bg-[#2D3F57] text-white px-6 py-3.5 rounded-xl transition-colors shadow-lg hover:scale-105 hover:shadow-xl"
+                  style={{ transition: 'transform 250ms ease, box-shadow 250ms ease, background-color 200ms ease' }}
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                  <div className="text-left">
+                    <p className="text-[10px] text-white/60 leading-none mb-0.5">Download on the</p>
+                    <p className="text-sm font-medium leading-none">App Store</p>
+                  </div>
+                </a>
+              </StaggerItem>
+              <StaggerItem>
+                <a
+                  href="#"
+                  className="flex items-center gap-3 bg-[#1E293B] hover:bg-[#2D3F57] text-white px-6 py-3.5 rounded-xl transition-colors shadow-lg hover:scale-105 hover:shadow-xl"
+                  style={{ transition: 'transform 250ms ease, box-shadow 250ms ease, background-color 200ms ease' }}
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3.18 23.76c.28.15.6.19.91.12l11.64-11.64L12 8.5 3.18 23.76zM20.68 9.8L17.5 8l-3.7 3.7 3.7 3.7 3.22-1.83c.92-.52.92-2.25-.04-2.77zM2.01.37C1.73.56 1.55.87 1.55 1.24v21.52c0 .37.18.68.46.87L13.5 12 2.01.37zM15.6 3.8L4.1.07c-.31-.1-.63-.06-.91.12L15.5 12.2 19.5 8.2l-3.9-4.4z"/>
+                  </svg>
+                  <div className="text-left">
+                    <p className="text-[10px] text-white/60 leading-none mb-0.5">Get it on</p>
+                    <p className="text-sm font-medium leading-none">Google Play</p>
+                  </div>
+                </a>
+              </StaggerItem>
+            </StaggerContainer>
+            <p className="text-white/50 text-sm">Free · iOS &amp; Android · No credit card required</p>
+          </FadeUp>
         </div>
       </section>
 
