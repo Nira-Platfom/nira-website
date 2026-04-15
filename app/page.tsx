@@ -601,7 +601,7 @@ export default function HomePage() {
             >
               Built for the women who
               <br />
-              power East Africa&apos;s beauty industry
+              Power East Africa&apos;s beauty industry
             </h2>
           </FadeUp>
 
@@ -626,9 +626,10 @@ export default function HomePage() {
                   <Parallax offset={30} className="h-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=85"
+                      src="/grace.jpg"
                       alt="Grace runs 3 salons in Dar es Salaam"
                       className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      style={{ objectPosition: 'center top' }}
                       loading="lazy"
                     />
                   </Parallax>
