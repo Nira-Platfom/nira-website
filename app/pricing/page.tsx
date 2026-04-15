@@ -110,7 +110,7 @@ function CheckIcon({ included }: { included: boolean }) {
     )
   }
   return (
-    <svg className="w-4 h-4 flex-shrink-0 text-slate-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 flex-shrink-0 opacity-30" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
   )
@@ -121,13 +121,13 @@ export default function PricingPage() {
     <div className="font-sans">
 
       {/* Header */}
-      <section className="pt-28 pb-16 bg-white text-center">
+      <section className="pt-28 pb-16 text-center" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-3xl mx-auto px-6">
           <span className="text-xs font-medium text-coral uppercase tracking-widest">Pricing</span>
-          <h1 className="font-serif text-5xl text-[#1E293B] mt-3 mb-4">
+          <h1 className="font-serif text-5xl mt-3 mb-4" style={{ color: 'var(--text-primary)' }}>
             Pick your power level
           </h1>
-          <p className="text-lg text-slate-500 leading-relaxed">
+          <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Start for free. Upgrade when your business is ready to grow.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 bg-mint-light text-mint-dark text-sm font-medium px-4 py-2 rounded-full">
@@ -140,17 +140,17 @@ export default function PricingPage() {
       </section>
 
       {/* Plans */}
-      <section className="pb-24 bg-nira-bg">
+      <section className="pb-24" style={{ backgroundColor: 'var(--bg-page)' }}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative rounded-2xl p-8 ${
-                  plan.highlight
-                    ? 'bg-coral text-white shadow-2xl shadow-coral/25 md:-mt-4 md:mb-4'
-                    : 'bg-white border border-nira-border'
-                }`}
+                className={`relative rounded-2xl p-8 ${plan.highlight ? 'bg-coral text-white shadow-2xl shadow-coral/25 md:-mt-4 md:mb-4' : 'border'}`}
+                style={plan.highlight ? {} : {
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border)',
+                }}
               >
                 {plan.badge && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#1E293B] text-white text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
@@ -159,18 +159,32 @@ export default function PricingPage() {
                 )}
 
                 <div className="mb-6">
-                  <h2 className={`font-medium text-sm mb-2 ${plan.highlight ? 'text-white/70' : 'text-slate-400'}`}>
+                  <h2
+                    className="font-medium text-sm mb-2"
+                    style={plan.highlight ? { color: 'rgba(255,255,255,0.7)' } : { color: 'var(--text-muted)' }}
+                  >
                     {plan.name}
                   </h2>
                   <div className="flex items-end gap-1 mb-2">
-                    <span className={`font-serif text-3xl ${plan.highlight ? 'text-white' : 'text-[#1E293B]'}`}>
+                    <span
+                      className="font-serif text-3xl"
+                      style={plan.highlight ? { color: 'white' } : { color: 'var(--text-primary)' }}
+                    >
                       {plan.price}
                     </span>
-                    <span className={`text-sm mb-1 ${plan.highlight ? 'text-white/70' : 'text-slate-400'}`}>
+                    <span
+                      className="text-sm mb-1"
+                      style={plan.highlight ? { color: 'rgba(255,255,255,0.7)' } : { color: 'var(--text-muted)' }}
+                    >
                       {plan.period}
                     </span>
                   </div>
-                  <p className={`text-sm ${plan.highlight ? 'text-white/80' : 'text-slate-500'}`}>{plan.desc}</p>
+                  <p
+                    className="text-sm"
+                    style={plan.highlight ? { color: 'rgba(255,255,255,0.8)' } : { color: 'var(--text-secondary)' }}
+                  >
+                    {plan.desc}
+                  </p>
                 </div>
 
                 <Link
@@ -184,13 +198,16 @@ export default function PricingPage() {
                   {plan.features.map((f) => (
                     <li
                       key={f.text}
-                      className={`flex items-center gap-3 text-sm ${
-                        plan.highlight
-                          ? f.included ? 'text-white/90' : 'text-white/30'
-                          : f.included ? 'text-slate-600' : 'text-slate-300'
-                      }`}
+                      className="flex items-center gap-3 text-sm"
+                      style={plan.highlight
+                        ? { color: f.included ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)' }
+                        : { color: f.included ? 'var(--text-secondary)' : 'var(--text-muted)', opacity: f.included ? 1 : 0.45 }
+                      }
                     >
-                      <span className={plan.highlight ? (f.included ? 'text-white' : 'text-white/30') : (f.included ? 'text-mint-dark' : 'text-slate-300')}>
+                      <span style={plan.highlight
+                        ? { color: f.included ? 'white' : 'rgba(255,255,255,0.3)' }
+                        : { color: f.included ? 'var(--mint)' : 'var(--text-muted)' }
+                      }>
                         <CheckIcon included={f.included} />
                       </span>
                       {f.text}
@@ -204,14 +221,21 @@ export default function PricingPage() {
       </section>
 
       {/* Payment methods */}
-      <section className="py-12 bg-white border-y border-nira-border">
+      <section className="py-12 border-y" style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}>
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm text-slate-400 font-medium mb-5 uppercase tracking-widest">Accepted payment methods</p>
+          <p className="text-sm font-medium mb-5 uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+            Accepted payment methods
+          </p>
           <div className="flex flex-wrap justify-center gap-4">
             {['M-Pesa', 'Airtel Money', 'Tigo Pesa', 'Visa', 'Mastercard'].map((method) => (
               <div
                 key={method}
-                className="bg-nira-bg border border-nira-border px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium border"
+                style={{
+                  backgroundColor: 'var(--bg-page)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--text-secondary)',
+                }}
               >
                 {method}
               </div>
@@ -221,17 +245,23 @@ export default function PricingPage() {
       </section>
 
       {/* FAQs */}
-      <section className="py-24 bg-white">
+      <section className="py-24" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-14">
             <span className="text-xs font-medium text-coral uppercase tracking-widest">FAQ</span>
-            <h2 className="font-serif text-4xl text-[#1E293B] mt-3">Frequently Asked Questions</h2>
+            <h2 className="font-serif text-4xl mt-3" style={{ color: 'var(--text-primary)' }}>
+              Frequently Asked Questions
+            </h2>
           </div>
           <div className="space-y-4">
             {faqs.map((faq) => (
-              <div key={faq.q} className="bg-nira-bg border border-nira-border rounded-2xl p-6">
-                <h3 className="font-medium text-[#1E293B] mb-2">{faq.q}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{faq.a}</p>
+              <div
+                key={faq.q}
+                className="rounded-2xl p-6 border"
+                style={{ backgroundColor: 'var(--bg-page)', borderColor: 'var(--border)' }}
+              >
+                <h3 className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{faq.q}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{faq.a}</p>
               </div>
             ))}
           </div>
