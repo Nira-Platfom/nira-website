@@ -599,9 +599,7 @@ export default function HomePage() {
               className="font-serif text-4xl lg:text-5xl leading-[1.2] mb-6"
               style={{ color: 'var(--text-primary)' }}
             >
-              Built for the women who
-              <br />
-              Power East Africa&apos;s beauty industry
+              Helping Beauty Businesses Grow Beyond Limits
             </h2>
           </FadeUp>
 
