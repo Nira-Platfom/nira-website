@@ -611,8 +611,8 @@ export default function HomePage() {
               className="text-lg leading-[1.7] max-w-[580px] mx-auto mb-16"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Millions of talented women run salons, spas, and beauty shops across Tanzania and Kenya.
-              They work hard, serve their communities, and deserve technology that works as hard as they do.
+              They run the beauty industry.
+              We build the tools to help them scale it
             </p>
           </FadeUp>
 
@@ -700,8 +700,7 @@ export default function HomePage() {
                 className="font-serif text-2xl lg:text-[28px] leading-[1.5] italic px-8"
                 style={{ color: 'var(--text-primary)' }}
               >
-                Technology should empower every woman,
-                not just women in Silicon Valley.
+                If your business depends on replies, it shouldn’t depend on you.
               </p>
               <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
                 — Nira team, Dar es Salaam
