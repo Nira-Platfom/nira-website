@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -7,8 +8,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand column */}
           <div className="md:col-span-1">
-            <Link href="/" className="font-serif text-2xl text-coral">
-              Nira
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt="Nira"
+                width={80}
+                height={32}
+                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+              />
             </Link>
             <p className="mt-3 text-sm text-slate-400 leading-relaxed">
               Your Beauty AI Companion. Glow Smarter.
@@ -74,10 +81,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <span className="text-sm text-slate-400">Privacy Policy</span>
+                <Link href="/privacy" className="text-sm text-slate-400 hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <span className="text-sm text-slate-400">Terms of Service</span>
+                <Link href="/terms" className="text-sm text-slate-400 hover:text-white transition-colors">
+                  Terms of Service
+                </Link>
               </li>
             </ul>
             <div className="mt-6">
