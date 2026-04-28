@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal — Nira</title>
+  <meta name="description" content="Nira legal documents — Terms & Conditions and Privacy Policy." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1E293B;
+      background: #ffffff;
+      line-height: 1.7;
+    }
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .navbar-icon {
+      width: 36px; height: 36px;
+      background: #FF6B6B;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .navbar-icon span {
+      color: white;
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .navbar-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #1E293B;
+      text-decoration: none;
+    }
+    .navbar-links { display: flex; gap: 24px; align-items: center; }
+    .navbar-links a {
+      font-size: 14px;
+      color: #64748B;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .navbar-links a:hover { color: #FF6B6B; }
+    .hero {
+      background: #FF6B6B;
+      padding: 72px 24px 64px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      color: white;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .hero p { font-size: 16px; color: rgba(255,255,255,0.85); max-width: 480px; margin: 0 auto; }
+    .content { max-width: 800px; margin: 0 auto; padding: 56px 24px 80px; }
+    .highlight-box {
+      background: #F8F7FF;
+      border: 1px solid #E2E8F0;
+      border-left: 4px solid #FF6B6B;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 15px;
+      color: #475569;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 8px;
+    }
+    .legal-card {
+      background: #F8F7FF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 32px;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .legal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+    .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+    .card-title { font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 8px; }
+    .card-desc { font-size: 14px; color: #64748B; line-height: 1.6; }
+    .card-link { margin-top: 16px; font-size: 14px; color: #FF6B6B; font-weight: 500; }
+    .footer {
+      background: #1E293B;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer-links a:hover { color: #FF6B6B; }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+    @media (max-width: 600px) {
+      .navbar-links { display: none; }
+      .hero { padding: 48px 20px 40px; }
+      .content { padding: 36px 20px 60px; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="navbar-icon"><span>N</span></div>
+      <span class="navbar-name">Nira</span>
+    </a>
+    <div class="navbar-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">Legal Documents</div>
+    <h1>Nira Legal</h1>
+    <p>Our commitment to transparency, privacy, and fair use of our platform.</p>
+  </div>
+
+  <div class="content">
+    <div class="card-grid">
+
+      <a href="privacy.html" class="legal-card">
+        <div class="card-icon" style="background:#E4F7F3;">🔒</div>
+        <div class="card-title">Privacy Policy</div>
+        <div class="card-desc">How we collect, use, and protect your personal data.</div>
+        <div class="card-link">Read policy →</div>
+      </a>
+
+      <a href="terms.html" class="legal-card">
+        <div class="card-icon" style="background:#FFE8E8;">📋</div>
+        <div class="card-title">Terms &amp; Conditions</div>
+        <div class="card-desc">Rules and guidelines for using the Nira platform.</div>
+        <div class="card-link">Read terms →</div>
+      </a>
+
+    </div>
+
+    <div class="highlight-box" style="margin-top:40px;">
+      Questions about our legal documents? Contact us at <strong><a href="mailto:info.niraapp@gmail.com" style="color:#FF6B6B;text-decoration:none;">info.niraapp@gmail.com</a></strong>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Nira</div>
+    <div class="footer-tagline">Glow Smarter 🌸</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="mailto:info.niraapp@gmail.com">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Nira Technologies. Dar es Salaam, Tanzania.</div>
+  </footer>
+
+</body>
+</html>
