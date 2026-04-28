@@ -21,9 +21,44 @@ const dmSerifDisplay = DM_Serif_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Nira — Your Beauty AI Companion',
+  title: 'Nira — Beauty Business AI Companion',
   description:
-    'AI-powered WhatsApp assistant for salons, spas, and cosmetic shops in East Africa. Auto-reply, bookings, and grow your business — 24/7.',
+    'AI-powered WhatsApp assistant for salons, spas, and cosmetic shops in East Africa. Automate bookings, orders and customer service — 24/7.',
+
+  icons: {
+    icon: [
+      { url: '/favicon.ico',        sizes: 'any' },
+      { url: '/favicon-16x16.png',  sizes: '16x16',  type: 'image/png' },
+      { url: '/favicon-32x32.png',  sizes: '32x32',  type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      { rel: 'mask-icon', url: '/favicon-32x32.png', color: '#FF6B6B' },
+    ],
+  },
+
+  manifest: '/site.webmanifest',
+  themeColor: '#FF6B6B',
+
+  openGraph: {
+    title: 'Nira — Beauty Business AI Companion',
+    description:
+      'AI-powered WhatsApp assistant for salons, spas, and cosmetic shops in East Africa. Auto-reply, bookings, and grow your business — 24/7.',
+    url: 'https://nira.tz',
+    siteName: 'Nira',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Nira — Beauty AI Companion' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nira — Beauty Business AI Companion',
+    description: 'AI-powered WhatsApp assistant for beauty businesses in East Africa.',
+    images: ['/og-image.png'],
+  },
 }
 
 export default function RootLayout({
