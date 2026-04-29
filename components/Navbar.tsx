@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import NiraWordmark from '@/components/NiraWordmark'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -23,14 +23,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Nira"
-            width={90}
-            height={36}
-            priority
-            style={{ objectFit: 'contain' }}
-          />
+          <NiraWordmark size="md" variant="default" />
         </Link>
 
         {/* Desktop nav */}

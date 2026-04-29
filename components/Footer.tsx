@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import NiraWordmark from '@/components/NiraWordmark'
 
 export default function Footer() {
   return (
@@ -9,13 +9,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Nira"
-                width={80}
-                height={32}
-                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
-              />
+              <NiraWordmark size="md" variant="white" />
             </Link>
             <p className="mt-3 text-sm text-slate-400 leading-relaxed">
               Your Beauty AI Companion. Glow Smarter.
