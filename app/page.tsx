@@ -871,8 +871,8 @@ export default function HomePage() {
               },
               {
                 step: '02',
-                title: 'Connect WhatsApp',
-                desc: 'Link your existing WhatsApp Business number. Nira gives you a one-click setup URL — paste it in Meta Business Suite.',
+                title: 'Get Your Bot Code',
+                desc: 'Once registered, Nira gives you a unique bot code — like hisalonname or hishopname. Share it with your customers. They simply type it on WhatsApp to instantly connect to your bot — no app download needed on their end. Example: a customer types hinasby and your Nasby Salon bot starts serving them immediately.',
                 icon: (
                   <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
@@ -1016,19 +1016,83 @@ export default function HomePage() {
                 quote: 'Nira imebadilisha biashara yangu kabisa. Sasa wateja wanaweza kupanga miadi usiku wa manane na bot inawajibu papo hapo!',
                 name: 'Grace Mwangi',
                 business: 'Glam Beauty Salon · Dar es Salaam',
-                avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80',
+                avatar: (
+                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                    <defs><clipPath id="av-grace"><circle cx="26" cy="26" r="26"/></clipPath></defs>
+                    <g clipPath="url(#av-grace)">
+                      <rect width="52" height="52" fill="#F0ECFB"/>
+                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#8B5E3C"/>
+                      <ellipse cx="26" cy="28" rx="13" ry="14" fill="#8B5E3C"/>
+                      <ellipse cx="26" cy="16" rx="14" ry="8" fill="#2C1810"/>
+                      <ellipse cx="14" cy="22" rx="5" ry="7" fill="#2C1810"/>
+                      <ellipse cx="38" cy="22" rx="5" ry="7" fill="#2C1810"/>
+                      <ellipse cx="21" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="31" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="21.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="31.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="26" cy="31" rx="2" ry="1.2" fill="#7A5030"/>
+                      <path d="M22 34 Q26 37 30 34" stroke="#5C2E0A" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                      <circle cx="13" cy="29" r="2" fill="#FF6B6B"/>
+                      <circle cx="39" cy="29" r="2" fill="#FF6B6B"/>
+                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#6B4226"/>
+                    </g>
+                  </svg>
+                ),
               },
               {
                 quote: 'I used to spend 3 hours a day just answering WhatsApp messages. Now Nira handles everything and I focus on my clients. Best decision I made.',
                 name: 'Amina Hassan',
                 business: 'Pure Glow Spa · Nairobi',
-                avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&q=80',
+                avatar: (
+                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                    <defs><clipPath id="av-amina"><circle cx="26" cy="26" r="26"/></clipPath></defs>
+                    <g clipPath="url(#av-amina)">
+                      <rect width="52" height="52" fill="#FFE8E8"/>
+                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#A0673A"/>
+                      <ellipse cx="26" cy="28" rx="13" ry="14" fill="#A0673A"/>
+                      <rect x="10" y="16" width="5" height="22" rx="2.5" fill="#3D1F00"/>
+                      <rect x="37" y="16" width="5" height="22" rx="2.5" fill="#3D1F00"/>
+                      <ellipse cx="26" cy="15" rx="14" ry="7" fill="#3D1F00"/>
+                      <rect x="23.5" y="8" width="5" height="18" rx="2.5" fill="#3D1F00"/>
+                      <ellipse cx="21" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="31" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="21.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="31.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="26" cy="31" rx="2" ry="1.2" fill="#8B5A2B"/>
+                      <path d="M22 34 Q26 37.5 30 34" stroke="#6B3F15" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                      <circle cx="13" cy="28" r="2.5" fill="none" stroke="#F5C842" strokeWidth="1.5"/>
+                      <circle cx="39" cy="28" r="2.5" fill="none" stroke="#F5C842" strokeWidth="1.5"/>
+                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#7A4F25"/>
+                    </g>
+                  </svg>
+                ),
               },
               {
                 quote: 'My cosmetics shop doubled orders in 2 months. Customers love how easy it is to order through WhatsApp. Nira is simply the best.',
                 name: 'Zainab Ali',
                 business: 'Zainab Beauty · Mombasa',
-                avatar: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=100&q=80',
+                avatar: (
+                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                    <defs><clipPath id="av-zainab"><circle cx="26" cy="26" r="26"/></clipPath></defs>
+                    <g clipPath="url(#av-zainab)">
+                      <rect width="52" height="52" fill="#E4F7F3"/>
+                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#5C3317"/>
+                      <ellipse cx="26" cy="29" rx="13" ry="13" fill="#5C3317"/>
+                      <ellipse cx="26" cy="17" rx="16" ry="11" fill="#6BCFB8"/>
+                      <ellipse cx="26" cy="14" rx="14" ry="7" fill="#4DB8A0"/>
+                      <ellipse cx="26" cy="9" rx="7" ry="5" fill="#6BCFB8"/>
+                      <rect x="10" y="20" width="7" height="16" rx="3" fill="#6BCFB8"/>
+                      <rect x="35" y="20" width="7" height="16" rx="3" fill="#6BCFB8"/>
+                      <ellipse cx="21" cy="28" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="31" cy="28" rx="2.5" ry="2" fill="#1A0A00"/>
+                      <ellipse cx="21.5" cy="27.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="31.5" cy="27.5" rx="0.8" ry="0.6" fill="white"/>
+                      <ellipse cx="26" cy="32" rx="2" ry="1.2" fill="#4A2610"/>
+                      <path d="M22 35 Q26 38 30 35" stroke="#3A1A06" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#4A2610"/>
+                    </g>
+                  </svg>
+                ),
               },
             ].map((t) => (
               <StaggerItem key={t.name}>
@@ -1064,16 +1128,12 @@ export default function HomePage() {
 
                   {/* Author */}
                   <div className="flex items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      width={44}
-                      height={44}
-                      className="rounded-full object-cover flex-shrink-0"
-                      style={{ border: '2px solid var(--coral)' }}
-                      loading="lazy"
-                    />
+                    <div
+                      className="flex-shrink-0 rounded-full overflow-hidden"
+                      style={{ border: '2px solid var(--coral)', width: 44, height: 44 }}
+                    >
+                      {t.avatar}
+                    </div>
                     <div>
                       <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t.name}</p>
                       <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.business}</p>
