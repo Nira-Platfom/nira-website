@@ -4,22 +4,13 @@ import { useState, useEffect, useRef } from 'react'
 
 const images = [
   {
-    src: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+    src: '/grace.jpg',
     label: 'Salon & Spa',
     name: 'Grace Beauty Salon',
     stat: '4.9',
     statLabel: 'Rating',
     kenBurns: 'ken-burns',
-    objectPosition: 'center',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=80',
-    label: 'Skincare Shop',
-    name: 'Zara Skincare Store',
-    stat: '312',
-    statLabel: 'Products',
-    kenBurns: 'ken-burns-2',
-    objectPosition: 'center',
+    objectPosition: 'center top',
   },
   {
     src: '/amina-makeup.jpg',

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { AnimatePresence, motion } from 'framer-motion'
+import { FadeUp, StaggerContainer, StaggerItem, SlideRight } from '../../components/animations'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', businessType: '', message: '' })
@@ -57,13 +59,15 @@ export default function ContactPage() {
       {/* Header */}
       <section className="pt-28 pb-16 text-center" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-2xl mx-auto px-6">
-          <span className="text-xs font-medium text-coral uppercase tracking-widest">Contact</span>
-          <h1 className="font-serif text-5xl mt-3 mb-4" style={{ color: 'var(--text-primary)' }}>
-            Get in Touch
-          </h1>
-          <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Have a question about Nira? Want a demo for your business? We&apos;d love to hear from you.
-          </p>
+          <FadeUp>
+            <span className="text-xs font-medium text-coral uppercase tracking-widest">Contact</span>
+            <h1 className="font-serif text-5xl mt-3 mb-4" style={{ color: 'var(--text-primary)' }}>
+              Get in Touch
+            </h1>
+            <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Have a question about Nira? Want a demo for your business? We&apos;d love to hear from you.
+            </p>
+          </FadeUp>
         </div>
       </section>
 
@@ -73,74 +77,92 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
 
             {/* Left — info */}
-            <div className="lg:col-span-2 space-y-6">
+            <StaggerContainer className="lg:col-span-2 space-y-6">
               {contacts.map((c) => (
-                <div
-                  key={c.label}
-                  className="flex items-start gap-4 rounded-2xl p-5 border"
-                  style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
-                >
-                  <div className="w-10 h-10 rounded-xl bg-coral-light flex items-center justify-center text-coral flex-shrink-0">
-                    {c.icon}
+                <StaggerItem key={c.label}>
+                  <div
+                    className="flex items-start gap-4 rounded-2xl p-5 border transition-shadow hover:shadow-md"
+                    style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-coral-light flex items-center justify-center text-coral flex-shrink-0">
+                      {c.icon}
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                        {c.label}
+                      </p>
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{c.value}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
-                      {c.label}
-                    </p>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{c.value}</p>
-                  </div>
-                </div>
+                </StaggerItem>
               ))}
 
               {/* Response time */}
-              <div className="bg-mint-light border border-mint/30 rounded-2xl p-5">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-mint-dark" />
-                  <p className="text-sm font-medium text-mint-dark">Quick response</p>
+              <StaggerItem>
+                <div className="bg-mint-light border border-mint/30 rounded-2xl p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-mint-dark" style={{ animation: 'pulse-soft 2s ease-in-out infinite' }} />
+                    <p className="text-sm font-medium text-mint-dark">Quick response</p>
+                  </div>
+                  <p className="text-sm text-slate-600">
+                    We typically respond within an hours during business hours (Mon–Sat, 8 AM – 6 PM EAT).
+                  </p>
                 </div>
-                <p className="text-sm text-slate-600">
-                  We typically respond within an hours during business hours (Mon–Sat, 8 AM – 6 PM EAT).
-                </p>
-              </div>
+              </StaggerItem>
 
               {/* Languages */}
-              <div
-                className="rounded-2xl p-5 border"
-                style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
-              >
-                <p className="text-xs font-medium uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
-                  We speak
-                </p>
-                <div className="flex gap-2">
-                  <span
-                    className="text-sm font-medium px-3 py-1.5 rounded-full border"
-                    style={{ backgroundColor: 'var(--bg-page)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-                  >
-                    🇹🇿 Swahili
-                  </span>
-                  <span
-                    className="text-sm font-medium px-3 py-1.5 rounded-full border"
-                    style={{ backgroundColor: 'var(--bg-page)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-                  >
-                    🇬🇧 English
-                  </span>
+              <StaggerItem>
+                <div
+                  className="rounded-2xl p-5 border"
+                  style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
+                >
+                  <p className="text-xs font-medium uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
+                    We speak
+                  </p>
+                  <div className="flex gap-2">
+                    <span
+                      className="text-sm font-medium px-3 py-1.5 rounded-full border"
+                      style={{ backgroundColor: 'var(--bg-page)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+                    >
+                      🇹🇿 Swahili
+                    </span>
+                    <span
+                      className="text-sm font-medium px-3 py-1.5 rounded-full border"
+                      style={{ backgroundColor: 'var(--bg-page)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+                    >
+                      🇬🇧 English
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </StaggerItem>
+            </StaggerContainer>
 
             {/* Right — form */}
-            <div className="lg:col-span-3">
+            <SlideRight delay={0.1} className="lg:col-span-3">
               <div
-                className="rounded-2xl p-8 border"
+                className="rounded-2xl p-8 border overflow-hidden"
                 style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
               >
+                <AnimatePresence mode="wait">
                 {submitted ? (
-                  <div className="py-10 text-center">
-                    <div className="w-16 h-16 rounded-full bg-mint-light flex items-center justify-center mx-auto mb-5">
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                    className="py-10 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.15, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+                      className="w-16 h-16 rounded-full bg-mint-light flex items-center justify-center mx-auto mb-5"
+                    >
                       <svg className="w-8 h-8 text-mint-dark" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
-                    </div>
+                    </motion.div>
                     <h3 className="font-serif text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>Message Sent!</h3>
                     <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
                       Thank you for reaching out. We&apos;ll get back to you within 2 hours.
@@ -151,9 +173,15 @@ export default function ContactPage() {
                     >
                       Send another message
                     </button>
-                  </div>
+                  </motion.div>
                 ) : (
-                  <>
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <h2 className="font-serif text-2xl mb-6" style={{ color: 'var(--text-primary)' }}>Send us a message</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -264,7 +292,7 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="w-full h-12 bg-coral hover:bg-coral-dark disabled:opacity-70 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
+                        className="btn-press w-full h-12 bg-coral hover:bg-coral-dark disabled:opacity-70 text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
                       >
                         {loading ? (
                           <>
@@ -284,10 +312,11 @@ export default function ContactPage() {
                         )}
                       </button>
                     </form>
-                  </>
+                  </motion.div>
                 )}
+                </AnimatePresence>
               </div>
-            </div>
+            </SlideRight>
 
           </div>
         </div>
@@ -296,17 +325,19 @@ export default function ContactPage() {
       {/* Download CTA */}
       <section className="py-14 text-center" style={{ backgroundColor: 'var(--bg-dark)' }}>
         <div className="max-w-xl mx-auto px-6">
-          <p className="text-white font-serif text-2xl mb-3">Ready to try Nira?</p>
-          <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>Download free and set up your business in minutes.</p>
-          <Link
-            href="/#download"
-            className="inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-white font-medium px-7 py-3 rounded-full transition-colors"
-          >
-            Download Free App
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+          <FadeUp>
+            <p className="text-white font-serif text-2xl mb-3">Ready to try Nira?</p>
+            <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>Download free and set up your business in minutes.</p>
+            <Link
+              href="/#download"
+              className="btn-press inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-white font-medium px-7 py-3 rounded-full transition-colors"
+            >
+              Download Free App
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </FadeUp>
         </div>
       </section>
 

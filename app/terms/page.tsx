@@ -1,16 +1,19 @@
 import type { Metadata } from 'next'
+import { FadeUp } from '../../components/animations'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — Nira',
+  title: 'Terms of Service · Nira',
   description: 'Terms governing your use of the Nira platform.',
 }
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen pt-16" style={{ backgroundColor: 'var(--bg-surface)' }}>
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-4xl font-semibold text-gray-900 mb-2">Terms of Service</h1>
-        <p className="text-sm text-gray-500 mb-12">Last updated: April 18, 2026</p>
+        <FadeUp>
+          <h1 className="text-4xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Terms of Service</h1>
+          <p className="text-sm mb-12" style={{ color: 'var(--text-muted)' }}>Last updated: April 18, 2026</p>
+        </FadeUp>
 
         <Section title="1. Acceptance of terms">
           <p>By creating an account or using the Nira platform (including the mobile app, WhatsApp bot, and website), you agree to these Terms of Service. If you do not agree, do not use Nira.</p>
@@ -21,9 +24,9 @@ export default function TermsPage() {
           <ul>
             <li>An automated WhatsApp bot that handles customer inquiries, bookings, and orders on your behalf</li>
             <li>A mobile app to manage your business, customers, products, services, and analytics</li>
-            <li>AI-powered skincare advice and responses generated using Anthropic's Claude</li>
+            <li>AI-powered skincare advice and responses generated using Anthropic&apos;s Claude</li>
           </ul>
-          <p>The service is provided on an "as is" basis and may be updated or changed at any time.</p>
+          <p>The service is provided on an &quot;as is&quot; basis and may be updated or changed at any time.</p>
         </Section>
 
         <Section title="3. User accounts">
@@ -43,7 +46,7 @@ export default function TermsPage() {
             <li>Transmit illegal, harmful, threatening, or fraudulent content through the WhatsApp bot</li>
             <li>Impersonate another person or business</li>
             <li>Attempt to reverse-engineer, hack, or exploit the platform</li>
-            <li>Violate WhatsApp's Business Policy or Meta's Terms of Service</li>
+            <li>Violate WhatsApp&apos;s Business Policy or Meta&apos;s Terms of Service</li>
             <li>Collect personal data from customers beyond what is needed to operate your business</li>
           </ul>
           <p>We reserve the right to suspend or terminate accounts that violate these rules without notice.</p>
@@ -56,7 +59,7 @@ export default function TermsPage() {
             <li>Subscription fees are billed in advance on a monthly or annual basis</li>
             <li>All prices are in Tanzanian Shillings (TZS) unless otherwise stated</li>
             <li>Refunds are provided at our discretion within 7 days of payment for annual plans</li>
-            <li>We reserve the right to change pricing with 30 days' notice</li>
+            <li>We reserve the right to change pricing with 30 days&apos; notice</li>
           </ul>
         </Section>
 
@@ -96,11 +99,16 @@ export default function TermsPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mb-10">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">{title}</h2>
-      <div className="text-gray-600 leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#FF6B6B]">
-        {children}
-      </div>
-    </section>
+    <FadeUp className="mb-10">
+      <section>
+        <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>{title}</h2>
+        <div
+          className="leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#FF6B6B] [&_strong]:font-medium"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          {children}
+        </div>
+      </section>
+    </FadeUp>
   )
 }

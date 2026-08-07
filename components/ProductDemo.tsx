@@ -4,10 +4,70 @@ import { useState } from 'react'
 
 type Tab = 'how' | 'effects' | 'suitable'
 
+function DropIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2.5c-3.5 5-7 9-7 13a7 7 0 0014 0c0-4-3.5-8-7-13z" />
+    </svg>
+  )
+}
+function GlowIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5" />
+      <path d="M12 1v3M12 20v3M23 12h-3M4 12H1M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05L4.93 4.93" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+}
+function ShieldIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5l8-3z" />
+    </svg>
+  )
+}
+function ListIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+    </svg>
+  )
+}
+function SparkIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2z" />
+    </svg>
+  )
+}
+function TargetIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+function GoodIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  )
+}
+function CautionIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a1 1 0 00.86 1.5h18.64a1 1 0 00.86-1.5L13.71 3.86a1 1 0 00-1.72 0z" />
+    </svg>
+  )
+}
+
 const PRODUCTS = [
   {
     id: 'niacinamide',
-    emoji: '💧',
+    Icon: DropIcon,
     name: 'Niacinamide 10% Serum',
     category: 'Serum',
     price: 'TZS 42,000',
@@ -17,18 +77,16 @@ const PRODUCTS = [
     tabs: {
       how: {
         title: 'How to Use',
-        icon: '📋',
         steps: [
           'Cleanse your face thoroughly',
           'Apply 3–4 drops on fingertips',
-          'Gently press into skin — don\'t rub',
+          'Gently press into skin, do not rub',
           'Follow with moisturizer',
           'Use morning and evening for best results',
         ],
       },
       effects: {
         title: 'What It Does',
-        icon: '✨',
         points: [
           { positive: true,  text: 'Minimizes the appearance of pores' },
           { positive: true,  text: 'Controls excess sebum production' },
@@ -39,7 +97,6 @@ const PRODUCTS = [
       },
       suitable: {
         title: 'Is It For You?',
-        icon: '🎯',
         types: [
           { type: 'Oily skin',       fit: 'perfect',  note: 'Controls shine, best match' },
           { type: 'Combination',     fit: 'perfect',  note: 'Balances oily zones' },
@@ -52,7 +109,7 @@ const PRODUCTS = [
   },
   {
     id: 'vitamin-c',
-    emoji: '🍊',
+    Icon: GlowIcon,
     name: 'Vitamin C Brightening Cream',
     category: 'Moisturizer',
     price: 'TZS 55,000',
@@ -62,7 +119,6 @@ const PRODUCTS = [
     tabs: {
       how: {
         title: 'How to Use',
-        icon: '📋',
         steps: [
           'Apply after toner or serum',
           'Use a pea-sized amount for the face',
@@ -73,18 +129,16 @@ const PRODUCTS = [
       },
       effects: {
         title: 'What It Does',
-        icon: '✨',
         points: [
           { positive: true,  text: 'Brightens dull skin & fades dark spots' },
           { positive: true,  text: 'Boosts collagen for firmer skin' },
           { positive: true,  text: 'Antioxidant protection from pollution' },
           { positive: true,  text: 'Visible glow within 4 weeks of use' },
-          { positive: false, text: 'Can cause sun sensitivity — always use SPF' },
+          { positive: false, text: 'Can cause sun sensitivity, always use SPF' },
         ],
       },
       suitable: {
         title: 'Is It For You?',
-        icon: '🎯',
         types: [
           { type: 'Dull / uneven tone', fit: 'perfect',  note: 'Number one pick for you' },
           { type: 'Normal skin',        fit: 'perfect',  note: 'Great daily brightener' },
@@ -97,7 +151,7 @@ const PRODUCTS = [
   },
   {
     id: 'sunscreen',
-    emoji: '☀️',
+    Icon: ShieldIcon,
     name: 'SPF 50+ Daily Sunscreen',
     category: 'Sun Protection',
     price: 'TZS 38,000',
@@ -107,10 +161,9 @@ const PRODUCTS = [
     tabs: {
       how: {
         title: 'How to Use',
-        icon: '📋',
         steps: [
           'Apply as the LAST step of your morning routine',
-          'Use a generous amount — don\'t skimp',
+          'Use a generous amount, do not skimp',
           'Cover face, neck & ears',
           'Reapply every 2 hours outdoors',
           'Apply 15 minutes before sun exposure',
@@ -118,18 +171,16 @@ const PRODUCTS = [
       },
       effects: {
         title: 'What It Does',
-        icon: '✨',
         points: [
           { positive: true,  text: 'Blocks 98% of UVA & UVB rays' },
           { positive: true,  text: 'Prevents premature aging & dark spots' },
-          { positive: true,  text: 'Lightweight — no white cast formula' },
+          { positive: true,  text: 'Lightweight, no white cast formula' },
           { positive: true,  text: 'Also moisturizes & primes skin' },
           { positive: false, text: 'Must reapply after sweating or swimming' },
         ],
       },
       suitable: {
         title: 'Is It For You?',
-        icon: '🎯',
         types: [
           { type: 'All skin types',  fit: 'perfect',  note: 'Suitable for everyone' },
           { type: 'Dark skin tones', fit: 'perfect',  note: 'No white cast, invisible' },
@@ -177,7 +228,7 @@ export default function ProductDemo() {
                 : 'bg-white border-nira-border hover:border-slate-300'
             }`}
           >
-            <span className="text-2xl">{p.emoji}</span>
+            <p.Icon className={`w-6 h-6 flex-shrink-0 ${i === selected ? p.accent : 'text-slate-400'}`} />
             <div className="min-w-0">
               <p className={`text-sm font-medium leading-snug ${i === selected ? p.accent : 'text-[#1E293B]'} truncate`}>
                 {p.name}
@@ -191,7 +242,7 @@ export default function ProductDemo() {
 
         {/* AI Ask prompt */}
         <div className="hidden lg:flex items-start gap-2 bg-[#1E293B] rounded-2xl p-4 mt-2">
-          <span className="text-lg">🤖</span>
+          <SparkIcon className="w-4 h-4 text-coral flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-xs text-white font-medium mb-1">Ask Nira AI</p>
             <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -214,17 +265,17 @@ export default function ProductDemo() {
               <h3 className="font-serif text-xl text-[#1E293B] mt-1">{product.name}</h3>
               <p className={`text-sm font-medium mt-0.5 ${product.accent}`}>{product.price}</p>
             </div>
-            <span className="text-4xl">{product.emoji}</span>
+            <product.Icon className={`w-9 h-9 ${product.accent}`} />
           </div>
         </div>
 
         {/* Tabs */}
         <div className="flex border-b border-nira-border">
           {([
-            { key: 'how' as Tab,      label: 'How to Use',    icon: '📋' },
-            { key: 'effects' as Tab,  label: 'Effects',       icon: '✨' },
-            { key: 'suitable' as Tab, label: 'Suitable For',  icon: '🎯' },
-          ] as const).map(({ key, label, icon }) => (
+            { key: 'how' as Tab,      label: 'How to Use',    Icon: ListIcon },
+            { key: 'effects' as Tab,  label: 'Effects',       Icon: SparkIcon },
+            { key: 'suitable' as Tab, label: 'Suitable For',  Icon: TargetIcon },
+          ] as const).map(({ key, label, Icon }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
@@ -234,7 +285,7 @@ export default function ProductDemo() {
                   : 'text-slate-400 hover:text-slate-600'
               }`}
             >
-              <span>{icon}</span>
+              <Icon className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{label}</span>
             </button>
           ))}
@@ -260,9 +311,10 @@ export default function ProductDemo() {
             <ul className="space-y-2.5">
               {(tabData as typeof PRODUCTS[0]['tabs']['effects']).points?.map((p: {positive: boolean; text: string}, i: number) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className={`text-base flex-shrink-0 mt-0.5 ${p.positive ? '' : ''}`}>
-                    {p.positive ? '✅' : '⚠️'}
-                  </span>
+                  {p.positive
+                    ? <GoodIcon className="w-4 h-4 text-mint-dark flex-shrink-0 mt-0.5" />
+                    : <CautionIcon className="w-4 h-4 text-coral flex-shrink-0 mt-0.5" />
+                  }
                   <p className={`text-sm leading-relaxed ${p.positive ? 'text-slate-600' : 'text-slate-500'}`}>
                     {p.text}
                   </p>
@@ -292,7 +344,7 @@ export default function ProductDemo() {
         {/* Footer */}
         <div className="px-6 pb-6">
           <p className="text-[11px] text-slate-400 text-center border-t border-nira-border pt-4">
-            💬 Customers receive this info automatically through WhatsApp — powered by Nira AI
+            Customers get this same answer automatically through WhatsApp, powered by Nira AI.
           </p>
         </div>
       </div>

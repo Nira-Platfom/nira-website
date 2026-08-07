@@ -1,27 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type BizType = 'salon' | 'shop'
 
 // ── Chat data ──────────────────────────────────────────────────────────────────
 const SALON_CHAT = [
-  { from: 'bot',  text: '👋 Welcome to Glam Salon!\n\n1️⃣ Book appointment 📅\n2️⃣ View services & prices\n3️⃣ Active promotions 🎉' },
-  { from: 'user', text: '1' },
-  { from: 'bot',  text: '💆 Choose a service:\n\n1. Classic Facial · TZS 45,000\n2. Manicure · TZS 25,000\n3. Hair Braiding · TZS 60,000' },
-  { from: 'user', text: '2' },
-  { from: 'bot',  text: '📅 What date works for you?\n(e.g. Saturday, Mon Jan 27)' },
-  { from: 'user', text: 'Saturday 10am' },
-  { from: 'bot',  text: '✅ Booked!\nManicure · Sat, Jan 25 · 10:00 AM\n\nWe\'ll remind you 1hr before 🔔' },
+  { from: 'user', text: 'Hi, do you have any facials available this week?' },
+  { from: 'bot',  text: 'We do! Our Classic Facial is TZS 45,000 and takes about an hour. Want me to check a day for you?' },
+  { from: 'user', text: 'Saturday morning if possible' },
+  { from: 'bot',  text: 'Saturday 10:00 AM is open. Should I book that for you?' },
+  { from: 'user', text: 'Yes please' },
+  { from: 'bot',  text: 'Booked! Classic Facial, Saturday at 10:00 AM. I will remind you an hour before.' },
 ]
 
 const SHOP_CHAT = [
   { from: 'user', text: 'Do you have something for oily skin?' },
-  { from: 'bot',  text: '💧 Yes! I recommend:\n\nNiacinamide 10% Serum\n✓ Controls oil\n✓ Minimises pores\n✓ Evens skin tone\nTZS 42,000' },
+  { from: 'bot',  text: 'Yes, our Niacinamide 10% Serum is a great fit. It controls oil, minimizes pores, and evens skin tone. TZS 42,000.' },
   { from: 'user', text: 'How do I use it?' },
-  { from: 'bot',  text: '📋 How to use:\n1. Cleanse your face\n2. Apply 3–4 drops\n3. Press gently — don\'t rub\n4. Follow with moisturiser\n\nBest morning & evening!' },
+  { from: 'bot',  text: 'Cleanse first, apply 3 to 4 drops, press gently into skin (do not rub), then follow with moisturizer. Best morning and evening.' },
   { from: 'user', text: "I'll take 2 bottles" },
-  { from: 'bot',  text: '🛒 Order confirmed!\n2× Niacinamide Serum\nTotal: TZS 84,000\n\nDelivery details coming soon 🚚' },
+  { from: 'bot',  text: 'Order confirmed, 2x Niacinamide Serum, total TZS 84,000. I will send delivery details next.' },
 ]
 
 // ── Feature data ───────────────────────────────────────────────────────────────
@@ -29,7 +29,7 @@ const SALON_FEATURES = [
   {
     icon: '📅',
     title: 'Guided Booking Flow',
-    desc: 'Customers book appointments step-by-step through WhatsApp — no calls, no back-and-forth.',
+    desc: 'Customers book appointments step-by-step through WhatsApp, no calls, no back-and-forth.',
   },
   {
     icon: '💆',
@@ -39,7 +39,7 @@ const SALON_FEATURES = [
   {
     icon: '🔔',
     title: 'Automatic Reminders',
-    desc: 'Customers receive a reminder 1 hour before their appointment — zero no-shows.',
+    desc: 'Customers receive a reminder 1 hour before their appointment, cutting no-shows to zero.',
   },
   {
     icon: '📊',
@@ -49,7 +49,7 @@ const SALON_FEATURES = [
   {
     icon: '🎉',
     title: 'Promotions & Offers',
-    desc: 'Broadcast seasonal deals to all your customers with one tap — fills slow days fast.',
+    desc: 'Broadcast seasonal deals to all your customers with one tap, fills slow days fast.',
   },
   {
     icon: '⭐',
@@ -62,7 +62,7 @@ const SHOP_FEATURES = [
   {
     icon: '🤖',
     title: 'AI Skincare Advisor',
-    desc: 'Recommends the right products for each customer\'s skin type — oily, dry, sensitive or combo.',
+    desc: 'Recommends the right products for each customer\'s skin type: oily, dry, sensitive or combo.',
   },
   {
     icon: '📋',
@@ -72,7 +72,7 @@ const SHOP_FEATURES = [
   {
     icon: '🛒',
     title: 'WhatsApp Orders',
-    desc: 'Customers order products, confirm quantity and share delivery details — all inside the chat.',
+    desc: 'Customers order products, confirm quantity and share delivery details, all inside the chat.',
   },
   {
     icon: '⚠️',
@@ -82,7 +82,7 @@ const SHOP_FEATURES = [
   {
     icon: '📦',
     title: 'Live Stock Awareness',
-    desc: 'The bot only recommends products that are currently in stock — no broken promises.',
+    desc: 'The bot only recommends products that are currently in stock, no broken promises.',
   },
   {
     icon: '🎯',
@@ -161,31 +161,33 @@ export default function BusinessTypeFeatures() {
       <div className="flex flex-col sm:flex-row justify-center gap-3 mb-14">
         <button
           onClick={() => setActive('salon')}
-          className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm transition-all ${
+          className={`btn-press flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm transition-all ${
             active === 'salon'
               ? 'bg-lavender text-white shadow-xl shadow-lavender/30 scale-[1.02]'
-              : 'bg-white border-2 border-nira-border text-slate-500 hover:border-lavender hover:text-lavender-dark'
+              : 'border-2 hover:border-lavender hover:text-lavender-dark'
           }`}
+          style={active === 'salon' ? undefined : { backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
         >
           <span className="text-2xl">💇</span>
           <div className="text-left">
             <p className="font-medium">Salon &amp; Spa</p>
-            <p className={`text-xs ${active === 'salon' ? 'text-white/70' : 'text-slate-400'}`}>Bookings, services &amp; scheduling</p>
+            <p className="text-xs" style={{ color: active === 'salon' ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>Bookings, services &amp; scheduling</p>
           </div>
         </button>
 
         <button
           onClick={() => setActive('shop')}
-          className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm transition-all ${
+          className={`btn-press flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-medium text-sm transition-all ${
             active === 'shop'
               ? 'bg-coral text-white shadow-xl shadow-coral/30 scale-[1.02]'
-              : 'bg-white border-2 border-nira-border text-slate-500 hover:border-coral hover:text-coral'
+              : 'border-2 hover:border-coral hover:text-coral'
           }`}
+          style={active === 'shop' ? undefined : { backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
         >
           <span className="text-2xl">💄</span>
           <div className="text-left">
             <p className="font-medium">Cosmetic Shop</p>
-            <p className={`text-xs ${active === 'shop' ? 'text-white/70' : 'text-slate-400'}`}>Products, AI advice &amp; orders</p>
+            <p className="text-xs" style={{ color: active === 'shop' ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>Products, AI advice &amp; orders</p>
           </div>
         </button>
       </div>
@@ -195,40 +197,64 @@ export default function BusinessTypeFeatures() {
 
         {/* Left — phone */}
         <div className="flex justify-center">
-          <PhoneMockup type={active} />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 16, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.97 }}
+              transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+            >
+              <PhoneMockup type={active} />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Right — features */}
-        <div>
-          <h3 className="font-serif text-3xl text-[#1E293B] leading-snug mb-3">
-            {active === 'salon'
-              ? 'Everything Your Salon or Spa Needs'
-              : 'Your Shop\'s 24/7 AI Sales Assistant'}
-          </h3>
-          <p className="text-slate-500 leading-relaxed mb-8">
-            {active === 'salon'
-              ? 'From the first "hello" to the booking confirmation and follow-up reminder — Nira handles the entire customer journey so you can focus on delivering great service.'
-              : "Nira turns every WhatsApp message into a sale. It advises, recommends, answers product questions and takes orders — automatically, even while you sleep."}
-          </p>
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
+            >
+              <h3 className="font-serif text-3xl leading-snug mb-3" style={{ color: 'var(--text-primary)' }}>
+                {active === 'salon'
+                  ? 'Everything Your Salon or Spa Needs'
+                  : 'Your Shop\'s 24/7 AI Sales Assistant'}
+              </h3>
+              <p className="leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
+                {active === 'salon'
+                  ? 'From the first "hello" to the booking confirmation and follow-up reminder, Nira handles the entire customer journey so you can focus on delivering great service.'
+                  : "Nira turns every WhatsApp message into a sale. It advises, recommends, answers product questions and takes orders, automatically, even while you sleep."}
+              </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {features.map((f, i) => (
-              <div
-                key={f.title}
-                className="group flex gap-3 p-4 bg-white rounded-2xl border border-nira-border shadow-sm hover:shadow-md hover:border-slate-200 transition-all"
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${
-                  active === 'salon' ? 'bg-lavender-light' : 'bg-coral-light'
-                }`}>
-                  {f.icon}
-                </div>
-                <div>
-                  <p className="font-medium text-[#1E293B] text-sm mb-0.5">{f.title}</p>
-                  <p className="text-slate-400 text-xs leading-relaxed">{f.desc}</p>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {features.map((f, i) => (
+                  <motion.div
+                    key={f.title}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.08 + i * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
+                    className="group flex gap-3 p-4 rounded-2xl border shadow-sm hover:shadow-md transition-all"
+                    style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${
+                      active === 'salon' ? 'bg-lavender-light' : 'bg-coral-light'
+                    }`}>
+                      {f.icon}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm mb-0.5" style={{ color: 'var(--text-primary)' }}>{f.title}</p>
+                      <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{f.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            ))}
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>

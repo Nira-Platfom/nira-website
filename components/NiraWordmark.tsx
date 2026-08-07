@@ -1,7 +1,7 @@
 'use client'
 
 interface NiraWordmarkProps {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   variant?: 'default' | 'white'
   className?: string
 }
@@ -11,10 +11,10 @@ export default function NiraWordmark({
   variant = 'default',
   className = '',
 }: NiraWordmarkProps) {
-  const fontSize = { sm: '22px', md: '28px', lg: '38px' }[size]
+  const fontSize = { sm: '22px', md: '28px', lg: '38px', xl: 'clamp(64px, 14vw, 160px)' }[size]
 
   const nColor   = '#FF6B6B'
-  const iraColor = variant === 'white' ? '#FFFFFF' : '#1E293B'
+  const iraColor = variant === 'white' ? '#FFFFFF' : 'var(--text-primary)'
 
   return (
     <span

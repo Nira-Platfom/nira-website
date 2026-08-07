@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes'
 import CursorGlow from '../components/CursorGlow'
 import ScrollProgress from '../components/ScrollProgress'
 import ThemeToggle from '../components/ThemeToggle'
+import FloatingWhatsApp from '../components/FloatingWhatsApp'
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -21,9 +22,9 @@ const dmSerifDisplay = DM_Serif_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Nira — Beauty Business AI Companion',
+  title: 'Nira · Beauty Business AI Companion',
   description:
-    'AI-powered WhatsApp assistant for salons, spas, and cosmetic shops in East Africa. Automate bookings, orders and customer service — 24/7.',
+    'Nira talks with your customers on WhatsApp like a real person would, books appointments, and helps new customers discover salons, spas, and cosmetic shops across East Africa.',
 
   icons: {
     icon: [
@@ -43,19 +44,19 @@ export const metadata: Metadata = {
   themeColor: '#FF6B6B',
 
   openGraph: {
-    title: 'Nira — Beauty Business AI Companion',
+    title: 'Nira · Beauty Business AI Companion',
     description:
-      'AI-powered WhatsApp assistant for salons, spas, and cosmetic shops in East Africa. Auto-reply, bookings, and grow your business — 24/7.',
+      'Nira talks with your customers on WhatsApp like a real person would, books appointments, and helps new customers discover your business nearby.',
     url: 'https://nira.tz',
     siteName: 'Nira',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Nira — Beauty AI Companion' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Nira · Beauty AI Companion' }],
     locale: 'en_US',
     type: 'website',
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Nira — Beauty Business AI Companion',
+    title: 'Nira · Beauty Business AI Companion',
     description: 'AI-powered WhatsApp assistant for beauty businesses in East Africa.',
     images: ['/og-image.png'],
   },
@@ -91,6 +92,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FloatingWhatsApp />
         </ThemeProvider>
       </body>
     </html>

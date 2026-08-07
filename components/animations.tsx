@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 
 // ─── FadeUp ───────────────────────────────────────────────────────────────────
@@ -248,6 +248,112 @@ export function CountUp({
       {count.toLocaleString()}
       {suffix}
     </span>
+  )
+}
+
+// ─── WipeReveal ───────────────────────────────────────────────────────────────
+// A diagonal wipe, not a fade. For a hero image's first reveal only.
+export function WipeReveal({
+  children,
+  delay = 0,
+  duration = 0.7,
+  className = '',
+}: {
+  children: React.ReactNode
+  delay?: number
+  duration?: number
+  className?: string
+}) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-60px' })
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ clipPath: 'polygon(0% 0%, 6% 0%, 0% 100%, 0% 100%)', opacity: 0.4 }}
+      animate={
+        isInView
+          ? { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', opacity: 1 }
+          : {}
+      }
+      transition={{ duration, delay, ease: [0.65, 0, 0.35, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// ─── ScrollFocusItem ────────────────────────────────────────────────────────
+// A vertical list item that fades and scales by distance from viewport
+// center. The scroll position IS the animation, there is no separate
+// timing to tune. Use inside a tall enough container (min-h-[60vh] or so)
+// per item so the scroll range through it actually reads as a transition.
+export function ScrollFocusItem({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.28, 1, 0.28])
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 0.94])
+
+  return (
+    <motion.div ref={ref} style={{ opacity, scale }} className={className}>
+      {children}
+    </motion.div>
+  )
+}
+
+// ─── TiltCard ─────────────────────────────────────────────────────────────────
+// Tilts toward the cursor on hover, a subtle 3D response rather than a flat
+// hover state. Springs back to flat on mouse leave.
+export function TiltCard({
+  children,
+  className = '',
+  max = 7,
+}: {
+  children: React.ReactNode
+  className?: string
+  max?: number
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const rotateXRaw = useMotionValue(0)
+  const rotateYRaw = useMotionValue(0)
+  const rotateX = useSpring(rotateXRaw, { stiffness: 300, damping: 28 })
+  const rotateY = useSpring(rotateYRaw, { stiffness: 300, damping: 28 })
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    const px = (e.clientX - rect.left) / rect.width - 0.5
+    const py = (e.clientY - rect.top) / rect.height - 0.5
+    rotateYRaw.set(px * max * 2)
+    rotateXRaw.set(py * -max * 2)
+  }
+  const handleMouseLeave = () => {
+    rotateXRaw.set(0)
+    rotateYRaw.set(0)
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      whileHover={{ scale: 1.02 }}
+      transition={{ scale: { duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] } }}
+      style={{ rotateX, rotateY, transformPerspective: 800 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   )
 }
 
