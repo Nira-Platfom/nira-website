@@ -1,13 +1,9 @@
 import type { Metadata } from 'next'
 import { DM_Sans, DM_Serif_Display } from 'next/font/google'
 import './globals.css'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import { ThemeProvider } from 'next-themes'
-import CursorGlow from '../components/CursorGlow'
-import ScrollProgress from '../components/ScrollProgress'
-import ThemeToggle from '../components/ThemeToggle'
-import FloatingWhatsApp from '../components/FloatingWhatsApp'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { Toaster } from 'sonner'
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -73,26 +69,20 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${dmSans.variable} ${dmSerifDisplay.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <ScrollProgress />
-          <CursorGlow />
-          {/* Theme toggle — floats at top-right, z-index above navbar */}
-          <div
-            className="fixed z-[60] hidden md:flex items-center justify-center"
-            style={{ top: 12, right: 16 }}
-          >
-            <ThemeToggle />
-          </div>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <FloatingWhatsApp />
+          <AuthProvider>
+            {children}
+            <Toaster
+              position="top-right"
+              toastOptions={{ classNames: { toast: 'font-sans' } }}
+            />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

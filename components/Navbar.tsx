@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import NiraWordmark from '@/components/NiraWordmark'
 import NiraIcon from '@/components/NiraIcon'
+import { DASHBOARD_LOGIN_URL, DASHBOARD_REGISTER_URL } from '@/lib/links'
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -51,14 +52,14 @@ export default function Navbar() {
 
         {/* CTA buttons */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/contact" className="text-sm font-medium hover:text-coral transition-colors" style={{ color: 'var(--text-secondary)' }}>
+          <Link href={DASHBOARD_LOGIN_URL} className="text-sm font-medium hover:text-coral transition-colors" style={{ color: 'var(--text-secondary)' }}>
             Sign in
           </Link>
           <Link
-            href="/#download"
+            href={DASHBOARD_REGISTER_URL}
             className="btn-press bg-coral hover:bg-coral-dark text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors"
           >
-            Download App
+            Get Started
           </Link>
         </div>
 
@@ -116,13 +117,22 @@ export default function Navbar() {
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.25, delay: 0.05 + 4 * 0.04 }}
+                className="flex flex-col gap-3"
               >
                 <Link
-                  href="/#download"
-                  className="btn-press block bg-coral text-white text-sm font-medium px-5 py-3 rounded-full text-center mt-2"
+                  href={DASHBOARD_LOGIN_URL}
+                  className="text-sm font-medium"
+                  style={{ color: 'var(--text-secondary)' }}
                   onClick={() => setMenuOpen(false)}
                 >
-                  Download App
+                  Sign in
+                </Link>
+                <Link
+                  href={DASHBOARD_REGISTER_URL}
+                  className="btn-press block bg-coral text-white text-sm font-medium px-5 py-3 rounded-full text-center mt-1"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get Started
                 </Link>
               </motion.div>
             </div>

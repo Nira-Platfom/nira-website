@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FadeUp, StaggerContainer, StaggerItem, SlideRight } from '../../components/animations'
+import { DASHBOARD_REGISTER_URL } from '@/lib/links'
+import { FadeUp, StaggerContainer, StaggerItem, SlideRight } from '@/components/animations'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', businessType: '', message: '' })
@@ -327,12 +328,12 @@ export default function ContactPage() {
         <div className="max-w-xl mx-auto px-6">
           <FadeUp>
             <p className="text-white font-serif text-2xl mb-3">Ready to try Nira?</p>
-            <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>Download free and set up your business in minutes.</p>
+            <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>Get started free and set up your business in minutes.</p>
             <Link
-              href="/#download"
+              href={DASHBOARD_REGISTER_URL}
               className="btn-press inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-white font-medium px-7 py-3 rounded-full transition-colors"
             >
-              Download Free App
+              Get Started Free
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

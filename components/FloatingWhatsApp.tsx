@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { WHATSAPP_CHAT_URL } from '@/lib/links'
 
 export default function FloatingWhatsApp() {
   const [visible, setVisible] = useState(false)
@@ -13,7 +14,7 @@ export default function FloatingWhatsApp() {
 
   return (
     <a
-      href="https://wa.me/255772630193"
+      href={WHATSAPP_CHAT_URL}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with Nira on WhatsApp"

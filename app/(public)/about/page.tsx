@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { FadeUp, FadeIn, StaggerContainer, StaggerItem } from '../../components/animations'
+import { DASHBOARD_REGISTER_URL } from '@/lib/links'
+import { FadeUp, FadeIn, StaggerContainer, StaggerItem } from '@/components/animations'
 
 export const metadata: Metadata = {
   title: 'About Us · Nira',
@@ -369,10 +370,10 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/#download"
+                href={DASHBOARD_REGISTER_URL}
                 className="btn-press inline-flex items-center gap-2 bg-white text-coral hover:bg-coral-light font-medium px-7 py-3.5 rounded-full transition-colors shadow-lg"
               >
-                Download Free App
+                Get Started Free
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

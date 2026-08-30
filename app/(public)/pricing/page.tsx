@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { FadeUp, FadeIn, StaggerContainer, StaggerItem } from '../../components/animations'
+import { DASHBOARD_REGISTER_URL } from '@/lib/links'
+import { FadeUp, FadeIn, StaggerContainer, StaggerItem } from '@/components/animations'
 
 export const metadata: Metadata = {
   title: 'Pricing · Nira',
@@ -193,7 +194,7 @@ export default function PricingPage() {
                 </div>
 
                 <Link
-                  href="/#download"
+                  href={DASHBOARD_REGISTER_URL}
                   className={`btn-press block text-center py-3 rounded-xl font-medium text-sm transition-colors mb-7 ${plan.ctaStyle}`}
                 >
                   {plan.cta}
@@ -282,12 +283,12 @@ export default function PricingPage() {
         <div className="max-w-xl mx-auto px-6">
           <FadeUp>
             <h2 className="font-serif text-3xl text-white mb-3">Ready to get started?</h2>
-            <p className="text-white/80 mb-8">Download the app and set up your business in minutes.</p>
+            <p className="text-white/80 mb-8">Set up your business dashboard in minutes.</p>
             <Link
-              href="/#download"
+              href={DASHBOARD_REGISTER_URL}
               className="btn-press inline-flex items-center gap-2 bg-white text-coral hover:bg-coral-light font-medium px-8 py-3.5 rounded-full transition-colors"
             >
-              Download Free App
+              Get Started Free
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

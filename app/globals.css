@@ -218,6 +218,14 @@ button { transition: transform 200ms ease, box-shadow 200ms ease, background-col
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 
+/* ─── Business dashboard: skeleton-loading shimmer bg ─────── */
+/* Paired with animate-dash-shimmer (tailwind.config.ts) — kept apart from
+   .btn-shimmer's @keyframes shimmer above, different animation entirely. */
+.shimmer {
+  background: linear-gradient(90deg, #f1f5f9 0%, #f8fafc 50%, #f1f5f9 100%);
+  background-size: 800px 100%;
+}
+
 /* ─── Step number gradient ────────────────────────────────── */
 .step-num {
   background: linear-gradient(135deg, #FF6B6B 0%, #B8A9E0 100%);

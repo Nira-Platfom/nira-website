@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import NiraWordmark from '@/components/NiraWordmark'
 import NiraIcon from '@/components/NiraIcon'
+import { DASHBOARD_REGISTER_URL, WHATSAPP_CHAT_URL } from '@/lib/links'
 
 export default function Footer() {
   return (
@@ -36,8 +37,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#download" className="text-sm text-slate-400 hover:text-white transition-colors">
-                  Download App
+                <Link href={DASHBOARD_REGISTER_URL} className="text-sm text-slate-400 hover:text-white transition-colors">
+                  Get Started
                 </Link>
               </li>
               <li>
@@ -92,7 +93,7 @@ export default function Footer() {
               <div className="flex gap-3">
                 {/* WhatsApp — real number, everything else here stays a placeholder until it's real */}
                 <a
-                  href="https://wa.me/255772630193"
+                  href={WHATSAPP_CHAT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-press w-8 h-8 rounded-full bg-white/10 hover:bg-coral hover:scale-110 transition-all flex items-center justify-center"

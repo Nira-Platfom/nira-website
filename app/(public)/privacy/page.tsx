@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { FadeUp } from '../../components/animations'
+import { FadeUp } from '@/components/animations'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy · Nira',

@@ -1,12 +1,13 @@
 import Link from 'next/link'
-import AnimatedChat    from '../components/AnimatedChat'
-import AnimatedRevenue from '../components/AnimatedRevenue'
-import BusinessTypeFeatures from '../components/BusinessTypeFeatures'
-import BeautyShowcase  from '../components/BeautyShowcase'
-import ProductDemo     from '../components/ProductDemo'
-import SurfaceShowcase from '../components/SurfaceShowcase'
-import PricingCards    from '../components/PricingCards'
-import HowItWorksFlow  from '../components/HowItWorksFlow'
+import { DASHBOARD_REGISTER_URL, WHATSAPP_CHAT_URL, WHATSAPP_NUMBER } from '@/lib/links'
+import AnimatedChat    from '@/components/AnimatedChat'
+import AnimatedRevenue from '@/components/AnimatedRevenue'
+import BusinessTypeFeatures from '@/components/BusinessTypeFeatures'
+import BeautyShowcase  from '@/components/BeautyShowcase'
+import ProductDemo     from '@/components/ProductDemo'
+import SurfaceShowcase from '@/components/SurfaceShowcase'
+import PricingCards    from '@/components/PricingCards'
+import HowItWorksFlow  from '@/components/HowItWorksFlow'
 import {
   FadeUp,
   FadeIn,
@@ -20,7 +21,7 @@ import {
   CountUp,
   MagneticButton,
   TiltCard,
-} from '../components/animations'
+} from '@/components/animations'
 
 function Check({ className = '' }: { className?: string }) {
   return (
@@ -132,10 +133,10 @@ export default function HomePage() {
                 <div className="flex flex-wrap gap-4 mb-10">
                   <MagneticButton>
                     <Link
-                      href="/#download"
+                      href={DASHBOARD_REGISTER_URL}
                       className="btn-shimmer btn-press inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
                     >
-                      Download Free App
+                      Own a Salon, Spa or Shop? Get Started
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
@@ -560,6 +561,132 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── FOR CUSTOMERS ─────────────────────────────────────────────── */}
+      <section className="py-24" style={{ backgroundColor: 'var(--bg-surface)' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <FadeUp className="text-center mb-14">
+            <span className="text-xs font-medium text-lavender-dark uppercase tracking-widest">For Customers</span>
+            <h2 className="font-serif text-4xl mt-3 max-w-2xl mx-auto leading-snug" style={{ color: 'var(--text-primary)' }}>
+              Book a Salon or Order Skincare — Without Leaving WhatsApp
+            </h2>
+            <p className="mt-4 max-w-xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
+              No app to install, no account to create. Message Nira like you&apos;d message a friend, and get real answers, real bookings, in Swahili or English.
+            </p>
+          </FadeUp>
+
+          {/* Benefit cards */}
+          <StaggerContainer>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
+              {[
+                {
+                  iconBg: 'bg-coral-light text-coral',
+                  title: 'Instant Answers, Day or Night',
+                  desc: 'Ask about prices, ingredients, or open slots and get a real reply in seconds — even at 3 AM.',
+                  icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ),
+                },
+                {
+                  iconBg: 'bg-lavender-light text-lavender-dark',
+                  title: 'Book or Order Right in Chat',
+                  desc: 'Confirm a time or place an order without filling out a single form or downloading anything.',
+                  icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2m-9 0h10a1 1 0 011 1v10a2 2 0 01-2 2H8a2 2 0 01-2-2V8a1 1 0 011-1z" />
+                    </svg>
+                  ),
+                },
+                {
+                  iconBg: 'bg-mint-light text-mint-dark',
+                  title: 'Discover Businesses Nearby',
+                  desc: "Don't have a salon yet? Tell Nira what you need and get matched with businesses near you.",
+                  icon: <PinIcon className="w-6 h-6" />,
+                },
+                {
+                  iconBg: 'bg-coral-light text-coral',
+                  title: 'Swahili or English, Your Call',
+                  desc: 'Every conversation happens in whichever language you pick first — switch anytime.',
+                  icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m0 13l4-8 4 8m-7.5-2h7M9 5c0 4.5-2 8-5.5 9.5" />
+                    </svg>
+                  ),
+                },
+              ].map((b) => (
+                <StaggerItem key={b.title}>
+                  <TiltCard className="h-full">
+                    <div
+                      className="card-hover h-full rounded-2xl p-6"
+                      style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}
+                    >
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 ${b.iconBg}`}>
+                        {b.icon}
+                      </div>
+                      <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--text-primary)' }}>{b.title}</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{b.desc}</p>
+                    </div>
+                  </TiltCard>
+                </StaggerItem>
+              ))}
+            </div>
+          </StaggerContainer>
+
+          {/* How a customer starts */}
+          <div className="rounded-3xl overflow-hidden bg-nira-dark relative">
+            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-mint opacity-[0.05] translate-x-1/3 -translate-y-1/4 pointer-events-none" />
+            <div className="px-6 py-16 relative">
+              <FadeUp className="text-center mb-12">
+                <span className="text-xs font-medium text-mint-dark uppercase tracking-widest">How to Start</span>
+                <h3 className="font-serif text-3xl text-white mt-3">Three Messages Away</h3>
+              </FadeUp>
+
+              <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                {[
+                  {
+                    step: '01',
+                    title: 'Message Nira',
+                    desc: `Save ${WHATSAPP_NUMBER.replace(/^255(\d{2})(\d{3})(\d{4})$/, '+255 $1 $2 $3')} or tap the button below, then just say hi.`,
+                  },
+                  {
+                    step: '02',
+                    title: 'Tell Nira What You Need',
+                    desc: 'Have a business’s code already? Type it. Otherwise describe what you’re looking for, like "facial in Dar."',
+                  },
+                  {
+                    step: '03',
+                    title: 'Book, Order, Done',
+                    desc: 'Confirm the details right there in the chat. No hold music, no waiting for a callback.',
+                  },
+                ].map((s) => (
+                  <FadeUp key={s.step} delay={Number(s.step) * 0.05}>
+                    <p className="step-num font-serif text-3xl mb-2">{s.step}</p>
+                    <h4 className="font-serif text-lg text-white mb-2">{s.title}</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
+                  </FadeUp>
+                ))}
+              </div>
+
+              <FadeUp className="text-center">
+                <a
+                  href={WHATSAPP_CHAT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-press inline-flex items-center gap-2 bg-mint text-[#0B3B30] font-medium px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                  Chat with Nira Now
+                </a>
+                <p className="text-slate-500 text-xs mt-3">Free to chat. No sign-up needed.</p>
+              </FadeUp>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── PRICING PREVIEW ───────────────────────────────────────────── */}
       <section className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
         <div className="max-w-6xl mx-auto px-6">
@@ -748,40 +875,26 @@ export default function HomePage() {
 
           {/* Scales into place rather than fading, the signature CTA moment of this page */}
           <ScaleIn delay={0.1}>
-            <div
-              className="inline-flex flex-wrap justify-center gap-4 mb-6 p-6 rounded-3xl"
-              style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)' }}
+            <Link
+              href={DASHBOARD_REGISTER_URL}
+              className="btn-press inline-flex items-center gap-2 bg-white text-coral-dark font-medium px-8 py-4 rounded-full shadow-lg hover:bg-coral-light transition-colors mb-6"
             >
-              <div className="flex items-center gap-3 bg-[#1E293B] text-white px-6 py-3.5 rounded-xl opacity-80">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] text-white/60 leading-none mb-0.5">Coming soon to the</p>
-                  <p className="text-sm font-medium leading-none">App Store</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-[#1E293B] text-white px-6 py-3.5 rounded-xl opacity-80">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3.18 23.76c.28.15.6.19.91.12l11.64-11.64L12 8.5 3.18 23.76zM20.68 9.8L17.5 8l-3.7 3.7 3.7 3.7 3.22-1.83c.92-.52.92-2.25-.04-2.77zM2.01.37C1.73.56 1.55.87 1.55 1.24v21.52c0 .37.18.68.46.87L13.5 12 2.01.37zM15.6 3.8L4.1.07c-.31-.1-.63-.06-.91.12L15.5 12.2 19.5 8.2l-3.9-4.4z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] text-white/60 leading-none mb-0.5">Coming soon to</p>
-                  <p className="text-sm font-medium leading-none">Google Play</p>
-                </div>
-              </div>
-            </div>
+              Get Started — It&apos;s Free
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </ScaleIn>
 
           <FadeUp delay={0.2}>
             <p className="text-white/70 text-sm mb-3">
-              Ready now: message us directly and we will get you set up.
+              Prefer a human? Message us directly and we&apos;ll set your business up.
             </p>
             <a
-              href="https://wa.me/255772630193"
+              href={WHATSAPP_CHAT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-press inline-flex items-center gap-2 bg-white text-coral-dark font-medium px-6 py-3 rounded-full hover:bg-coral-light transition-colors"
+              className="btn-press inline-flex items-center gap-2 bg-transparent border border-white/40 text-white font-medium px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
             >
               Chat on WhatsApp
             </a>

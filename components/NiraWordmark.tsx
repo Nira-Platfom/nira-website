@@ -2,7 +2,9 @@
 
 interface NiraWordmarkProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'default' | 'white'
+  // 'mono-white': fully white wordmark (N included) — for placement directly
+  // on a coral/brand-colored surface, where a coral "N" would disappear.
+  variant?: 'default' | 'white' | 'mono-white'
   className?: string
 }
 
@@ -13,8 +15,8 @@ export default function NiraWordmark({
 }: NiraWordmarkProps) {
   const fontSize = { sm: '22px', md: '28px', lg: '38px', xl: 'clamp(64px, 14vw, 160px)' }[size]
 
-  const nColor   = '#FF6B6B'
-  const iraColor = variant === 'white' ? '#FFFFFF' : 'var(--text-primary)'
+  const nColor   = variant === 'mono-white' ? '#FFFFFF' : '#FF6B6B'
+  const iraColor = variant === 'default' ? 'var(--text-primary)' : '#FFFFFF'
 
   return (
     <span
