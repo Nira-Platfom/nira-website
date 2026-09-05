@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, Scissors, Package } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Input } from "@/components/ui";
 import NiraWordmark from "@/components/NiraWordmark";
@@ -38,15 +38,7 @@ export default function RegisterPage() {
       await login(data.access_token);
       router.push("/dashboard");
     } catch (e: any) {
-      if (e?.response?.data?.detail) {
-        toast.error(e.response.data.detail);
-      } else if (e?.code === "ECONNABORTED") {
-        toast.error("The server took too long to respond. Please try again.");
-      } else if (!e?.response) {
-        toast.error("Couldn't reach the server. Check your connection and try again.");
-      } else {
-        toast.error("Couldn't create your account. Please try again.");
-      }
+      toast.error(apiErrorMessage(e, "Couldn't create your account. Please try again."));
     } finally {
       setLoading(false);
     }
