@@ -55,7 +55,7 @@ export default function RegisterPage() {
 
       <form onSubmit={submit} className="space-y-4">
         <Input label="Full name" icon={User} value={form.full_name} onChange={(e) => set("full_name", e.target.value)} placeholder="Grace Mwakasege" />
-        <Input label="Email" type="email" icon={Mail} value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="you@business.com" />
+        <Input label="Email" type="email" icon={Mail} value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
         <Input label="Password" type="password" icon={Lock} value={form.password} onChange={(e) => set("password", e.target.value)} />
 
         <div className="flex items-center gap-3 pt-2">

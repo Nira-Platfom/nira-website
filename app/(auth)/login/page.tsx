@@ -42,7 +42,7 @@ export default function LoginPage() {
       <p className="text-sm text-slate-500 mb-8">Sign in to your dashboard</p>
 
       <form onSubmit={submit} className="space-y-4">
-        <Input label="Email" type="email" icon={Mail} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@business.com" autoComplete="email" />
+        <Input label="Email" type="email" icon={Mail} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
         <div>
           <div className="relative">
             <Input
