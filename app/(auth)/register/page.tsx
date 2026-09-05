@@ -38,7 +38,15 @@ export default function RegisterPage() {
       await login(data.access_token);
       router.push("/dashboard");
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't create your account");
+      if (e?.response?.data?.detail) {
+        toast.error(e.response.data.detail);
+      } else if (e?.code === "ECONNABORTED") {
+        toast.error("The server took too long to respond. Please try again.");
+      } else if (!e?.response) {
+        toast.error("Couldn't reach the server. Check your connection and try again.");
+      } else {
+        toast.error("Couldn't create your account. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
