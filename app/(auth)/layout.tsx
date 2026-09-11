@@ -1,3 +1,4 @@
+import Link from "next/link";
 import NiraWordmark from "@/components/NiraWordmark";
 import AuthVisual from "@/components/AuthVisual";
 import { CountUp, FadeUp } from "@/components/animations";
@@ -12,7 +13,19 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
         <div className="relative z-10 flex flex-col h-full px-10 xl:px-14 pt-10 pb-8">
           <FadeUp>
-            <NiraWordmark size="lg" variant="mono-white" />
+            <Link href="/" className="inline-flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+              {/* Source PNG's opaque pixels are coral, not white — brightness(0)
+                  invert(1) forces a true white silhouette regardless, since
+                  coral-on-coral here would be nearly invisible. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/nira-icon-white.png"
+                alt=""
+                className="w-8 h-8"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
+              <NiraWordmark size="lg" variant="mono-white" />
+            </Link>
             <p className="text-white/90 text-lg font-serif mt-2">Africa&rsquo;s AI Beauty Marketplace</p>
           </FadeUp>
 
