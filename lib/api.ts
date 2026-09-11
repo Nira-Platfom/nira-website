@@ -1,7 +1,16 @@
 import axios from "axios";
 
+// Hardcoded fallback, same defensive pattern used for the backend's CORS
+// origins and self-ping URL: NEXT_PUBLIC_API_URL has already gone missing
+// from the hosting platform's own dashboard once before without anyone
+// noticing at build time — Next.js can't inline a value that was never
+// set, so it silently compiles to a runtime `process.env` lookup that
+// resolves to undefined in the browser, and every request quietly goes to
+// a relative path on this site's own origin instead of the backend. That
+// exact failure is what caused "can't log in" / "backend not connected"
+// even though the backend itself was working correctly the whole time.
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://nira-backend-w7p9.onrender.com",
   withCredentials: true,
   timeout: 15000,
 });
