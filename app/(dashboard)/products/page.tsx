@@ -20,6 +20,8 @@ interface Product {
   stock_quantity: number | null;
   is_active: boolean;
   image_url?: string | null;
+  brand: string | null;
+  is_african_made: boolean;
 }
 
 // Below this, a stock quantity is flagged as running low — a nudge to
@@ -28,7 +30,7 @@ const LOW_STOCK_THRESHOLD = 5;
 
 const empty = {
   name: "", category: "", price: "", skin_type: "", description: "", usage_instructions: "", side_effects: "",
-  in_stock: true, trackStock: false, stock_quantity: "",
+  in_stock: true, trackStock: false, stock_quantity: "", brand: "", is_african_made: false,
 };
 
 export default function ProductsPage() {
@@ -93,6 +95,8 @@ export default function ProductsPage() {
       in_stock: p.in_stock,
       trackStock: p.stock_quantity !== null,
       stock_quantity: p.stock_quantity !== null ? String(p.stock_quantity) : "",
+      brand: p.brand || "",
+      is_african_made: p.is_african_made,
     });
     setSheetOpen(true);
   };
@@ -118,6 +122,8 @@ export default function ProductsPage() {
         side_effects: form.side_effects || undefined,
         in_stock: form.in_stock,
         stock_quantity: form.trackStock ? parseInt(form.stock_quantity, 10) : null,
+        brand: form.brand || undefined,
+        is_african_made: form.is_african_made,
       };
       if (editing) {
         const { data: updated } = await api.put(`/products/${editing.id}`, body);
@@ -295,7 +301,12 @@ export default function ProductsPage() {
               </div>
               <div className="p-4">
                 <h3 className="text-[14px] font-medium text-charcoal truncate mb-1">{p.name}</h3>
-                {p.category && <span className="inline-block text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-0.5 mb-2">{p.category}</span>}
+                <div className="flex items-center gap-1.5 flex-wrap mb-2">
+                  {p.category && <span className="inline-block text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-0.5">{p.category}</span>}
+                  {p.is_african_made && (
+                    <span className="inline-block text-[11px] bg-mint-light text-mint-deep rounded-full px-2 py-0.5">🌍 African-made</span>
+                  )}
+                </div>
                 <div className="flex items-center justify-between mt-1">
                   <span className="font-serif text-[17px] text-coral">{formatTZS(p.price)}</span>
                   {p.stock_quantity !== null ? (
@@ -359,6 +370,7 @@ export default function ProductsPage() {
             <Input label="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Skincare" />
             <Input label="Price (TZS)" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
             <Input label="Skin type" value={form.skin_type} onChange={(e) => setForm({ ...form, skin_type: e.target.value })} placeholder="Oily, dry, all…" />
+            <Input label="Brand" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} placeholder="Optional" />
           </div>
           <div className="space-y-4">
             <Textarea label="Description" rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
@@ -367,6 +379,13 @@ export default function ProductsPage() {
           </div>
         </div>
         <div className="mt-5 pt-5 border-t border-slate-100 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-sm font-medium text-charcoal">African-made</span>
+              <p className="text-[12px] text-slate-500 mt-0.5">Shown to customers who specifically ask for local/African products</p>
+            </div>
+            <Switch checked={form.is_african_made} onChange={(v) => setForm({ ...form, is_african_made: v })} />
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <span className="text-sm font-medium text-charcoal">Track stock quantity</span>
