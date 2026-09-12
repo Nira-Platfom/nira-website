@@ -46,6 +46,20 @@ export default function ProductsPage() {
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState(false);
+  // A brand-new product has no id yet, so a photo can't be attached to it
+  // until it's saved — but the customer still expects to just pick a photo
+  // while filling the form, not in two separate steps. Stash the file +
+  // a local preview here, then upload it right after the product is
+  // created in submit(). For an existing product (editing set), the photo
+  // still uploads immediately on pick, same as before.
+  const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
+  const [pendingPhotoPreview, setPendingPhotoPreview] = useState<string | null>(null);
+
+  const clearPendingPhoto = () => {
+    if (pendingPhotoPreview) URL.revokeObjectURL(pendingPhotoPreview);
+    setPendingPhoto(null);
+    setPendingPhotoPreview(null);
+  };
 
   const load = async () => {
     setLoading(true);
@@ -79,6 +93,7 @@ export default function ProductsPage() {
   const openNew = () => {
     setEditing(null);
     setForm(empty);
+    clearPendingPhoto();
     setSheetOpen(true);
   };
 
@@ -98,6 +113,7 @@ export default function ProductsPage() {
       brand: p.brand || "",
       is_african_made: p.is_african_made,
     });
+    clearPendingPhoto();
     setSheetOpen(true);
   };
 
@@ -132,9 +148,19 @@ export default function ProductsPage() {
         setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
       } else {
         const { data: created } = await api.post("/products", body);
-        toast.success("Product added — add a photo below, or close when you're done");
-        setEditing(created);
-        setProducts((prev) => [created, ...prev]);
+        let finalProduct = created;
+        if (pendingPhoto) {
+          try {
+            finalProduct = await uploadPhotoFor(created.id, pendingPhoto);
+          } catch {
+            toast.error("Product saved, but the photo couldn't be uploaded — try again from Edit.");
+          }
+        }
+        toast.success("Product added");
+        setEditing(finalProduct);
+        setProducts((prev) => [finalProduct, ...prev]);
+        clearPendingPhoto();
+        setSheetOpen(false);
         if (created.category && !categories.includes(created.category)) {
           setCategories((prev) => [...prev, created.category]);
         }
@@ -165,14 +191,27 @@ export default function ProductsPage() {
     }
   };
 
-  const uploadPhoto = async (file: File) => {
-    if (!editing) return;
+  const uploadPhotoFor = async (productId: string, file: File) => {
     const fd = new FormData();
     fd.append("file", file);
+    const { data: updated } = await api.post(`/products/${productId}/photo`, fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return updated;
+  };
+
+  // Editing an existing product: upload right away, same as before. A
+  // brand-new one has no id yet — stash the file + a local preview and
+  // let submit() upload it once the product is actually created.
+  const handlePhotoPick = async (file: File) => {
+    if (!editing) {
+      if (pendingPhotoPreview) URL.revokeObjectURL(pendingPhotoPreview);
+      setPendingPhoto(file);
+      setPendingPhotoPreview(URL.createObjectURL(file));
+      return;
+    }
     try {
-      const { data: updated } = await api.post(`/products/${editing.id}/photo`, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const updated = await uploadPhotoFor(editing.id, file);
       setEditing(updated);
       setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
       toast.success("Photo uploaded");
@@ -359,10 +398,8 @@ export default function ProductsPage() {
       >
         <ImageUpload
           className="mb-5"
-          imageUrl={editing?.image_url}
-          onUpload={uploadPhoto}
-          disabled={!editing}
-          disabledHint="Add the product first — then you can add a photo here."
+          imageUrl={editing?.image_url || pendingPhotoPreview}
+          onUpload={handlePhotoPick}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-4">
