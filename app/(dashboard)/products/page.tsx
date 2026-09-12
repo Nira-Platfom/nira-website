@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Plus, Search, Grid3x3, List, Package, Pencil } from "lucide-react";
+import { Plus, Search, Grid3x3, List, Package, Pencil, Trash2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, DataTable, Badge, ImageUpload } from "@/components/ui";
 import { formatTZS, cn } from "@/lib/utils";
 
@@ -17,11 +17,19 @@ interface Product {
   side_effects: string | null;
   skin_type: string | null;
   in_stock: boolean;
+  stock_quantity: number | null;
   is_active: boolean;
   image_url?: string | null;
 }
 
-const empty = { name: "", category: "", price: "", skin_type: "", description: "", usage_instructions: "", side_effects: "", in_stock: true };
+// Below this, a stock quantity is flagged as running low — a nudge to
+// restock, not a hard rule.
+const LOW_STOCK_THRESHOLD = 5;
+
+const empty = {
+  name: "", category: "", price: "", skin_type: "", description: "", usage_instructions: "", side_effects: "",
+  in_stock: true, trackStock: false, stock_quantity: "",
+};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -34,6 +42,8 @@ export default function ProductsPage() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -81,6 +91,8 @@ export default function ProductsPage() {
       usage_instructions: p.usage_instructions || "",
       side_effects: p.side_effects || "",
       in_stock: p.in_stock,
+      trackStock: p.stock_quantity !== null,
+      stock_quantity: p.stock_quantity !== null ? String(p.stock_quantity) : "",
     });
     setSheetOpen(true);
   };
@@ -88,6 +100,10 @@ export default function ProductsPage() {
   const submit = async () => {
     if (!form.name || !form.price) {
       toast.error("Name and price are required");
+      return;
+    }
+    if (form.trackStock && form.stock_quantity === "") {
+      toast.error("Enter a stock quantity, or turn off stock tracking");
       return;
     }
     setSaving(true);
@@ -101,6 +117,7 @@ export default function ProductsPage() {
         usage_instructions: form.usage_instructions || undefined,
         side_effects: form.side_effects || undefined,
         in_stock: form.in_stock,
+        stock_quantity: form.trackStock ? parseInt(form.stock_quantity, 10) : null,
       };
       if (editing) {
         const { data: updated } = await api.put(`/products/${editing.id}`, body);
@@ -117,9 +134,28 @@ export default function ProductsPage() {
         }
       }
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't save product");
+      toast.error(apiErrorMessage(e, "Couldn't save product"));
     } finally {
       setSaving(false);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const { data } = await api.delete(`/products/${deleteTarget.id}`);
+      if (data.deleted) {
+        setProducts((prev) => prev.filter((x) => x.id !== deleteTarget.id));
+      } else {
+        setProducts((prev) => prev.map((x) => (x.id === deleteTarget.id ? { ...x, is_active: false } : x)));
+      }
+      toast.success(data.message);
+      setDeleteTarget(null);
+    } catch (e: any) {
+      toast.error(apiErrorMessage(e, "Couldn't delete product"));
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -155,16 +191,32 @@ export default function ProductsPage() {
     {
       accessorKey: "in_stock",
       header: "Stock",
-      cell: ({ row }) => <Badge status={row.original.in_stock ? "active" : "cancelled"} className={row.original.in_stock ? "" : ""} />,
+      cell: ({ row }) => {
+        const { in_stock, stock_quantity } = row.original;
+        if (stock_quantity !== null) {
+          const low = in_stock && stock_quantity <= LOW_STOCK_THRESHOLD;
+          return (
+            <span className={cn("text-[13px] font-medium", !in_stock ? "text-coral" : low ? "text-amber-deep" : "text-mint-deep")}>
+              {stock_quantity} left{low && !!stock_quantity && " · low"}
+            </span>
+          );
+        }
+        return <Badge status={in_stock ? "active" : "cancelled"} />;
+      },
     },
     { accessorKey: "is_active", header: "Status", cell: ({ row }) => <Badge status={row.original.is_active ? "active" : "cancelled"} /> },
     {
       id: "actions",
       header: "Actions",
       cell: ({ row }) => (
-        <button onClick={() => openEdit(row.original)} className="text-slate-400 hover:text-coral">
-          <Pencil size={15} />
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => openEdit(row.original)} className="text-slate-400 hover:text-coral">
+            <Pencil size={15} />
+          </button>
+          <button onClick={() => setDeleteTarget(row.original)} className="text-slate-400 hover:text-coral">
+            <Trash2 size={15} />
+          </button>
+        </div>
       ),
     },
   ];
@@ -246,13 +298,30 @@ export default function ProductsPage() {
                 {p.category && <span className="inline-block text-[11px] bg-slate-100 text-slate-600 rounded-full px-2 py-0.5 mb-2">{p.category}</span>}
                 <div className="flex items-center justify-between mt-1">
                   <span className="font-serif text-[17px] text-coral">{formatTZS(p.price)}</span>
-                  <span className={cn("text-[11px] font-medium", p.in_stock ? "text-mint-deep" : "text-coral")}>
-                    {p.in_stock ? "In Stock" : "Out of Stock"}
-                  </span>
+                  {p.stock_quantity !== null ? (
+                    <span
+                      className={cn(
+                        "text-[11px] font-medium flex items-center gap-1",
+                        !p.in_stock ? "text-coral" : p.stock_quantity <= LOW_STOCK_THRESHOLD ? "text-amber-deep" : "text-mint-deep"
+                      )}
+                    >
+                      {p.in_stock && p.stock_quantity <= LOW_STOCK_THRESHOLD && <AlertTriangle size={11} />}
+                      {p.stock_quantity} left
+                    </span>
+                  ) : (
+                    <span className={cn("text-[11px] font-medium", p.in_stock ? "text-mint-deep" : "text-coral")}>
+                      {p.in_stock ? "In Stock" : "Out of Stock"}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
-                  <span className="text-[11px] text-slate-500">{p.is_active ? "Active" : "Inactive"}</span>
-                  <Switch checked={p.is_active} onChange={() => toggleActive(p)} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-500">{p.is_active ? "Active" : "Inactive"}</span>
+                    <Switch checked={p.is_active} onChange={() => toggleActive(p)} />
+                  </div>
+                  <button onClick={() => setDeleteTarget(p)} className="text-slate-300 hover:text-coral transition-colors" title="Delete product">
+                    <Trash2 size={15} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -297,9 +366,58 @@ export default function ProductsPage() {
             <Textarea label="Side effects" rows={2} value={form.side_effects} onChange={(e) => setForm({ ...form, side_effects: e.target.value })} />
           </div>
         </div>
-        <div className="flex items-center justify-between mt-5 pt-5 border-t border-slate-100">
-          <span className="text-sm font-medium text-charcoal">In Stock</span>
-          <Switch checked={form.in_stock} onChange={(v) => setForm({ ...form, in_stock: v })} />
+        <div className="mt-5 pt-5 border-t border-slate-100 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-sm font-medium text-charcoal">Track stock quantity</span>
+              <p className="text-[12px] text-slate-500 mt-0.5">Count units instead of a simple in/out switch</p>
+            </div>
+            <Switch
+              checked={form.trackStock}
+              onChange={(v) => setForm({ ...form, trackStock: v, in_stock: v ? form.in_stock : true })}
+            />
+          </div>
+          {form.trackStock ? (
+            <Input
+              label="Units in stock"
+              type="number"
+              min={0}
+              value={form.stock_quantity}
+              onChange={(e) => setForm({ ...form, stock_quantity: e.target.value })}
+              hint="Goes down automatically as WhatsApp orders come in"
+            />
+          ) : (
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-charcoal">In Stock</span>
+              <Switch checked={form.in_stock} onChange={(v) => setForm({ ...form, in_stock: v })} />
+            </div>
+          )}
+        </div>
+      </Modal>
+
+      <Modal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        title="Delete product"
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="danger" loading={deleting} onClick={confirmDelete}>
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <div className="p-6">
+          <p className="text-sm text-charcoal">
+            Delete <strong className="font-medium">{deleteTarget?.name}</strong>?
+          </p>
+          <p className="text-[13px] text-slate-500 mt-2">
+            If it's never been ordered, this removes it permanently. If it has past orders, it'll be deactivated
+            instead so that order history stays intact — same as turning it off with the Active switch.
+          </p>
         </div>
       </Modal>
     </div>
