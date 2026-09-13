@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, Megaphone, Tag, Send, Trash2, Pencil, Repeat } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
-import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, PillTabs } from "@/components/ui";
+import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, PillTabs, Badge } from "@/components/ui";
 import { formatDate, toLocalISODate, cn } from "@/lib/utils";
 
 type Tab = "promotions" | "broadcasts";
@@ -279,6 +279,18 @@ function PromotionsTab({ open: sheetOpen, setOpen: setSheetOpen }: { open: boole
   );
 }
 
+const AUDIENCE_LABELS: Record<string, string> = {
+  all: "All customers",
+  active_30d: "Active last 30 days",
+  had_bookings: "Had bookings",
+  had_orders: "Had orders",
+};
+
+function toLocalISOMinute(d: Date) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function BroadcastsTab() {
   const [broadcasts, setBroadcasts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -286,6 +298,8 @@ function BroadcastsTab() {
   const [audience, setAudience] = useState("all");
   const [sending, setSending] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
+  const [isScheduled, setIsScheduled] = useState(false);
+  const [scheduledAt, setScheduledAt] = useState(() => toLocalISOMinute(new Date(Date.now() + 3600000)));
   const composerRef = useRef<HTMLTextAreaElement>(null);
 
   const load = async () => {
@@ -306,10 +320,22 @@ function BroadcastsTab() {
 
   const send = async () => {
     if (!message.trim()) return;
+    if (isScheduled && new Date(scheduledAt).getTime() <= Date.now()) {
+      toast.error("Pick a time in the future");
+      return;
+    }
     setSending(true);
     try {
-      const { data } = await api.post("/marketing/broadcast", { message, target_audience: audience });
-      toast.success(`Sent to ${data.delivered_count} customer(s)`);
+      const { data } = await api.post("/marketing/broadcast", {
+        message,
+        target_audience: audience,
+        scheduled_at: isScheduled ? new Date(scheduledAt).toISOString() : undefined,
+      });
+      if (isScheduled) {
+        toast.success(`Scheduled for ${formatDate(data.scheduled_at || scheduledAt)}`);
+      } else {
+        toast.success(`Sent to ${data.delivered_count} customer(s)`);
+      }
       setMessage("");
       load();
     } catch (e: any) {
@@ -350,9 +376,26 @@ function BroadcastsTab() {
     }
   };
 
+  const totalDelivered = broadcasts.reduce((sum, b) => sum + (b.delivered_count || 0), 0);
+
   return (
     <div>
-      <Card className="mb-6">
+      {/* Quick totals — skipped while empty, nothing useful to show yet */}
+      {!loading && broadcasts.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white rounded-card shadow-card border border-slate-100 p-4">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500 font-medium mb-1">Broadcasts Sent</p>
+            <p className="font-serif text-[22px] text-charcoal">{broadcasts.length}</p>
+          </div>
+          <div className="bg-white rounded-card shadow-card border border-slate-100 p-4">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500 font-medium mb-1">Total Delivered</p>
+            <p className="font-serif text-[22px] text-charcoal">{totalDelivered.toLocaleString()}</p>
+          </div>
+        </div>
+      )}
+
+      <p className="text-[13px] font-medium text-slate-500 uppercase tracking-wide mb-3">Compose</p>
+      <Card className="mb-8">
         <textarea
           ref={composerRef}
           value={message}
@@ -362,26 +405,43 @@ function BroadcastsTab() {
           placeholder="Write your message to customers…"
           className="w-full rounded-input bg-page border border-slate-200 text-charcoal px-4 py-3 text-[15px] outline-none focus:border-coral resize-none mb-3"
         />
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
             <select
               value={audience}
               onChange={(e) => setAudience(e.target.value)}
               className="h-10 rounded-input bg-page border border-slate-200 text-charcoal px-3 text-sm outline-none focus:border-coral"
             >
-              <option value="all">All customers</option>
-              <option value="active_30d">Active last 30 days</option>
-              <option value="had_bookings">Had bookings</option>
-              <option value="had_orders">Had orders</option>
+              {Object.entries(AUDIENCE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
             </select>
-            <span className="text-[12px] text-slate-400">{message.length}/1000</span>
+            <span className={cn("text-[12px]", message.length > 900 ? "text-coral font-medium" : "text-slate-400")}>
+              {message.length}/1000
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center gap-3">
+            <Switch checked={isScheduled} onChange={setIsScheduled} />
+            <span className="text-sm text-charcoal">Schedule for later</span>
+            {isScheduled && (
+              <input
+                type="datetime-local"
+                value={scheduledAt}
+                min={toLocalISOMinute(new Date())}
+                onChange={(e) => setScheduledAt(e.target.value)}
+                className="h-10 rounded-input bg-page border border-slate-200 text-charcoal px-3 text-sm outline-none focus:border-coral"
+              />
+            )}
           </div>
           <Button icon={<Send size={15} />} onClick={send} loading={sending} disabled={!message.trim()}>
-            Send Broadcast
+            {isScheduled ? "Schedule Broadcast" : "Send Broadcast"}
           </Button>
         </div>
       </Card>
 
+      <p className="text-[13px] font-medium text-slate-500 uppercase tracking-wide mb-3">History</p>
       <Card noPadding>
         {loading ? (
           <div className="p-6 space-y-3">
@@ -394,22 +454,33 @@ function BroadcastsTab() {
         ) : (
           <div className="divide-y divide-slate-50">
             {broadcasts.map((b) => (
-              <div key={b.id} className="p-4">
-                <div className="flex items-start justify-between gap-4">
-                  <p className="text-sm text-charcoal line-clamp-2 flex-1">{b.message}</p>
-                  <span className="text-[11px] text-slate-400 whitespace-nowrap">{formatDate(b.created_at)}</span>
+              <div key={b.id} className="p-5 hover:bg-page/50 transition-colors">
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <p className="text-[14px] text-charcoal leading-relaxed flex-1">{b.message}</p>
+                  <span className="text-[11px] text-slate-400 whitespace-nowrap shrink-0 mt-0.5">{formatDate(b.created_at)}</span>
                 </div>
-                <div className="flex items-center justify-between mt-2">
-                  <div className="flex items-center gap-4 text-[12px] text-slate-500">
-                    <span className="capitalize">{b.target_audience.replace(/_/g, " ")}</span>
-                    <span>{b.delivered_count} delivered</span>
-                    <span className="capitalize">{b.status}</span>
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge status={b.status} />
+                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium bg-page text-slate-600">
+                      {AUDIENCE_LABELS[b.target_audience] || b.target_audience.replace(/_/g, " ")}
+                    </span>
+                    {b.status === "scheduled" && b.scheduled_at ? (
+                      <span className="text-[12px] text-slate-500">
+                        Sends {formatDate(b.scheduled_at)}
+                      </span>
+                    ) : (
+                      <span className="text-[12px] text-slate-500">
+                        <strong className="text-charcoal font-medium">{b.delivered_count}</strong> delivered
+                        {b.recipient_count > b.delivered_count && ` of ${b.recipient_count}`}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       title="Edit and resend"
                       onClick={() => editIntoComposer(b)}
-                      className="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:bg-page hover:text-charcoal transition-colors"
+                      className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:bg-white hover:text-charcoal hover:shadow-card transition-all"
                     >
                       <Pencil size={14} />
                     </button>
@@ -417,14 +488,14 @@ function BroadcastsTab() {
                       title="Resend as-is"
                       onClick={() => resend(b)}
                       disabled={resendingId === b.id}
-                      className="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:bg-page hover:text-mint-deep transition-colors disabled:opacity-50"
+                      className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:bg-white hover:text-mint-deep hover:shadow-card transition-all disabled:opacity-50"
                     >
                       <Repeat size={14} className={resendingId === b.id ? "animate-spin" : ""} />
                     </button>
                     <button
                       title="Delete"
                       onClick={() => remove(b.id)}
-                      className="w-7 h-7 rounded-md flex items-center justify-center text-slate-400 hover:bg-page hover:text-coral transition-colors"
+                      className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:bg-white hover:text-coral hover:shadow-card transition-all"
                     >
                       <Trash2 size={14} />
                     </button>
