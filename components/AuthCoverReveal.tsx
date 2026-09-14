@@ -253,21 +253,30 @@ function FormPanel({
           treatment this had before read as unfinished. The top-right
           "Sign in"/"Create account" link is always visible here regardless
           of how tall the form is (the register form runs long enough to
-          push a bottom-of-form link below the fold on shorter screens). */}
-      <div className="hidden lg:flex items-center justify-between w-full max-w-lg mx-auto px-4 pt-8">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-slate-400 hover:text-coral text-[13px] font-medium transition-colors"
-        >
-          <ArrowLeft size={15} /> Back
-        </button>
-        <Link href={switchHref} className="text-coral text-[13px] font-medium hover:underline">
-          {switchLabel}
-        </Link>
-      </div>
+          push a bottom-of-form link below the fold on shorter screens).
 
-      <div className="flex-1 lg:flex-none w-full lg:max-w-lg lg:mx-auto bg-white rounded-t-[28px] lg:rounded-3xl -mt-8 lg:mt-6 lg:mb-10 relative z-10 shadow-[0_-12px_32px_rgba(30,41,59,0.08)] lg:shadow-xl lg:shadow-slate-900/5 lg:border lg:border-slate-100 px-6 pt-8 pb-10 sm:px-8 lg:px-10 lg:py-10">
-        {children}
+          lg:my-auto on this wrapper (not justify-center on the scrollable
+          ancestor) is what centers it — auto margins on a flex item center
+          it when there's spare room but collapse to 0 instead of going
+          negative when content is taller than the viewport, so a long
+          form can never push the nav row above the reachable scroll area
+          the way justify-center on the outer container did. */}
+      <div className="flex-1 flex flex-col lg:flex-none lg:block lg:my-auto">
+        <div className="hidden lg:flex items-center justify-between w-full max-w-lg mx-auto px-4 pb-4">
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 text-slate-400 hover:text-coral text-[13px] font-medium transition-colors"
+          >
+            <ArrowLeft size={15} /> Back
+          </button>
+          <Link href={switchHref} className="text-coral text-[13px] font-medium hover:underline">
+            {switchLabel}
+          </Link>
+        </div>
+
+        <div className="flex-1 lg:flex-none w-full lg:max-w-lg lg:mx-auto bg-white rounded-t-[28px] lg:rounded-3xl -mt-8 lg:mt-0 relative z-10 shadow-[0_-12px_32px_rgba(30,41,59,0.08)] lg:shadow-xl lg:shadow-slate-900/5 lg:border lg:border-slate-100 px-6 pt-8 pb-10 sm:px-8 lg:px-10 lg:py-10">
+          {children}
+        </div>
       </div>
     </motion.div>
   );
