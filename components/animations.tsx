@@ -357,6 +357,35 @@ export function TiltCard({
   )
 }
 
+// ─── AmbientGlow ──────────────────────────────────────────────────────────────
+// A soft blurred color field behind a phone/card mockup that slowly drifts
+// and breathes, instead of sitting as a static blur — small enough to read
+// as "alive" without being distracting. `direction` just mirrors the drift
+// so two glows in the same layout don't move in lockstep.
+export function AmbientGlow({
+  color,
+  className = '',
+  direction = 'right',
+}: {
+  color: string
+  className?: string
+  direction?: 'left' | 'right'
+}) {
+  const sign = direction === 'right' ? 1 : -1
+  return (
+    <motion.div
+      className={`absolute inset-0 pointer-events-none ${className}`}
+      style={{ backgroundColor: color, filter: 'blur(52px)' }}
+      animate={{
+        opacity: [0.14, 0.26, 0.14],
+        x: [24 * sign, 32 * sign, 24 * sign],
+        y: [-24, -16, -24],
+      }}
+      transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+    />
+  )
+}
+
 // ─── MagneticButton ───────────────────────────────────────────────────────────
 export function MagneticButton({
   children,

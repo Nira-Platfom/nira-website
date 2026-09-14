@@ -21,6 +21,7 @@ import {
   CountUp,
   MagneticButton,
   TiltCard,
+  AmbientGlow,
 } from '@/components/animations'
 
 function Check({ className = '' }: { className?: string }) {
@@ -40,12 +41,15 @@ function PinIcon({ className = '' }: { className?: string }) {
   )
 }
 
-// Dashboard phone mockup (static — for bookings feature)
+// Dashboard phone mockup — stats count up and bookings stagger in once
+// scrolled into view, phone responds to cursor tilt, glow drifts gently.
 function DashboardPhone() {
   return (
     <div className="relative mx-auto w-[265px]">
-      <div className="absolute inset-0 -translate-y-4 -translate-x-4 rounded-[44px] bg-lavender opacity-20 blur-3xl pointer-events-none" />
-      <div className="relative rounded-[40px] border-[5px] border-[#2D3F57] bg-[#1E293B] shadow-2xl overflow-hidden animate-float" style={{ animationDelay: '1s' }}>
+      <AmbientGlow color="#B8A9E0" className="rounded-[44px]" direction="left" />
+      <div className="animate-float" style={{ animationDelay: '1s' }}>
+      <TiltCard max={6}>
+      <div className="relative rounded-[40px] border-[5px] border-[#2D3F57] bg-[#1E293B] shadow-2xl overflow-hidden">
         <div className="flex justify-between items-center px-6 pt-3 pb-1">
           <span className="text-white/80 text-[10px]">9:41</span>
         </div>
@@ -58,38 +62,46 @@ function DashboardPhone() {
             <span className="text-[11px] font-medium text-coral">G</span>
           </div>
         </div>
-        <div className="bg-[#F8F7FF] px-3 py-3 grid grid-cols-2 gap-2">
+        <StaggerContainer className="bg-[#F8F7FF] px-3 py-3 grid grid-cols-2 gap-2">
           {[
-            { label: "Today's Bookings", value: '8', sub: '↑ +2 more', subColor: 'text-mint-dark' },
-            { label: 'Revenue Today',    value: 'TZS 480K', sub: '+23%', subColor: 'text-mint-dark' },
-            { label: 'Customers',        value: '124', sub: '+12 new', subColor: 'text-lavender-dark' },
-            { label: 'Bot Active',       value: '24/7', sub: '● online', subColor: 'text-mint-dark' },
+            { label: "Today's Bookings", value: <CountUp to={8} />,               sub: '↑ +2 more', subColor: 'text-mint-dark' },
+            { label: 'Revenue Today',    value: <>TZS <CountUp to={480} suffix="K" /></>, sub: '+23%', subColor: 'text-mint-dark' },
+            { label: 'Customers',        value: <CountUp to={124} />,             sub: '+12 new', subColor: 'text-lavender-dark' },
+            { label: 'Bot Active',       value: '24/7',                          sub: '● online', subColor: 'text-mint-dark' },
           ].map((s, i) => (
-            <div key={i} className="bg-white rounded-xl p-3 shadow-sm">
-              <p className="text-[9px] text-slate-400 mb-0.5 leading-tight">{s.label}</p>
-              <p className="text-sm font-serif text-[#1E293B]">{s.value}</p>
-              <p className={`text-[9px] font-medium ${s.subColor}`}>{s.sub}</p>
-            </div>
+            <StaggerItem key={i}>
+              <div className="bg-white rounded-xl p-3 shadow-sm">
+                <p className="text-[9px] text-slate-400 mb-0.5 leading-tight">{s.label}</p>
+                <p className="text-sm font-serif text-[#1E293B]">{s.value}</p>
+                <p className={`text-[9px] font-medium ${s.subColor}`}>{s.sub}</p>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
         <div className="bg-white px-3 py-3">
           <p className="text-[10px] font-medium text-slate-400 mb-2 uppercase tracking-wide">Upcoming Bookings</p>
-          {[
-            { name: 'Amina K.',  service: 'Classic Facial', time: '10:00 AM' },
-            { name: 'Rehema M.', service: 'Manicure',       time: '11:30 AM' },
-          ].map((b, i) => (
-            <div key={i} className="flex items-center gap-2 py-2 border-b border-slate-50 last:border-0">
-              <div className="w-7 h-7 rounded-full bg-lavender-light flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-medium text-lavender-dark">{b.name[0]}</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-[10px] font-medium text-[#1E293B]">{b.name}</p>
-                <p className="text-[9px] text-slate-400">{b.service}</p>
-              </div>
-              <span className="text-[9px] font-medium text-coral">{b.time}</span>
-            </div>
-          ))}
+          <StaggerContainer>
+            {[
+              { name: 'Amina K.',  service: 'Classic Facial', time: '10:00 AM' },
+              { name: 'Rehema M.', service: 'Manicure',       time: '11:30 AM' },
+            ].map((b, i) => (
+              <StaggerItem key={i}>
+                <div className="flex items-center gap-2 py-2 border-b border-slate-50 last:border-0">
+                  <div className="w-7 h-7 rounded-full bg-lavender-light flex items-center justify-center flex-shrink-0">
+                    <span className="text-[10px] font-medium text-lavender-dark">{b.name[0]}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-medium text-[#1E293B]">{b.name}</p>
+                    <p className="text-[9px] text-slate-400">{b.service}</p>
+                  </div>
+                  <span className="text-[9px] font-medium text-coral">{b.time}</span>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
+      </div>
+      </TiltCard>
       </div>
     </div>
   )
