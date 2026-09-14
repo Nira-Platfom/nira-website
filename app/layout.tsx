@@ -39,6 +39,17 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
   themeColor: '#FF6B6B',
 
+  // iOS Safari ignores the web manifest for "Add to Home Screen" — without
+  // these, the home-screen icon still works but the app opens back inside
+  // Safari with the address bar showing, instead of full-screen like a
+  // real app. appleWebApp.title also sets the label under the home-screen
+  // icon (otherwise iOS uses the full <title>, which gets truncated).
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Nira',
+  },
+
   openGraph: {
     title: 'Nira · Beauty Business AI Companion',
     description:
