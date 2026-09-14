@@ -8,6 +8,7 @@ import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Input } from "@/components/ui";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/animations";
+import AuthCoverReveal from "@/components/AuthCoverReveal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,7 +34,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
+    <AuthCoverReveal
+      title="Welcome Back"
+      tagline="Sign in to keep your business connected on WhatsApp, 24/7."
+      ctaLabel="Sign In"
+      switchLabel="Create account"
+      switchHref="/register"
+    >
       <FadeUp>
         <h1 className="font-serif text-[28px] text-charcoal mb-1">Welcome back</h1>
         <p className="text-sm text-slate-500 mb-8">Sign in to your dashboard</p>
@@ -92,6 +99,6 @@ export default function LoginPage() {
           </Button>
         </Link>
       </FadeUp>
-    </div>
+    </AuthCoverReveal>
   );
 }

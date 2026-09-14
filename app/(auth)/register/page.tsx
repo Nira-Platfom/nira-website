@@ -9,6 +9,7 @@ import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Input } from "@/components/ui";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/animations";
+import AuthCoverReveal from "@/components/AuthCoverReveal";
 import { cn } from "@/lib/utils";
 
 export default function RegisterPage() {
@@ -46,7 +47,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div>
+    <AuthCoverReveal
+      title="Get Started Free"
+      tagline="Join 500+ beauty businesses growing with Nira on WhatsApp."
+      ctaLabel="Get Started"
+      switchLabel="Sign in"
+      switchHref="/login"
+    >
       <FadeUp>
         <h1 className="font-serif text-[28px] text-charcoal mb-1">Get started free</h1>
         <p className="text-sm text-slate-500 mb-6">30-day Pro trial, no card needed</p>
@@ -145,6 +152,6 @@ export default function RegisterPage() {
           </Link>
         </div>
       </FadeUp>
-    </div>
+    </AuthCoverReveal>
   );
 }
