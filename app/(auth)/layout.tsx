@@ -61,8 +61,32 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
-        <div className="w-full max-w-md">{children}</div>
+      {/* Mobile/tablet: the desktop branding panel above is hidden entirely
+          below lg, which previously left nothing but a bare white page and
+          a small centered logo — the actual cause of it reading as "cheap"
+          on a phone. A compact gradient hero (echoing the desktop panel)
+          with the form rising over it as a rounded sheet gives mobile real
+          brand presence instead of just disappearing at that breakpoint. */}
+      <div className="flex-1 flex flex-col lg:items-center lg:justify-center lg:p-12">
+        <div className="lg:hidden relative overflow-hidden bg-gradient-to-br from-coral via-[#ff8585] to-coral-dark pt-14 pb-20 px-6">
+          <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-white/10 pointer-events-none" />
+          <div className="absolute -left-12 -bottom-8 w-48 h-48 rounded-full bg-white/[0.08] pointer-events-none" />
+          <Link href="/" className="relative z-10 inline-flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/nira-icon-white.png"
+              alt=""
+              className="w-7 h-7"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
+            <NiraWordmark size="md" variant="mono-white" />
+          </Link>
+          <p className="relative z-10 text-white/90 text-sm mt-2">Africa&rsquo;s AI Beauty Marketplace</p>
+        </div>
+
+        <div className="flex-1 lg:flex-none lg:w-full lg:max-w-md bg-white rounded-t-[28px] lg:rounded-none -mt-8 lg:mt-0 relative z-10 shadow-[0_-12px_32px_rgba(30,41,59,0.08)] lg:shadow-none px-6 pt-8 pb-10 sm:px-8 lg:p-0">
+          {children}
+        </div>
       </div>
     </div>
   );

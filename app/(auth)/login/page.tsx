@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Input } from "@/components/ui";
-import NiraWordmark from "@/components/NiraWordmark";
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/animations";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,52 +34,64 @@ export default function LoginPage() {
 
   return (
     <div>
-      <div className="lg:hidden mb-8 flex justify-center">
-        <NiraWordmark size="lg" />
-      </div>
+      <FadeUp>
+        <h1 className="font-serif text-[28px] text-charcoal mb-1">Welcome back</h1>
+        <p className="text-sm text-slate-500 mb-8">Sign in to your dashboard</p>
+      </FadeUp>
 
-      <h1 className="font-serif text-[28px] text-charcoal mb-1">Welcome back</h1>
-      <p className="text-sm text-slate-500 mb-8">Sign in to your dashboard</p>
+      <StaggerContainer>
+        <form onSubmit={submit} className="space-y-4">
+          <StaggerItem>
+            <Input label="Email" type="email" icon={Mail} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
+          </StaggerItem>
+          <StaggerItem>
+            <div>
+              <div className="relative">
+                <Input
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  icon={Lock}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                />
+                <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-[38px] text-slate-400 hover:text-coral transition-colors">
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <div className="text-right mt-1.5">
+                <button
+                  type="button"
+                  onClick={() => toast.info("Password reset is coming soon — contact support for now.")}
+                  className="text-[13px] text-coral font-medium hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            </div>
+          </StaggerItem>
 
-      <form onSubmit={submit} className="space-y-4">
-        <Input label="Email" type="email" icon={Mail} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
-        <div>
-          <div className="relative">
-            <Input
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              icon={Lock}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
-            <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-[38px] text-slate-400">
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          </div>
-          <div className="text-right mt-1.5">
-            <Link href="#" className="text-[13px] text-coral font-medium hover:underline">
-              Forgot password?
-            </Link>
-          </div>
+          <StaggerItem>
+            <Button type="submit" className="w-full" size="lg" loading={loading}>
+              Sign In
+            </Button>
+          </StaggerItem>
+        </form>
+      </StaggerContainer>
+
+      <FadeUp delay={0.3}>
+        <div className="flex items-center gap-3 my-6">
+          <div className="h-px bg-slate-100 flex-1" />
+          <span className="text-[13px] text-slate-400">Don&rsquo;t have an account?</span>
+          <div className="h-px bg-slate-100 flex-1" />
         </div>
 
-        <Button type="submit" className="w-full" size="lg" loading={loading}>
-          Sign In
-        </Button>
-      </form>
-
-      <div className="flex items-center gap-3 my-6">
-        <div className="h-px bg-slate-100 flex-1" />
-        <span className="text-[13px] text-slate-400">Don&rsquo;t have an account?</span>
-        <div className="h-px bg-slate-100 flex-1" />
-      </div>
-
-      <Link href="/register">
-        <Button variant="secondary" className="w-full" size="lg">
-          Create account
-        </Button>
-      </Link>
+        <Link href="/register">
+          <Button variant="secondary" className="w-full" size="lg">
+            Create account
+          </Button>
+        </Link>
+      </FadeUp>
     </div>
   );
 }

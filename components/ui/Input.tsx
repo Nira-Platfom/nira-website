@@ -19,16 +19,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <div className="relative">
-          {Icon && <Icon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />}
+        <div className="relative group">
+          {Icon && (
+            <Icon
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-200 group-focus-within:text-coral"
+            />
+          )}
           <input
             ref={ref}
             id={inputId}
             className={cn(
-              "w-full h-12 rounded-input bg-page border text-[15px] text-charcoal px-4 outline-none transition-colors",
+              "w-full h-12 rounded-input bg-page border text-[15px] text-charcoal px-4 outline-none",
+              "transition-[border-color,box-shadow] duration-200",
               "placeholder:text-slate-400",
               Icon && "pl-10",
-              error ? "border-red-400" : "border-slate-200 focus:border-coral",
+              error
+                ? "border-red-400 focus:shadow-[0_0_0_4px_rgba(248,113,113,0.15)]"
+                : "border-slate-200 focus:border-coral focus:shadow-[0_0_0_4px_rgba(255,107,107,0.12)]",
               className
             )}
             {...props}
