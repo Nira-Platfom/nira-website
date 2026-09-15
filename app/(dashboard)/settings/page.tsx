@@ -1,25 +1,41 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions } from "@/hooks/usePermissions";
-import { Card, Button, Input, Switch, Badge, Avatar, EmptyState } from "@/components/ui";
+import { Card, Button, Input, Switch, Badge, Avatar, EmptyState, Modal } from "@/components/ui";
 import { cn, formatDate } from "@/lib/utils";
-import { Copy, Share2, Download, UserPlus, Trash2, Crown, Users as UsersIcon } from "lucide-react";
+import { Copy, Share2, Download, UserPlus, Trash2, Crown, Users as UsersIcon, AlertTriangle } from "lucide-react";
 
-type Section = "general" | "bot" | "team" | "subscription";
+type Section = "profile" | "general" | "bot" | "team" | "subscription";
 
 const SECTIONS: { id: Section; label: string }[] = [
-  { id: "general", label: "General" },
+  { id: "profile", label: "Profile" },
+  { id: "general", label: "Business" },
   { id: "bot", label: "WhatsApp Bot" },
   { id: "team", label: "Team" },
   { id: "subscription", label: "Subscription" },
 ];
 
 export default function SettingsPage() {
-  const [section, setSection] = useState<Section>("general");
+  return (
+    <Suspense fallback={null}>
+      <SettingsPageInner />
+    </Suspense>
+  );
+}
+
+function SettingsPageInner() {
+  const params = useSearchParams();
+  const router = useRouter();
   const { isOwner } = usePermissions();
+
+  const requested = params.get("section") as Section | null;
+  const section: Section = requested && SECTIONS.some((s) => s.id === requested) ? requested : "profile";
+
+  const setSection = (id: Section) => router.push(`/settings?section=${id}`);
 
   const visibleSections = SECTIONS.filter((s) => s.id !== "subscription" || isOwner());
 
@@ -42,11 +58,179 @@ export default function SettingsPage() {
         </div>
       </nav>
       <div className="flex-1 min-w-0 max-w-2xl">
+        {section === "profile" && <ProfileSection />}
         {section === "general" && <GeneralSection />}
         {section === "bot" && <BotSection />}
         {section === "team" && <TeamSection />}
         {section === "subscription" && <SubscriptionSection />}
       </div>
+    </div>
+  );
+}
+
+function ProfileSection() {
+  const { user, logout, refreshUser } = useAuth();
+  const [form, setForm] = useState({ full_name: "", email: "" });
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  const [pwForm, setPwForm] = useState({ current_password: "", new_password: "", confirm_password: "" });
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    if (user) setForm({ full_name: user.full_name || "", email: user.email || "" });
+  }, [user]);
+
+  const profileUnchanged = user && form.full_name === user.full_name && form.email === user.email;
+
+  const saveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      await api.put("/auth/me", form);
+      toast.success("Profile updated");
+      await refreshUser();
+    } catch (e: any) {
+      toast.error(apiErrorMessage(e, "Couldn't save changes"));
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const changePassword = async () => {
+    if (pwForm.new_password !== pwForm.confirm_password) {
+      toast.error("New passwords don't match");
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      await api.put("/auth/change-password", {
+        current_password: pwForm.current_password,
+        new_password: pwForm.new_password,
+      });
+      toast.success("Password changed");
+      setPwForm({ current_password: "", new_password: "", confirm_password: "" });
+    } catch (e: any) {
+      toast.error(apiErrorMessage(e, "Couldn't change password"));
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
+  const deleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await api.delete("/auth/account");
+      toast.success("Account deleted");
+      logout();
+    } catch (e: any) {
+      toast.error(apiErrorMessage(e, "Couldn't delete your account"));
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card title="Your Profile">
+        <div className="flex items-center gap-4 mb-6">
+          <Avatar name={user?.full_name} size={56} />
+          <div>
+            <p className="text-[15px] font-medium text-charcoal">{user?.full_name}</p>
+            <p className="text-[13px] text-slate-500">{user?.email}</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <Input label="Full name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+          <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          <Button loading={savingProfile} disabled={!!profileUnchanged} onClick={saveProfile}>
+            Save Changes
+          </Button>
+        </div>
+      </Card>
+
+      <Card title="Change Password">
+        <div className="space-y-4">
+          <Input
+            label="Current password"
+            type="password"
+            value={pwForm.current_password}
+            onChange={(e) => setPwForm({ ...pwForm, current_password: e.target.value })}
+          />
+          <Input
+            label="New password"
+            type="password"
+            value={pwForm.new_password}
+            onChange={(e) => setPwForm({ ...pwForm, new_password: e.target.value })}
+            hint="At least 8 characters"
+          />
+          <Input
+            label="Confirm new password"
+            type="password"
+            value={pwForm.confirm_password}
+            onChange={(e) => setPwForm({ ...pwForm, confirm_password: e.target.value })}
+          />
+          <Button
+            loading={savingPassword}
+            disabled={!pwForm.current_password || !pwForm.new_password || !pwForm.confirm_password}
+            onClick={changePassword}
+          >
+            Update Password
+          </Button>
+        </div>
+      </Card>
+
+      <Card className="border-l-4 border-l-coral">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-coral-light text-coral flex items-center justify-center shrink-0">
+            <AlertTriangle size={18} />
+          </div>
+          <div>
+            <h3 className="text-[15px] font-medium text-charcoal">Danger Zone</h3>
+            <p className="text-[13px] text-slate-500 mt-0.5">
+              Permanently delete your account. Businesses you own alone are deleted entirely, including all
+              products, bookings, orders, and customer data. This cannot be undone.
+            </p>
+          </div>
+        </div>
+        <Button variant="danger" icon={<Trash2 size={15} />} onClick={() => setDeleteOpen(true)}>
+          Delete Account
+        </Button>
+      </Card>
+
+      <Modal
+        open={deleteOpen}
+        onClose={() => {
+          setDeleteOpen(false);
+          setDeleteConfirmText("");
+        }}
+        title="Delete your account"
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" loading={deleting} disabled={deleteConfirmText !== "DELETE"} onClick={deleteAccount}>
+              Delete Permanently
+            </Button>
+          </div>
+        }
+      >
+        <div className="p-6 space-y-4">
+          <p className="text-sm text-charcoal">
+            This permanently deletes your account and — for any business you own without other active team
+            members — every product, service, booking, order, customer, and conversation it has. There is no
+            way to undo this.
+          </p>
+          <Input
+            label='Type "DELETE" to confirm'
+            value={deleteConfirmText}
+            onChange={(e) => setDeleteConfirmText(e.target.value)}
+            placeholder="DELETE"
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

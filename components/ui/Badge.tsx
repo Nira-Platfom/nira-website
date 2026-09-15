@@ -23,6 +23,9 @@ const STYLES: Record<string, string> = {
   past_due: "bg-coral-light text-coral-deep",
   failed: "bg-coral-light text-coral-deep",
   refunded: "bg-slate-100 text-slate-600",
+  sent: "bg-mint-light text-mint-deep",
+  scheduled: "bg-lavender-light text-lavender-deep",
+  sending: "bg-amber-light text-amber-deep",
 };
 
 function labelize(s: string) {
