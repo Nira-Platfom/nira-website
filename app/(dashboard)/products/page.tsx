@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Plus, Search, Grid3x3, List, Package, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { Plus, Search, Grid3x3, List, Package, Pencil, Trash2, AlertTriangle, Copy } from "lucide-react";
 import { toast } from "sonner";
 import api, { apiErrorMessage } from "@/lib/api";
 import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, DataTable, Badge, ImageUpload } from "@/components/ui";
@@ -22,6 +22,7 @@ interface Product {
   image_url?: string | null;
   brand: string | null;
   is_african_made: boolean;
+  order_link?: string | null;
 }
 
 // Below this, a stock quantity is flagged as running low — a nudge to
@@ -229,6 +230,12 @@ export default function ProductsPage() {
     }
   };
 
+  const copyLink = (p: Product) => {
+    if (!p.order_link) return;
+    navigator.clipboard.writeText(p.order_link);
+    toast.success("Order link copied");
+  };
+
   const columns: ColumnDef<Product>[] = [
     { accessorKey: "name", header: "Name", cell: ({ row }) => <span className="font-medium text-charcoal">{row.original.name}</span> },
     { accessorKey: "category", header: "Category", cell: ({ row }) => row.original.category || "—" },
@@ -258,6 +265,11 @@ export default function ProductsPage() {
           <button onClick={() => openEdit(row.original)} className="text-slate-400 hover:text-coral">
             <Pencil size={15} />
           </button>
+          {row.original.order_link && (
+            <button onClick={() => copyLink(row.original)} className="text-slate-400 hover:text-coral" title="Copy order link">
+              <Copy size={15} />
+            </button>
+          )}
           <button onClick={() => setDeleteTarget(row.original)} className="text-slate-400 hover:text-coral">
             <Trash2 size={15} />
           </button>
@@ -369,9 +381,16 @@ export default function ProductsPage() {
                     <span className="text-[11px] text-slate-500">{p.is_active ? "Active" : "Inactive"}</span>
                     <Switch checked={p.is_active} onChange={() => toggleActive(p)} />
                   </div>
-                  <button onClick={() => setDeleteTarget(p)} className="text-slate-300 hover:text-coral transition-colors" title="Delete product">
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {p.order_link && (
+                      <button onClick={() => copyLink(p)} className="text-slate-300 hover:text-coral transition-colors" title="Copy order link">
+                        <Copy size={15} />
+                      </button>
+                    )}
+                    <button onClick={() => setDeleteTarget(p)} className="text-slate-300 hover:text-coral transition-colors" title="Delete product">
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

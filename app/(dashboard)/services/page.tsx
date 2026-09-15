@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Plus, Scissors, Pencil, Clock } from "lucide-react";
+import { Plus, Scissors, Pencil, Clock, Copy } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, ImageUpload } from "@/components/ui";
@@ -14,6 +14,7 @@ interface Service {
   description: string | null;
   is_active: boolean;
   image_url?: string | null;
+  booking_link?: string | null;
 }
 
 const empty = { name: "", price: "", duration_minutes: "30", description: "" };
@@ -110,6 +111,12 @@ export default function ServicesPage() {
     }
   };
 
+  const copyLink = (s: Service) => {
+    if (!s.booking_link) return;
+    navigator.clipboard.writeText(s.booking_link);
+    toast.success("Booking link copied");
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -159,6 +166,15 @@ export default function ServicesPage() {
                   <span className="font-serif text-lg text-coral">{formatTZS(s.price)}</span>
                   <Switch checked={s.is_active} onChange={() => toggleActive(s)} />
                 </div>
+                {s.booking_link && (
+                  <button
+                    onClick={() => copyLink(s)}
+                    className="mt-3 pt-3 border-t border-slate-50 w-full flex items-center justify-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-coral transition-colors"
+                  >
+                    <Copy size={12} />
+                    Copy booking link
+                  </button>
+                )}
               </div>
             </div>
           ))}

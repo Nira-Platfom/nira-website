@@ -191,10 +191,12 @@ function Landing({
   onDirectCode,
   onExploreBusinesses,
   onExploreProducts,
+  onTakeQuiz,
 }: {
   onDirectCode: (code: string) => void
   onExploreBusinesses: () => void
   onExploreProducts: () => void
+  onTakeQuiz: () => void
 }) {
   const [code, setCode] = useState('')
   return (
@@ -211,6 +213,17 @@ function Landing({
       </div>
 
       <div className="grid w-full max-w-md gap-3">
+        <button
+          onClick={onTakeQuiz}
+          className="btn-press card-hover flex items-center gap-4 rounded-2xl border-2 border-coral bg-coral-light p-4 text-left"
+        >
+          <span className="text-2xl">✨</span>
+          <span>
+            <span className="block text-sm font-medium text-coral-dark">Take the Beauty Quiz</span>
+            <span className="block text-xs text-coral-dark/70">Get skin or hair product picks made for you</span>
+          </span>
+        </button>
+
         <button
           onClick={onExploreProducts}
           className="btn-press card-hover flex items-center gap-4 rounded-2xl border p-4 text-left"
@@ -262,7 +275,17 @@ function Landing({
 
 // ── Explore: marketplace search before a business is chosen ───────────────────
 
-function ExploreBusinesses({ onPick, onBack }: { onPick: (code: string, name: string) => void; onBack: () => void }) {
+function ExploreBusinesses({
+  onPick,
+  onBack,
+  heading = 'Salons & beauty shops',
+  subheading,
+}: {
+  onPick: (code: string, name: string) => void
+  onBack: () => void
+  heading?: string
+  subheading?: string
+}) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<BusinessResult[]>([])
   const [loading, setLoading] = useState(true)
@@ -286,7 +309,8 @@ function ExploreBusinesses({ onPick, onBack }: { onPick: (code: string, name: st
       <button onClick={onBack} className="btn-press mb-4 self-start text-xs hover:text-coral" style={mutedText}>
         ← Back
       </button>
-      <h2 className="mb-3 text-lg font-medium" style={primaryText}>Salons & beauty shops</h2>
+      <h2 className={subheading ? 'mb-1 text-lg font-medium' : 'mb-3 text-lg font-medium'} style={primaryText}>{heading}</h2>
+      {subheading && <p className="mb-3 text-xs" style={mutedText}>{subheading}</p>}
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -383,10 +407,19 @@ function ExploreProducts({ onPick, onBack }: { onPick: (code: string, name: stri
 
 // ── Main component ─────────────────────────────────────────────────────────
 
-type Phase = 'landing' | 'browse_businesses' | 'browse_products' | 'chat'
+type Phase = 'landing' | 'browse_businesses' | 'browse_products' | 'quiz_pick' | 'chat'
 
-export default function WebChat({ initialBotCode }: { initialBotCode?: string }) {
-  const [phase, setPhase] = useState<Phase>(initialBotCode ? 'chat' : 'landing')
+export default function WebChat({
+  initialBotCode,
+  initialIntent,
+}: {
+  initialBotCode?: string
+  /** Skip the landing screen and drop straight into the quiz's business
+   * picker — used by the marketing site's dedicated quiz CTA (/chat?intent=quiz),
+   * so an influencer or a menu link can point at the quiz by name. */
+  initialIntent?: 'quiz'
+}) {
+  const [phase, setPhase] = useState<Phase>(initialBotCode ? 'chat' : initialIntent === 'quiz' ? 'quiz_pick' : 'landing')
   const [botCode, setBotCode] = useState<string | null>(initialBotCode ?? null)
   const [business, setBusiness] = useState<BusinessInfo | null>(null)
   const [bubbles, setBubbles] = useState<Bubble[]>([])
@@ -395,7 +428,7 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
   const [error, setError] = useState<string | null>(null)
 
   const visitorIdRef = useRef('')
-  const pendingIntroRef = useRef<string | null>(null)
+  const pendingIntroRef = useRef<{ message: string; label: string } | null>(null)
   const bubbleIdRef = useRef(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const startedRef = useRef(false)
@@ -418,10 +451,10 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
     })
   }, [botCode])
 
-  const sendMessage = useCallback(async (text: string, opts?: { silent?: boolean }) => {
+  const sendMessage = useCallback(async (text: string, opts?: { silent?: boolean; displayText?: string }) => {
     if (!opts?.silent) {
       bubbleIdRef.current += 1
-      setBubbles((prev) => [...prev, { id: bubbleIdRef.current, dir: 'out', result: { type: 'text', body: text } }])
+      setBubbles((prev) => [...prev, { id: bubbleIdRef.current, dir: 'out', result: { type: 'text', body: opts?.displayText ?? text } }])
       scrollToBottom()
     }
     setSending(true)
@@ -432,11 +465,17 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
       setBubbles((prev) => [...prev, { id: bubbleIdRef.current, dir: 'in', result }])
       scrollToBottom()
 
-      if (pendingIntroRef.current && result.type === 'text') {
-        const intro = pendingIntroRef.current
+      // A pending intro (queued by beginChat, e.g. "Hi, I'm interested in X"
+      // or "menu_quiz") should auto-fire right after the welcome message —
+      // but NOT after the language-select prompt, which is always the very
+      // first reply and also arrives as a `buttons` result. Distinguish by
+      // button id rather than result.type, since both are "buttons".
+      const isLanguageSelect = result.type === 'buttons' && result.buttons?.some((b) => b.reply.id.startsWith('lang_'))
+      if (pendingIntroRef.current && !isLanguageSelect) {
+        const { message, label } = pendingIntroRef.current
         pendingIntroRef.current = null
         setSending(false)
-        await sendMessage(intro)
+        await sendMessage(message, { displayText: label })
         return
       }
     } catch (e: unknown) {
@@ -446,12 +485,12 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
     }
   }, [postMessage, scrollToBottom])
 
-  const beginChat = useCallback(async (code: string, intro?: string) => {
+  const beginChat = useCallback(async (code: string, intro?: string | { message: string; label: string }) => {
     setBotCode(code)
     setBusiness(null)
     setBubbles([])
     setError(null)
-    pendingIntroRef.current = intro ?? null
+    pendingIntroRef.current = typeof intro === 'string' ? { message: intro, label: intro } : intro ?? null
     setPhase('chat')
 
     try {
@@ -503,6 +542,7 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
               onDirectCode={(code) => beginChat(code.toLowerCase())}
               onExploreBusinesses={() => setPhase('browse_businesses')}
               onExploreProducts={() => setPhase('browse_products')}
+              onTakeQuiz={() => setPhase('quiz_pick')}
             />
           </motion.div>
         )}
@@ -510,6 +550,17 @@ export default function WebChat({ initialBotCode }: { initialBotCode?: string })
         {phase === 'browse_businesses' && (
           <motion.div key="browse_businesses" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-1 flex-col">
             <ExploreBusinesses onBack={() => setPhase('landing')} onPick={(code) => beginChat(code)} />
+          </motion.div>
+        )}
+
+        {phase === 'quiz_pick' && (
+          <motion.div key="quiz_pick" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-1 flex-col">
+            <ExploreBusinesses
+              onBack={() => setPhase('landing')}
+              heading="✨ Take the Beauty Quiz"
+              subheading="Pick a shop — Nira will ask a few quick questions and match you to their products"
+              onPick={(code) => beginChat(code, { message: 'menu_quiz', label: "✨ I'd like to take the beauty quiz" })}
+            />
           </motion.div>
         )}
 

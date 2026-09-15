@@ -5,10 +5,14 @@ export const metadata = {
   description: 'Book appointments, order products, or get beauty advice from Nira — right here in your browser.',
 }
 
-export default function ChatPage() {
+export default function ChatPage({
+  searchParams,
+}: {
+  searchParams: { intent?: string }
+}) {
   return (
     <div className="pt-16">
-      <WebChat />
+      <WebChat initialIntent={searchParams.intent === 'quiz' ? 'quiz' : undefined} />
     </div>
   )
 }
