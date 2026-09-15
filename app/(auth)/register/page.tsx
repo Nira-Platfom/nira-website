@@ -56,7 +56,7 @@ export default function RegisterPage() {
     >
       <FadeUp>
         <h1 className="font-serif text-[28px] text-charcoal mb-1">Get started free</h1>
-        <p className="text-sm text-slate-500 mb-6">30-day Pro trial, no card needed</p>
+        <p className="text-sm text-slate-500 mb-6">3-month Pro trial, no card needed</p>
       </FadeUp>
 
       <StaggerContainer>

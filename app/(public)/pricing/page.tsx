@@ -49,7 +49,7 @@ const plans = [
       { text: 'Broadcast campaigns', included: true },
       { text: 'Priority support', included: false },
     ],
-    cta: 'Start 30-day free trial',
+    cta: 'Start 3-month free trial',
     ctaStyle: 'bg-white hover:bg-coral-light text-coral',
   },
   {
@@ -71,7 +71,7 @@ const plans = [
       { text: 'Custom bot flows', included: true },
       { text: 'Priority support', included: true },
     ],
-    cta: 'Start 30-day free trial',
+    cta: 'Start 3-month free trial',
     ctaStyle: 'bg-coral hover:bg-coral-dark text-white',
   },
 ]
@@ -83,7 +83,7 @@ const faqs = [
   },
   {
     q: 'What happens after the free trial?',
-    a: 'After your 30-day trial ends, you\'ll be moved to the Free plan unless you choose to upgrade. You won\'t lose your data.',
+    a: 'After your 3-month trial ends, you\'ll be moved to the Free plan unless you choose to upgrade. You won\'t lose your data.',
   },
   {
     q: 'Can I use Nira with my existing WhatsApp number?',
@@ -139,7 +139,7 @@ export default function PricingPage() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              30-day free trial, no credit card required
+              3-month free trial, no credit card required
             </div>
           </FadeUp>
         </div>

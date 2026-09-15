@@ -54,7 +54,7 @@ export default function TermsPage() {
 
         <Section title="5. Payment and subscription">
           <ul>
-            <li>New accounts receive a <strong>30-day free trial</strong> with no credit card required</li>
+            <li>New accounts receive a <strong>3-month free trial</strong> with no credit card required</li>
             <li>After the trial, continued use requires a paid subscription (Free, Pro, or Business plan)</li>
             <li>Subscription fees are billed in advance on a monthly or annual basis</li>
             <li>All prices are in Tanzanian Shillings (TZS) unless otherwise stated</li>

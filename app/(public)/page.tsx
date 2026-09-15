@@ -720,7 +720,7 @@ export default function HomePage() {
 
           <FadeUp>
             <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-              All paid plans include a 30-day free trial. No credit card required.{' '}
+              All paid plans include a 3-month free trial. No credit card required.{' '}
               <Link href="/pricing" className="text-coral hover:underline font-medium">View full pricing →</Link>
             </p>
           </FadeUp>
