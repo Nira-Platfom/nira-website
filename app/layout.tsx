@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { DM_Sans, DM_Serif_Display } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
@@ -37,7 +37,6 @@ export const metadata: Metadata = {
   },
 
   manifest: '/site.webmanifest',
-  themeColor: '#FF6B6B',
 
   // iOS Safari ignores the web manifest for "Add to Home Screen" — without
   // these, the home-screen icon still works but the app opens back inside
@@ -67,6 +66,15 @@ export const metadata: Metadata = {
     description: 'AI-powered WhatsApp assistant for beauty businesses in East Africa.',
     images: ['/og-image.png'],
   },
+}
+
+// viewportFit "cover" lets the page draw under the iPhone notch/home-indicator
+// in standalone (installed) mode — without it, env(safe-area-inset-*) always
+// resolves to 0 and the dashboard's sticky header/bottom tab bar sit flush
+// against the status bar and home-indicator instead of padding around them.
+export const viewport: Viewport = {
+  themeColor: '#FF6B6B',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({

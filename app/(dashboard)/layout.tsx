@@ -1,16 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import MobileTabBar from "@/components/layout/MobileTabBar";
 import NiraWordmark from "@/components/NiraWordmark";
-import { X } from "lucide-react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
@@ -27,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen bg-page overflow-hidden">
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — mobile/tablet gets the bottom tab bar instead */}
       <div className="hidden lg:block xl:hidden">
         <Sidebar collapsed />
       </div>
@@ -35,28 +34,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar />
       </div>
 
-      {/* Mobile sidebar drawer */}
-      {mobileNavOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileNavOpen(false)} />
-          <div className="relative">
-            <Sidebar />
-            <button
-              onClick={() => setMobileNavOpen(false)}
-              className="absolute top-4 -right-11 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-      )}
-
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header onMenuClick={() => setMobileNavOpen(true)} />
+        <Header />
         <main className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-6 max-w-[1400px] mx-auto">{children}</div>
+          {/* Bottom padding on mobile clears the fixed tab bar (52px content
+              + its own safe-area inset) so the last card is never hidden
+              behind it; lg+ has no tab bar so no extra padding is needed. */}
+          <div className="p-4 md:p-6 pb-24 lg:pb-6 max-w-[1400px] mx-auto">{children}</div>
         </main>
       </div>
+
+      <MobileTabBar />
     </div>
   );
 }

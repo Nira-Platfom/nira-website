@@ -226,6 +226,15 @@ button { transition: transform 200ms ease, box-shadow 200ms ease, background-col
   background-size: 800px 100%;
 }
 
+/* ─── Business dashboard: mobile "More" bottom sheet ───────── */
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0);    }
+}
+.animate-sheet-up {
+  animation: sheet-up 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 /* ─── Step number gradient ────────────────────────────────── */
 .step-num {
   background: linear-gradient(135deg, #FF6B6B 0%, #B8A9E0 100%);

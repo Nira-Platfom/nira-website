@@ -2,7 +2,7 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, Menu } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getInitials, cn } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ const TITLES: Record<string, string> = {
   "/add-business": "Add business",
 };
 
-export default function Header({ onMenuClick }: { onMenuClick?: () => void }) {
+export default function Header() {
   const pathname = usePathname();
   const { business } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,11 +42,10 @@ export default function Header({ onMenuClick }: { onMenuClick?: () => void }) {
   }, [pathname]);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-40 flex items-center px-4 md:px-6 shrink-0">
-      <button onClick={onMenuClick} className="md:hidden mr-3 text-charcoal">
-        <Menu size={22} />
-      </button>
-
+    <header
+      className="h-16 bg-white border-b border-slate-200 sticky top-0 z-40 flex items-center px-4 md:px-6 shrink-0"
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)", height: "calc(4rem + env(safe-area-inset-top, 0px))" }}
+    >
       <h1 className="text-[18px] font-medium text-charcoal shrink-0">{title}</h1>
 
       <div className="flex-1 flex justify-center px-6">
@@ -82,7 +81,7 @@ export default function Header({ onMenuClick }: { onMenuClick?: () => void }) {
           </button>
           {menuOpen && (
             <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-lg shadow-card-hover border border-slate-100 py-1.5 z-50">
-              <Link href="/settings" className="block px-3 py-2 text-[13px] text-charcoal hover:bg-page">
+              <Link href="/settings?section=profile" className="block px-3 py-2 text-[13px] text-charcoal hover:bg-page">
                 Profile
               </Link>
               <Link href="/settings" className="block px-3 py-2 text-[13px] text-charcoal hover:bg-page">
