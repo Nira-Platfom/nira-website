@@ -18,6 +18,8 @@ interface Business {
   onboarding_completed: boolean;
   bot_code?: string | null;
   whatsapp_link?: string | null;
+  booking_link?: string | null;
+  order_link?: string | null;
 }
 
 interface BusinessSummary {

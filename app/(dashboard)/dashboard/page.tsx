@@ -180,6 +180,11 @@ export default function OverviewPage() {
     }
   };
 
+  const copyText = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied`);
+  };
+
   const revenueThisMonth = analytics?.this_month_revenue ?? analytics?.revenue_total ?? 0;
   const revenueTrend = analytics ? trendFrom(revenueThisMonth, analytics.vs_last_month.revenue_total) : undefined;
   const activityCount = isSalon ? analytics?.bookings_this_month : analytics?.orders_this_month;
@@ -461,6 +466,50 @@ export default function OverviewPage() {
                 </Button>
               </div>
             </div>
+
+            {(business?.booking_link || business?.order_link) && (
+              <div className="mt-4 pt-4 border-t border-slate-100 space-y-2 text-left">
+                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-1">
+                  Direct Links
+                </p>
+                <p className="text-[12px] text-slate-500 mb-3">
+                  Skip the bot code — these open straight to {isSalon ? "booking" : "ordering"}. Good for your
+                  Instagram bio or WhatsApp status.
+                </p>
+                {business.booking_link && (
+                  <div className="flex items-center justify-between gap-2 rounded-lg bg-page px-3 py-2.5">
+                    <div className="min-w-0">
+                      <p className="text-[12px] font-medium text-charcoal">Booking link</p>
+                      <p className="text-[11px] text-slate-500 truncate font-mono">{business.booking_link}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      icon={<Copy size={13} />}
+                      onClick={() => copyText(business.booking_link!, "Booking link")}
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                )}
+                {business.order_link && (
+                  <div className="flex items-center justify-between gap-2 rounded-lg bg-page px-3 py-2.5">
+                    <div className="min-w-0">
+                      <p className="text-[12px] font-medium text-charcoal">Order link</p>
+                      <p className="text-[11px] text-slate-500 truncate font-mono">{business.order_link}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      icon={<Copy size={13} />}
+                      onClick={() => copyText(business.order_link!, "Order link")}
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </Card>
         </div>
       </div>
