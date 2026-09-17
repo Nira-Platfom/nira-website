@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus, Megaphone, Tag, Send, Trash2, Pencil, Repeat } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, PillTabs, Badge } from "@/components/ui";
 import { formatDate, toLocalISODate, cn } from "@/lib/utils";
 
@@ -113,7 +113,7 @@ function PromotionsTab({ open: sheetOpen, setOpen: setSheetOpen }: { open: boole
       setSheetOpen(false);
       load();
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't create promotion");
+      toast.error(apiErrorMessage(e, "Couldn't create promotion"));
     } finally {
       setSaving(false);
     }
@@ -339,7 +339,7 @@ function BroadcastsTab() {
       setMessage("");
       load();
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't send broadcast");
+      toast.error(apiErrorMessage(e, "Couldn't send broadcast"));
     } finally {
       setSending(false);
     }
@@ -360,7 +360,7 @@ function BroadcastsTab() {
       toast.success(`Resent to ${data.delivered_count} customer(s)`);
       load();
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't resend broadcast");
+      toast.error(apiErrorMessage(e, "Couldn't resend broadcast"));
     } finally {
       setResendingId(null);
     }
@@ -372,7 +372,7 @@ function BroadcastsTab() {
       setBroadcasts((prev) => prev.filter((b) => b.id !== id));
       toast.success("Broadcast deleted");
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't delete broadcast");
+      toast.error(apiErrorMessage(e, "Couldn't delete broadcast"));
     }
   };
 
