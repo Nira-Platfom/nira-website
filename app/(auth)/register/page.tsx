@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { User, Mail, Lock, Scissors, Package, Store, MapPin, Phone, Check } from "lucide-react";
+import { User, Mail, Lock, Scissors, Package, Store, MapPin, Phone, Check, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import api, { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,6 +25,7 @@ export default function RegisterPage() {
     business_phone: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -68,14 +69,24 @@ export default function RegisterPage() {
             <Input label="Email" type="email" icon={Mail} value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
           </StaggerItem>
           <StaggerItem>
-            <Input
-              label="Password"
-              type="password"
-              icon={Lock}
-              value={form.password}
-              onChange={(e) => set("password", e.target.value)}
-              hint="At least 8 characters, with a letter and a number"
-            />
+            <div className="relative">
+              <Input
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                icon={Lock}
+                value={form.password}
+                onChange={(e) => set("password", e.target.value)}
+                autoComplete="new-password"
+                hint="At least 8 characters, with a letter and a number"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-[38px] text-slate-400 hover:text-coral transition-colors"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </StaggerItem>
 
           <StaggerItem>
