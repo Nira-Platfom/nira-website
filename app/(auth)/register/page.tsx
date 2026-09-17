@@ -68,7 +68,14 @@ export default function RegisterPage() {
             <Input label="Email" type="email" icon={Mail} value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="you@business.com" autoComplete="email" autoCapitalize="none" autoCorrect="off" />
           </StaggerItem>
           <StaggerItem>
-            <Input label="Password" type="password" icon={Lock} value={form.password} onChange={(e) => set("password", e.target.value)} />
+            <Input
+              label="Password"
+              type="password"
+              icon={Lock}
+              value={form.password}
+              onChange={(e) => set("password", e.target.value)}
+              hint="At least 8 characters, with a letter and a number"
+            />
           </StaggerItem>
 
           <StaggerItem>

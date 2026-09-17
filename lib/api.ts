@@ -44,7 +44,24 @@ api.interceptors.response.use(
 // actually happened. Centralized here so every call site handles both.
 export function apiErrorMessage(e: any, fallback: string): string {
   const data = e?.response?.data;
-  if (data?.detail) return data.detail;
+  if (data?.detail) {
+    // A Pydantic/FastAPI validation failure (weak password, bad field,
+    // etc.) sends detail as an ARRAY of {msg, loc, ...} objects, not a
+    // string — passing that straight to a toast rendered as an unreadable
+    // blank/garbled message instead of the actual reason, which is
+    // exactly what a register/login form validation error looks like.
+    // Pydantic also prefixes a field_validator's own raised message with
+    // "Value error, " — stripped here so the user sees the real text
+    // ("Password must be at least 8 characters"), not Pydantic's wrapper.
+    if (Array.isArray(data.detail)) {
+      const messages = data.detail
+        .map((d: any) => (typeof d?.msg === "string" ? d.msg.replace(/^Value error,\s*/, "") : null))
+        .filter(Boolean);
+      if (messages.length) return messages.join(" ");
+    } else if (typeof data.detail === "string") {
+      return data.detail;
+    }
+  }
   if (e?.response?.status === 429) {
     const retryAfter = data?.retry_after;
     return retryAfter
