@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Plus, Scissors, Pencil, Clock, Copy } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Plus, Scissors, Pencil, Clock, Copy, Upload, Download, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { Card, Button, EmptyState, Modal, Input, Textarea, Switch, ImageUpload } from "@/components/ui";
 import { formatTZS } from "@/lib/utils";
 
@@ -19,6 +19,163 @@ interface Service {
 
 const empty = { name: "", price: "", duration_minutes: "30", description: "" };
 
+// ── Bulk import ──────────────────────────────────────────────────────────────
+interface BulkImportError {
+  row: number;
+  error: string;
+}
+interface BulkImportResult {
+  created: number;
+  errors: BulkImportError[];
+}
+
+function BulkImportModal({ open, onClose, onImported }: { open: boolean; onClose: () => void; onImported: () => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [downloading, setDownloading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [result, setResult] = useState<BulkImportResult | null>(null);
+
+  const reset = () => {
+    setResult(null);
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  const close = () => {
+    reset();
+    onClose();
+  };
+
+  const downloadTemplate = async () => {
+    setDownloading(true);
+    try {
+      const res = await api.get("/services/bulk-import/template", { responseType: "blob" });
+      const blob = new Blob([res.data], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "nira_services_template.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error("Couldn't download the template");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const handleFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    setResult(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const { data } = await api.post("/services/bulk-import", fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setResult(data);
+      if (data.created > 0) onImported();
+    } catch (e: any) {
+      toast.error(apiErrorMessage(e, "Couldn't import that file"));
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  };
+
+  return (
+    <Modal open={open} onClose={close} title="Import Services">
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".csv,text/csv"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
+
+      {!result ? (
+        <div className="space-y-3">
+          <p className="text-sm text-slate-500">
+            Add many services at once from a spreadsheet. Download the template, fill in your services, then upload
+            it back here.
+          </p>
+
+          <button
+            type="button"
+            onClick={downloadTemplate}
+            disabled={downloading}
+            className="w-full flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-coral transition-colors text-left disabled:opacity-60"
+          >
+            <div className="w-10 h-10 rounded-lg bg-coral-light flex items-center justify-center shrink-0">
+              <Download size={17} className="text-coral" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-charcoal">1. Download template</p>
+              <p className="text-[12px] text-slate-500 mt-0.5">A blank CSV with the right columns, plus an example row</p>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="w-full flex items-center gap-3 p-4 rounded-lg border border-slate-200 hover:border-coral transition-colors text-left disabled:opacity-60"
+          >
+            <div className="w-10 h-10 rounded-lg bg-coral-light flex items-center justify-center shrink-0">
+              <Upload size={17} className="text-coral" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-charcoal">2. Choose your filled-in file</p>
+              <p className="text-[12px] text-slate-500 mt-0.5">CSV only — up to 500 services per file</p>
+            </div>
+            {uploading && <span className="text-[12px] text-slate-400">Uploading…</span>}
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-mint-light">
+            <CheckCircle2 size={20} className="text-mint-deep shrink-0" />
+            <p className="text-sm text-charcoal">
+              <strong className="font-medium">{result.created}</strong> service{result.created === 1 ? "" : "s"} added
+              {result.errors.length > 0 && (
+                <>
+                  , <strong className="font-medium">{result.errors.length}</strong> row
+                  {result.errors.length === 1 ? "" : "s"} skipped
+                </>
+              )}
+            </p>
+          </div>
+
+          {result.errors.length > 0 && (
+            <div>
+              <p className="text-[13px] font-medium text-charcoal mb-2">Rows that need fixing:</p>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {result.errors.map((e, i) => (
+                  <div key={i} className="p-3 rounded-lg border border-slate-200">
+                    <p className="text-[12px] font-medium text-coral mb-0.5">Row {e.row}</p>
+                    <p className="text-[13px] text-charcoal">{e.error}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between pt-2">
+            {result.errors.length > 0 ? (
+              <Button variant="ghost" onClick={reset}>
+                Try another file
+              </Button>
+            ) : (
+              <span />
+            )}
+            <Button onClick={close}>Done</Button>
+          </div>
+        </div>
+      )}
+    </Modal>
+  );
+}
+
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +183,7 @@ export default function ServicesPage() {
   const [editing, setEditing] = useState<Service | null>(null);
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -121,9 +279,14 @@ export default function ServicesPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-slate-500">{services.length} service{services.length === 1 ? "" : "s"}</p>
-        <Button icon={<Plus size={16} />} onClick={openNew}>
-          Add Service
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="secondary" icon={<Upload size={16} />} onClick={() => setImportOpen(true)}>
+            Import CSV
+          </Button>
+          <Button icon={<Plus size={16} />} onClick={openNew}>
+            Add Service
+          </Button>
+        </div>
       </div>
 
       {loading ? (
@@ -212,6 +375,8 @@ export default function ServicesPage() {
           <Textarea label="Description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
         </div>
       </Modal>
+
+      <BulkImportModal open={importOpen} onClose={() => setImportOpen(false)} onImported={load} />
     </div>
   );
 }
