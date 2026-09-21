@@ -9,12 +9,24 @@ import { formatTZS, formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 const COLORS = { coral: "#FF6B6B", lavender: "#B8A9E0", mint: "#6BCFB8" };
-const REPORT_PERIODS = [
+// Drives both the stat cards below AND the Download Report button — the
+// backend's /analytics/summary accepts all six; /analytics/report (CSV)
+// only has today|week|month|year so far, mapped down via csvPeriod below
+// rather than blocking the two extra options from the stat cards.
+const PERIODS = [
   { value: "today", label: "Today" },
   { value: "week", label: "Week" },
   { value: "month", label: "Month" },
+  { value: "3month", label: "3 Months" },
+  { value: "6month", label: "6 Months" },
   { value: "year", label: "Year" },
 ] as const;
+
+function csvPeriod(period: (typeof PERIODS)[number]["value"]): "today" | "week" | "month" | "year" {
+  if (period === "3month") return "month";
+  if (period === "6month") return "year";
+  return period;
+}
 
 export default function AnalyticsPage() {
   const { business } = useAuth();
@@ -24,14 +36,18 @@ export default function AnalyticsPage() {
   const [topProducts, setTopProducts] = useState<any[]>([]);
   const [topServices, setTopServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [reportPeriod, setReportPeriod] = useState<(typeof REPORT_PERIODS)[number]["value"]>("month");
+  const [period, setPeriod] = useState<(typeof PERIODS)[number]["value"]>("today");
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
-        const calls = [api.get("/analytics/summary"), api.get("/analytics/customers"), api.get("/analytics/top-products", { params: { limit: 8 } })];
+        const calls = [
+          api.get("/analytics/summary", { params: { period } }),
+          api.get("/analytics/customers"),
+          api.get("/analytics/top-products", { params: { limit: 8 } }),
+        ];
         if (isSalon) calls.push(api.get("/analytics/top-services", { params: { limit: 5 } }));
         const results = await Promise.all(calls);
         setSummary(results[0].data);
@@ -44,17 +60,18 @@ export default function AnalyticsPage() {
         setLoading(false);
       }
     })();
-  }, [isSalon]);
+  }, [isSalon, period]);
 
   const downloadReport = async () => {
     setDownloading(true);
     try {
-      const res = await api.get("/analytics/report", { params: { period: reportPeriod, format: "csv" }, responseType: "blob" });
+      const period_ = csvPeriod(period);
+      const res = await api.get("/analytics/report", { params: { period: period_, format: "csv" }, responseType: "blob" });
       const blob = new Blob([res.data], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `nira-report-${reportPeriod}.csv`;
+      a.download = `nira-report-${period_}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -66,24 +83,25 @@ export default function AnalyticsPage() {
 
   const revenueBookings = summary?.revenue_from_bookings ?? 0;
   const revenueOrders = summary?.revenue_from_orders ?? 0;
+  const periodLabel = summary?.period_label ?? PERIODS.find((p) => p.value === period)?.label.toLowerCase();
 
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <PillTabs options={REPORT_PERIODS as any} value={reportPeriod} onChange={setReportPeriod as any} />
+        <PillTabs options={PERIODS as any} value={period} onChange={setPeriod as any} />
         <Button variant="secondary" size="sm" icon={<Download size={14} />} loading={downloading} onClick={downloadReport}>
           Download Report
         </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
-        <StatCard label="Revenue" value={formatTZS(summary?.revenue_total ?? 0)} sub={isSalon ? "this month" : "all time"} icon={TrendingUp} color="mint" loading={loading} />
+        <StatCard label="Revenue" value={formatTZS(summary?.revenue_total ?? 0)} sub={periodLabel} icon={TrendingUp} color="mint" loading={loading} />
         {isSalon ? (
-          <StatCard label="Bookings" value={summary?.bookings_this_month ?? 0} sub="this month" icon={Calendar} color="lavender" loading={loading} />
+          <StatCard label="Bookings" value={summary?.bookings_this_month ?? 0} sub={periodLabel} icon={Calendar} color="lavender" loading={loading} />
         ) : (
-          <StatCard label="Orders" value={summary?.this_month_orders ?? summary?.orders_this_month ?? 0} sub="this month" icon={ShoppingBag} color="lavender" loading={loading} />
+          <StatCard label="Orders" value={summary?.orders_this_month ?? 0} sub={periodLabel} icon={ShoppingBag} color="lavender" loading={loading} />
         )}
-        <StatCard label="New Customers" value={summary?.new_customers_this_month ?? 0} sub="this month" icon={Users} color="coral" loading={loading} />
+        <StatCard label="New Customers" value={summary?.new_customers_this_month ?? 0} sub={periodLabel} icon={Users} color="coral" loading={loading} />
         <StatCard label="Total Customers" value={summary?.total_customers ?? 0} icon={Users} color="amber" loading={loading} />
       </div>
 
