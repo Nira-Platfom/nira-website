@@ -1,4 +1,6 @@
+"use client";
 import { LucideIcon, ArrowUp, ArrowDown, Minus } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface StatCardProps {
@@ -9,6 +11,9 @@ interface StatCardProps {
   icon: LucideIcon;
   color?: "coral" | "lavender" | "mint" | "amber";
   loading?: boolean;
+  /** Staggers this card's entrance behind others in the same grid —
+   * pass the card's index (0, 1, 2...) when several load together. */
+  index?: number;
 }
 
 const borderColor = {
@@ -33,7 +38,7 @@ const trendStyle = {
 
 const TrendIcon = { up: ArrowUp, down: ArrowDown, neutral: Minus };
 
-export default function StatCard({ label, value, sub, trend, icon: Icon, color = "coral", loading }: StatCardProps) {
+export default function StatCard({ label, value, sub, trend, icon: Icon, color = "coral", loading, index = 0 }: StatCardProps) {
   if (loading) {
     return (
       <div className={cn("bg-white rounded-card shadow-card border border-slate-100 border-l-4 p-6", borderColor[color])}>
@@ -47,9 +52,13 @@ export default function StatCard({ label, value, sub, trend, icon: Icon, color =
   const TrendI = trend ? TrendIcon[trend.direction] : null;
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.21, 0.47, 0.32, 0.98] }}
+      whileHover={{ y: -3 }}
       className={cn(
-        "bg-white rounded-card shadow-card border border-slate-100 border-l-4 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover",
+        "bg-white rounded-card shadow-card border border-slate-100 border-l-4 p-6 transition-shadow duration-200 hover:shadow-card-hover",
         borderColor[color]
       )}
     >
@@ -67,6 +76,6 @@ export default function StatCard({ label, value, sub, trend, icon: Icon, color =
           <span>{trend.pct}% vs last period</span>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

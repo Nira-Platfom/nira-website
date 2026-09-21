@@ -255,6 +255,7 @@ export default function OverviewPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
         <StatCard
+          index={0}
           label="Revenue"
           value={formatTZS(revenueThisMonth)}
           sub="this month"
@@ -265,8 +266,9 @@ export default function OverviewPage() {
         />
         {isSalon ? (
           <>
-            <StatCard label="Bookings Today" value={summary?.bookings_today ?? 0} icon={Calendar} color="lavender" loading={loading} />
+            <StatCard index={1} label="Bookings Today" value={summary?.bookings_today ?? 0} icon={Calendar} color="lavender" loading={loading} />
             <StatCard
+              index={2}
               label="Bookings This Month"
               value={analytics?.bookings_this_month ?? 0}
               trend={activityTrend}
@@ -278,8 +280,9 @@ export default function OverviewPage() {
           </>
         ) : (
           <>
-            <StatCard label="Orders Today" value={summary?.orders_today ?? 0} icon={ShoppingBag} color="lavender" loading={loading} />
+            <StatCard index={1} label="Orders Today" value={summary?.orders_today ?? 0} icon={ShoppingBag} color="lavender" loading={loading} />
             <StatCard
+              index={2}
               label="Orders This Month"
               value={analytics?.orders_this_month ?? 0}
               trend={activityTrend}
@@ -291,6 +294,7 @@ export default function OverviewPage() {
           </>
         )}
         <StatCard
+          index={3}
           label="Active Customers"
           value={summary?.active_customers_7d ?? 0}
           sub="last 7 days"

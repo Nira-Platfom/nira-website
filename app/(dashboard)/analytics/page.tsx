@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { TrendingUp, Calendar, Users, ShoppingBag, Download } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
@@ -95,14 +96,14 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
-        <StatCard label="Revenue" value={formatTZS(summary?.revenue_total ?? 0)} sub={periodLabel} icon={TrendingUp} color="mint" loading={loading} />
+        <StatCard index={0} label="Revenue" value={formatTZS(summary?.revenue_total ?? 0)} sub={periodLabel} icon={TrendingUp} color="mint" loading={loading} />
         {isSalon ? (
-          <StatCard label="Bookings" value={summary?.bookings_this_month ?? 0} sub={periodLabel} icon={Calendar} color="lavender" loading={loading} />
+          <StatCard index={1} label="Bookings" value={summary?.bookings_this_month ?? 0} sub={periodLabel} icon={Calendar} color="lavender" loading={loading} />
         ) : (
-          <StatCard label="Orders" value={summary?.orders_this_month ?? 0} sub={periodLabel} icon={ShoppingBag} color="lavender" loading={loading} />
+          <StatCard index={1} label="Orders" value={summary?.orders_this_month ?? 0} sub={periodLabel} icon={ShoppingBag} color="lavender" loading={loading} />
         )}
-        <StatCard label="New Customers" value={summary?.new_customers_this_month ?? 0} sub={periodLabel} icon={Users} color="coral" loading={loading} />
-        <StatCard label="Total Customers" value={summary?.total_customers ?? 0} icon={Users} color="amber" loading={loading} />
+        <StatCard index={2} label="New Customers" value={summary?.new_customers_this_month ?? 0} sub={periodLabel} icon={Users} color="coral" loading={loading} />
+        <StatCard index={3} label="Total Customers" value={summary?.total_customers ?? 0} icon={Users} color="amber" loading={loading} />
       </div>
 
       <Card title="Revenue Overview" className="mb-6">
@@ -179,7 +180,16 @@ function ProductsTable({ products, loading }: { products: any[]; loading: boolea
 function RevenueChart({ isSalon }: { isSalon: boolean }) {
   const [period, setPeriod] = useState<"30d" | "90d" | "12m">("30d");
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Separate from `refreshing` on purpose: the skeleton only ever covers
+  // the true first paint (no chart has ever been shown yet). Switching
+  // periods after that keeps the existing chart on screen — Recharts
+  // morphs the area/line paths to the new data on its own when `data`
+  // changes under an already-mounted chart — with just a brief dim while
+  // the new numbers are in flight, instead of the whole graph vanishing
+  // behind a shimmer block and popping back, which read as a reload
+  // rather than a transition.
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [Chart, setChart] = useState<any>(null);
 
   useEffect(() => {
@@ -187,12 +197,15 @@ function RevenueChart({ isSalon }: { isSalon: boolean }) {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setRefreshing(true);
     api
       .get("/analytics/revenue-chart", { params: { period } })
       .then(({ data }) => setData(data))
       .catch(() => toast.error("Couldn't load revenue chart"))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setRefreshing(false);
+        setInitialLoading(false);
+      });
   }, [period]);
 
   return (
@@ -208,10 +221,14 @@ function RevenueChart({ isSalon }: { isSalon: boolean }) {
           onChange={setPeriod as any}
         />
       </div>
-      {loading || !Chart ? (
+      {initialLoading || !Chart ? (
         <div className="h-[300px] rounded shimmer animate-dash-shimmer" />
       ) : (
-        <div style={{ height: 300 }}>
+        <motion.div
+          style={{ height: 300 }}
+          animate={{ opacity: refreshing ? 0.45 : 1 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+        >
           <Chart.ResponsiveContainer width="100%" height="100%">
             <Chart.AreaChart data={data} margin={{ left: -10, right: 10, top: 10 }}>
               <defs>
@@ -224,12 +241,48 @@ function RevenueChart({ isSalon }: { isSalon: boolean }) {
               <Chart.XAxis dataKey="label" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
               <Chart.YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => formatTZS(v)} width={70} />
               <Chart.Tooltip formatter={(v: number) => formatTZS(v)} contentStyle={{ borderRadius: 10, border: "1px solid #E2E8F0", fontSize: 13 }} />
-              <Chart.Area type="monotone" dataKey="total" name="Total" stroke={COLORS.coral} strokeWidth={2} fill="url(#coralFill2)" />
-              {isSalon && <Chart.Area type="monotone" dataKey="from_bookings" name="Bookings" stroke={COLORS.lavender} strokeWidth={1.5} strokeDasharray="4 3" fill="none" />}
-              {isSalon && <Chart.Area type="monotone" dataKey="from_orders" name="Orders" stroke={COLORS.mint} strokeWidth={1.5} strokeDasharray="2 3" fill="none" />}
+              <Chart.Area
+                type="monotone"
+                dataKey="total"
+                name="Total"
+                stroke={COLORS.coral}
+                strokeWidth={2}
+                fill="url(#coralFill2)"
+                isAnimationActive
+                animationDuration={500}
+                animationEasing="ease-out"
+              />
+              {isSalon && (
+                <Chart.Area
+                  type="monotone"
+                  dataKey="from_bookings"
+                  name="Bookings"
+                  stroke={COLORS.lavender}
+                  strokeWidth={1.5}
+                  strokeDasharray="4 3"
+                  fill="none"
+                  isAnimationActive
+                  animationDuration={500}
+                  animationEasing="ease-out"
+                />
+              )}
+              {isSalon && (
+                <Chart.Area
+                  type="monotone"
+                  dataKey="from_orders"
+                  name="Orders"
+                  stroke={COLORS.mint}
+                  strokeWidth={1.5}
+                  strokeDasharray="2 3"
+                  fill="none"
+                  isAnimationActive
+                  animationDuration={500}
+                  animationEasing="ease-out"
+                />
+              )}
             </Chart.AreaChart>
           </Chart.ResponsiveContainer>
-        </div>
+        </motion.div>
       )}
     </div>
   );
