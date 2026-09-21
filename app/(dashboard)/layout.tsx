@@ -5,7 +5,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import MobileTabBar from "@/components/layout/MobileTabBar";
-import NiraWordmark from "@/components/NiraWordmark";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -17,9 +16,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center gap-4 bg-page">
-        <NiraWordmark size="lg" />
-        <div className="w-8 h-8 border-[3px] border-slate-200 border-t-coral rounded-full animate-spin" />
+      <div className="h-screen w-screen flex flex-col items-center justify-center gap-6 bg-page">
+        {/* Real brand mark (a static PNG, not the CSS-drawn wordmark) — this
+            screen can render before the theme/CSS-variable system has
+            settled, which previously left the "ira" half of the wordmark
+            invisible (its color came from a CSS var that wasn't resolved
+            yet). An image's colors are baked in, so there's nothing to
+            fail to resolve; text-charcoal below is a fixed Tailwind color
+            for the same reason, not the CSS-var-driven text-primary. */}
+        <div className="flex flex-col items-center gap-3 animate-nira-fade-up">
+          <img
+            src="/brand/nira-icon-coral.png"
+            alt="Nira"
+            width={72}
+            height={72}
+            className="w-[72px] h-[72px] animate-nira-breathe drop-shadow-[0_8px_20px_rgba(255,107,107,0.25)]"
+          />
+          <span className="font-serif text-[26px] text-charcoal tracking-tight">Nira</span>
+        </div>
+        <div
+          className="w-7 h-7 border-[3px] border-slate-200 border-t-coral rounded-full animate-spin animate-nira-fade-up"
+          style={{ animationDelay: "150ms" }}
+        />
       </div>
     );
   }

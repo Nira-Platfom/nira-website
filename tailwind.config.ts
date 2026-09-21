@@ -67,9 +67,19 @@ const config: Config = {
           "0%": { backgroundPosition: "-400px 0" },
           "100%": { backgroundPosition: "400px 0" },
         },
+        niraFadeUp: {
+          "0%":   { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        niraBreathe: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%":      { transform: "scale(1.06)" },
+        },
       },
       animation: {
         "dash-shimmer": "dashShimmer 1.4s ease-in-out infinite",
+        "nira-fade-up": "niraFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "nira-breathe": "niraBreathe 2.2s ease-in-out infinite",
       },
     },
   },
