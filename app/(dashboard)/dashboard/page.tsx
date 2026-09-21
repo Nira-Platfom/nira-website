@@ -51,7 +51,7 @@ interface Summary {
   pending_orders?: number;
 }
 
-interface VsLastMonth {
+interface VsPreviousPeriod {
   revenue_total: number;
   bookings?: number;
   orders?: number;
@@ -60,13 +60,12 @@ interface VsLastMonth {
 
 interface AnalyticsSummary {
   revenue_total: number;
-  this_month_revenue?: number;
   bookings_this_month?: number;
   orders_this_month?: number;
   total_customers: number;
   new_customers_this_month: number;
   messages_this_month: number;
-  vs_last_month: VsLastMonth;
+  vs_previous_period: VsPreviousPeriod;
 }
 
 interface Performer {
@@ -139,7 +138,7 @@ export default function OverviewPage() {
         if (alive) setLoading(false);
       }
       try {
-        const { data } = await api.get("/analytics/summary");
+        const { data } = await api.get("/analytics/summary", { params: { period: "month" } });
         if (alive) setAnalytics(data);
       } catch {
         /* analytics optional on overview */
@@ -185,15 +184,15 @@ export default function OverviewPage() {
     toast.success(`${label} copied`);
   };
 
-  const revenueThisMonth = analytics?.this_month_revenue ?? analytics?.revenue_total ?? 0;
-  const revenueTrend = analytics ? trendFrom(revenueThisMonth, analytics.vs_last_month.revenue_total) : undefined;
+  const revenueThisMonth = analytics?.revenue_total ?? 0;
+  const revenueTrend = analytics ? trendFrom(revenueThisMonth, analytics.vs_previous_period.revenue_total) : undefined;
   const activityCount = isSalon ? analytics?.bookings_this_month : analytics?.orders_this_month;
   const activityTrend =
     analytics && activityCount !== undefined
-      ? trendFrom(activityCount, (isSalon ? analytics.vs_last_month.bookings : analytics.vs_last_month.orders) ?? 0)
+      ? trendFrom(activityCount, (isSalon ? analytics.vs_previous_period.bookings : analytics.vs_previous_period.orders) ?? 0)
       : undefined;
   const customerTrend = analytics
-    ? trendFrom(analytics.new_customers_this_month, analytics.vs_last_month.new_customers)
+    ? trendFrom(analytics.new_customers_this_month, analytics.vs_previous_period.new_customers)
     : undefined;
 
   const checklist = [
