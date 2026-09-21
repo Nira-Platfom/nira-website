@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Plus, ChevronLeft, ChevronRight, Search, Check, X as XIcon } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, Search, Check, X as XIcon, List, Grid3x3, PlusCircle, DoorClosed } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { apiErrorMessage } from "@/lib/api";
 import { Card, Button, Badge, EmptyState, Modal, PillTabs, Input } from "@/components/ui";
 import { formatDateLong, toLocalISODate, cn } from "@/lib/utils";
 import { Calendar as CalIcon } from "lucide-react";
@@ -28,6 +28,19 @@ interface Service {
   duration_minutes: number;
 }
 
+interface CalendarSlot {
+  time: string;
+  status: "booked" | "available";
+  booking: Booking | null;
+}
+interface CalendarDay {
+  date: string;
+  is_closed: boolean;
+  opens_at: string | null;
+  closes_at: string | null;
+  slots: CalendarSlot[];
+}
+
 const toISODate = toLocalISODate;
 
 const STATUS_FILTERS = [
@@ -46,6 +59,10 @@ export default function BookingsPage() {
   const [statusFilter, setStatusFilter] = useState<(typeof STATUS_FILTERS)[number]["value"]>("all");
   const [search, setSearch] = useState("");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [view, setView] = useState<"list" | "slots">("list");
+  const [calendarDay, setCalendarDay] = useState<CalendarDay | null>(null);
+  const [calendarLoading, setCalendarLoading] = useState(false);
+  const [slotTime, setSlotTime] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -63,6 +80,17 @@ export default function BookingsPage() {
   useEffect(() => {
     load();
   }, []);
+
+  const selectedISOForCalendar = toISODate(selectedDate);
+  useEffect(() => {
+    if (view !== "slots") return;
+    setCalendarLoading(true);
+    api
+      .get("/bookings/calendar", { params: { date: selectedISOForCalendar } })
+      .then(({ data }) => setCalendarDay(data))
+      .catch(() => setCalendarDay(null))
+      .finally(() => setCalendarLoading(false));
+  }, [view, selectedISOForCalendar]);
 
   const bookingsByDate = useMemo(() => {
     const map = new Map<string, Booking[]>();
@@ -131,87 +159,174 @@ export default function BookingsPage() {
       <div className="flex-1 min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <h2 className="text-[17px] font-medium text-charcoal">{formatDateLong(selectedDate)}</h2>
-          <Button icon={<Plus size={16} />} onClick={() => setSheetOpen(true)}>
-            Add Booking
-          </Button>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-          <PillTabs options={STATUS_FILTERS as any} value={statusFilter} onChange={setStatusFilter as any} />
-          <div className="relative flex-1 max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search customer…"
-              className="w-full h-9 pl-8 pr-3 rounded-input bg-page border border-slate-200 text-charcoal text-sm outline-none focus:border-coral"
-            />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center bg-page rounded-lg p-1 border border-slate-100">
+              <button
+                onClick={() => setView("list")}
+                className={cn("w-8 h-7 flex items-center justify-center rounded", view === "list" && "bg-white shadow-sm")}
+                title="List view"
+              >
+                <List size={14} className="text-slate-500" />
+              </button>
+              <button
+                onClick={() => setView("slots")}
+                className={cn("w-8 h-7 flex items-center justify-center rounded", view === "slots" && "bg-white shadow-sm")}
+                title="Slot grid"
+              >
+                <Grid3x3 size={14} className="text-slate-500" />
+              </button>
+            </div>
+            <Button icon={<Plus size={16} />} onClick={() => { setSlotTime(null); setSheetOpen(true); }}>
+              Add Booking
+            </Button>
           </div>
         </div>
 
-        <Card noPadding>
-          {loading ? (
-            <div className="p-6 space-y-3">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-16 rounded shimmer animate-dash-shimmer" />
-              ))}
+        {view === "list" && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+            <PillTabs options={STATUS_FILTERS as any} value={statusFilter} onChange={setStatusFilter as any} />
+            <div className="relative flex-1 max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search customer…"
+                className="w-full h-9 pl-8 pr-3 rounded-input bg-page border border-slate-200 text-charcoal text-sm outline-none focus:border-coral"
+              />
             </div>
-          ) : dayBookings.length === 0 ? (
-            <EmptyState
-              icon={CalIcon}
-              title="No bookings this day"
-              description="Add a booking or pick another date on the calendar."
-              action={{ label: "Add Booking", onClick: () => setSheetOpen(true) }}
-            />
-          ) : (
-            <div className="divide-y divide-slate-50">
-              {dayBookings
-                .sort((a, b) => a.booking_time.localeCompare(b.booking_time))
-                .map((b) => (
-                  <div key={b.id} className="flex items-center gap-4 p-4">
-                    <div className="w-16 shrink-0 text-[13px] font-medium text-slate-500">{b.booking_time}</div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-charcoal truncate">{b.customer_name || b.customer_phone}</p>
-                      <p className="text-[12px] text-slate-500 truncate">
-                        {b.service_name} · {b.duration_minutes}min
-                      </p>
-                    </div>
-                    <Badge status={b.status} />
-                    <div className="flex items-center gap-1 shrink-0">
-                      {b.status !== "completed" && b.status !== "cancelled" && (
-                        <>
-                          <button
-                            title="Mark complete"
-                            onClick={() => updateStatus(b.id, "completed")}
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-mint-deep hover:bg-mint-light"
-                          >
-                            <Check size={16} />
-                          </button>
-                          <button
-                            title="Cancel"
-                            onClick={() => updateStatus(b.id, "cancelled")}
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-coral hover:bg-coral-light"
-                          >
-                            <XIcon size={16} />
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </div>
+          </div>
+        )}
+
+        {view === "slots" ? (
+          <Card noPadding>
+            {calendarLoading ? (
+              <div className="p-6 space-y-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-14 rounded shimmer animate-dash-shimmer" />
                 ))}
-            </div>
-          )}
-        </Card>
+              </div>
+            ) : !calendarDay ? (
+              <EmptyState icon={CalIcon} title="Couldn't load calendar" description="Try picking the date again." />
+            ) : calendarDay.is_closed ? (
+              <EmptyState icon={DoorClosed} title="Closed" description="Not open this day — set hours in Marketplace > Hours." />
+            ) : (
+              <div className="divide-y divide-slate-50">
+                <div className="px-4 py-2 text-[12px] text-slate-500">
+                  Open {calendarDay.opens_at} – {calendarDay.closes_at}
+                </div>
+                {calendarDay.slots.map((slot) => (
+                  <button
+                    key={slot.time}
+                    onClick={() => {
+                      if (slot.status === "available") {
+                        setSlotTime(slot.time);
+                        setSheetOpen(true);
+                      }
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-4 p-4 text-left transition-colors",
+                      slot.status === "available" && "hover:bg-mint-light/40 cursor-pointer"
+                    )}
+                  >
+                    <div className="w-16 shrink-0 text-[13px] font-medium text-slate-500">{slot.time}</div>
+                    {slot.status === "booked" && slot.booking ? (
+                      <>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-charcoal truncate">
+                            {slot.booking.customer_name || slot.booking.customer_phone}
+                          </p>
+                          <p className="text-[12px] text-slate-500 truncate">
+                            {slot.booking.service_name} · {slot.booking.duration_minutes}min
+                          </p>
+                        </div>
+                        <Badge status={slot.booking.status} />
+                      </>
+                    ) : (
+                      <div className="flex-1 flex items-center gap-1.5 text-mint-deep">
+                        <PlusCircle size={14} />
+                        <span className="text-[13px] font-medium">Available</span>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </Card>
+        ) : (
+          <Card noPadding>
+            {loading ? (
+              <div className="p-6 space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-16 rounded shimmer animate-dash-shimmer" />
+                ))}
+              </div>
+            ) : dayBookings.length === 0 ? (
+              <EmptyState
+                icon={CalIcon}
+                title="No bookings this day"
+                description="Add a booking or pick another date on the calendar."
+                action={{ label: "Add Booking", onClick: () => setSheetOpen(true) }}
+              />
+            ) : (
+              <div className="divide-y divide-slate-50">
+                {dayBookings
+                  .sort((a, b) => a.booking_time.localeCompare(b.booking_time))
+                  .map((b) => (
+                    <div key={b.id} className="flex items-center gap-4 p-4">
+                      <div className="w-16 shrink-0 text-[13px] font-medium text-slate-500">{b.booking_time}</div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-charcoal truncate">{b.customer_name || b.customer_phone}</p>
+                        <p className="text-[12px] text-slate-500 truncate">
+                          {b.service_name} · {b.duration_minutes}min
+                        </p>
+                      </div>
+                      <Badge status={b.status} />
+                      <div className="flex items-center gap-1 shrink-0">
+                        {b.status !== "completed" && b.status !== "cancelled" && (
+                          <>
+                            <button
+                              title="Mark complete"
+                              onClick={() => updateStatus(b.id, "completed")}
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-mint-deep hover:bg-mint-light"
+                            >
+                              <Check size={16} />
+                            </button>
+                            <button
+                              title="Cancel"
+                              onClick={() => updateStatus(b.id, "cancelled")}
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-coral hover:bg-coral-light"
+                            >
+                              <XIcon size={16} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </Card>
+        )}
       </div>
 
       <AddBookingSheet
         open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
+        onClose={() => { setSheetOpen(false); setSlotTime(null); }}
         services={services}
         defaultDate={selectedISO}
+        defaultTime={slotTime}
         onSaved={() => {
           setSheetOpen(false);
+          setSlotTime(null);
           load();
+          if (view === "slots") {
+            setCalendarLoading(true);
+            api
+              .get("/bookings/calendar", { params: { date: selectedISOForCalendar } })
+              .then(({ data }) => setCalendarDay(data))
+              .catch(() => setCalendarDay(null))
+              .finally(() => setCalendarLoading(false));
+          }
         }}
       />
     </div>
@@ -292,12 +407,14 @@ function AddBookingSheet({
   onClose,
   services,
   defaultDate,
+  defaultTime,
   onSaved,
 }: {
   open: boolean;
   onClose: () => void;
   services: Service[];
   defaultDate: string;
+  defaultTime?: string | null;
   onSaved: () => void;
 }) {
   const [serviceId, setServiceId] = useState("");
@@ -311,9 +428,10 @@ function AddBookingSheet({
   useEffect(() => {
     if (open) {
       setDate(defaultDate);
+      setTime(defaultTime || "10:00");
       setServiceId(services[0]?.id || "");
     }
-  }, [open, defaultDate, services]);
+  }, [open, defaultDate, defaultTime, services]);
 
   const submit = async () => {
     if (!serviceId || !customerPhone || !date || !time) {
@@ -336,7 +454,7 @@ function AddBookingSheet({
       setNotes("");
       onSaved();
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Couldn't create booking");
+      toast.error(apiErrorMessage(e, "Couldn't create booking"));
     } finally {
       setSaving(false);
     }
