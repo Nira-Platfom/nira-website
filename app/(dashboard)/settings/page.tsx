@@ -7,7 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions } from "@/hooks/usePermissions";
 import { Card, Button, Input, Switch, Badge, Avatar, EmptyState, Modal } from "@/components/ui";
 import { cn, formatDate } from "@/lib/utils";
-import { Copy, Share2, Download, UserPlus, Trash2, Crown, Users as UsersIcon, AlertTriangle } from "lucide-react";
+import { Copy, Share2, Download, UserPlus, Trash2, Crown, Users as UsersIcon, AlertTriangle, Bell } from "lucide-react";
+import { getPushPermissionState, isCurrentlySubscribed, isPushSupported, subscribeToPush, unsubscribeFromPush } from "@/lib/webPush";
 
 type Section = "profile" | "general" | "bot" | "team" | "subscription";
 
@@ -65,6 +66,71 @@ function SettingsPageInner() {
         {section === "subscription" && <SubscriptionSection />}
       </div>
     </div>
+  );
+}
+
+function NotificationsCard() {
+  const [supported, setSupported] = useState(true);
+  const [enabled, setEnabled] = useState(false);
+  const [permission, setPermission] = useState<NotificationPermission | "unsupported">("default");
+  const [busy, setBusy] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const supportedNow = isPushSupported();
+      setSupported(supportedNow);
+      if (supportedNow) {
+        setPermission(await getPushPermissionState());
+        setEnabled(await isCurrentlySubscribed());
+      }
+      setChecked(true);
+    })();
+  }, []);
+
+  const toggle = async (next: boolean) => {
+    setBusy(true);
+    try {
+      if (next) {
+        await subscribeToPush();
+        setEnabled(true);
+        setPermission("granted");
+        toast.success("Notifications enabled");
+      } else {
+        await unsubscribeFromPush();
+        setEnabled(false);
+        toast.success("Notifications turned off");
+      }
+    } catch (e: any) {
+      toast.error(e?.message || "Couldn't update notification settings");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!checked) return null;
+
+  return (
+    <Card title="Notifications">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-full bg-coral-light text-coral flex items-center justify-center shrink-0">
+            <Bell size={18} />
+          </div>
+          <div>
+            <p className="text-[15px] font-medium text-charcoal">Push notifications on this device</p>
+            <p className="text-[13px] text-slate-500 mt-0.5">
+              {!supported
+                ? "This browser doesn't support push notifications — install Nira to your home screen for the best experience."
+                : permission === "denied"
+                ? "Notifications are blocked for this site in your browser settings — enable them there first."
+                : "Get notified here the moment a new order, booking, or customer needing attention comes in."}
+            </p>
+          </div>
+        </div>
+        <Switch checked={enabled} onChange={toggle} disabled={busy || !supported || permission === "denied"} />
+      </div>
+    </Card>
   );
 }
 
@@ -149,6 +215,8 @@ function ProfileSection() {
           </Button>
         </div>
       </Card>
+
+      <NotificationsCard />
 
       <Card title="Change Password">
         <div className="space-y-4">
