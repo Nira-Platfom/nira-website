@@ -31,11 +31,7 @@ export default function Footer() {
                   Features
                 </Link>
               </li>
-              <li>
-                <Link href="/pricing" className="text-sm text-slate-400 hover:text-white transition-colors">
-                  Pricing
-                </Link>
-              </li>
+              {/* Pricing link commented out — free during the pilot */}
               <li>
                 <Link href={DASHBOARD_REGISTER_URL} className="text-sm text-slate-400 hover:text-white transition-colors">
                   Get Started

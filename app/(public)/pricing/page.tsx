@@ -1,3 +1,15 @@
+import { redirect } from 'next/navigation'
+
+// Pricing is commented out for now — Nira is free for everyone during the
+// pilot, no paid plan is actually live yet (see CLAUDE.md §12: billing
+// isn't wired up until Step 19). The full page below (tiers, FAQ, payment
+// methods) is preserved in the comment block — restore the real default
+// export and the imports/nav links pointing here once billing is ready.
+export default function PricingPage() {
+  redirect('/')
+}
+
+/*
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { DASHBOARD_REGISTER_URL } from '@/lib/links'
@@ -122,7 +134,6 @@ export default function PricingPage() {
   return (
     <div className="font-sans">
 
-      {/* Header */}
       <section className="pt-28 pb-16 text-center" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-3xl mx-auto px-6">
           <FadeUp>
@@ -145,7 +156,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Plans */}
       <section className="pb-24" style={{ backgroundColor: 'var(--bg-page)' }}>
         <div className="max-w-6xl mx-auto px-6">
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
@@ -227,7 +237,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Payment methods */}
       <section className="py-12 border-y" style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}>
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
@@ -253,7 +262,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* FAQs */}
       <section className="py-24" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-3xl mx-auto px-6">
           <FadeUp className="text-center mb-14">
@@ -278,7 +286,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 bg-coral text-center">
         <div className="max-w-xl mx-auto px-6">
           <FadeUp>
@@ -300,3 +307,4 @@ export default function PricingPage() {
     </div>
   )
 }
+*/

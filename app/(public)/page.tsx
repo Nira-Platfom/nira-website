@@ -6,7 +6,8 @@ import BusinessTypeFeatures from '@/components/BusinessTypeFeatures'
 import BeautyShowcase  from '@/components/BeautyShowcase'
 import ProductDemo     from '@/components/ProductDemo'
 import SurfaceShowcase from '@/components/SurfaceShowcase'
-import PricingCards    from '@/components/PricingCards'
+// PricingCards import commented out along with the PRICING PREVIEW section below — free during the pilot
+// import PricingCards    from '@/components/PricingCards'
 import HowItWorksFlow  from '@/components/HowItWorksFlow'
 import {
   FadeUp,
@@ -707,7 +708,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PRICING PREVIEW ───────────────────────────────────────────── */}
+      {/* PRICING PREVIEW commented out — free during the pilot, see
+          app/(public)/pricing/page.tsx for the full preserved section */}
+      {/*
       <section className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
         <div className="max-w-6xl mx-auto px-6">
           <FadeUp className="text-center mb-14">
@@ -726,6 +729,7 @@ export default function HomePage() {
           </FadeUp>
         </div>
       </section>
+      */}
 
       {/* ── TESTIMONIALS ──────────────────────────────────────────────── */}
       <section className="py-24 overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
