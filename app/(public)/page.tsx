@@ -5,7 +5,7 @@ import AnimatedRevenue from '@/components/AnimatedRevenue'
 import BusinessTypeFeatures from '@/components/BusinessTypeFeatures'
 import BeautyShowcase  from '@/components/BeautyShowcase'
 import ProductDemo     from '@/components/ProductDemo'
-import SurfaceShowcase from '@/components/SurfaceShowcase'
+import SurfaceShowcase, { MarketplaceScreen } from '@/components/SurfaceShowcase'
 // PricingCards import commented out along with the PRICING PREVIEW section below — free during the pilot
 // import PricingCards    from '@/components/PricingCards'
 import HowItWorksFlow  from '@/components/HowItWorksFlow'
@@ -103,6 +103,31 @@ function DashboardPhone() {
         </div>
       </div>
       </TiltCard>
+      </div>
+    </div>
+  )
+}
+
+// Marketplace phone mockup — reuses SurfaceShowcase's own MarketplaceScreen
+// animation (radar ping → business card slides up with rating/distance →
+// a review fades in) inside the same phone-frame shell as DashboardPhone
+// above, so this new feature block matches its siblings visually without
+// re-implementing the animation a second time.
+function MarketplacePhone() {
+  return (
+    <div className="relative mx-auto w-[265px]">
+      <AmbientGlow color="#6BCFB8" className="rounded-[44px]" direction="right" />
+      <div className="animate-float" style={{ animationDelay: '0.5s' }}>
+        <TiltCard max={6}>
+          <div className="relative rounded-[40px] border-[5px] border-[#2D3F57] bg-[#1E293B] shadow-2xl overflow-hidden">
+            <div className="flex justify-between items-center px-6 pt-3 pb-1">
+              <span className="text-white/80 text-[10px]">9:41</span>
+            </div>
+            <div style={{ height: 328 }}>
+              <MarketplaceScreen />
+            </div>
+          </div>
+        </TiltCard>
       </div>
     </div>
   )
@@ -514,6 +539,43 @@ export default function HomePage() {
             <FadeUp delay={0.15}>
               <ProductDemo />
             </FadeUp>
+          </div>
+        </div>
+
+        {/* Feature 5 — Marketplace Discovery */}
+        <div className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <SlideLeft delay={0.15} className="flex justify-center order-2 lg:order-1">
+                <MarketplacePhone />
+              </SlideLeft>
+              <FadeUp className="order-1 lg:order-2">
+                <span className="text-xs font-medium text-mint-dark uppercase tracking-widest">05 · Marketplace Discovery</span>
+                <h2 className="font-serif text-4xl mt-3 mb-5 leading-snug" style={{ color: 'var(--text-primary)' }}>
+                  Get Found by New Customers
+                </h2>
+                <p className="leading-relaxed mb-7" style={{ color: 'var(--text-secondary)' }}>
+                  Your business joins Nira&apos;s growing beauty marketplace automatically. When someone nearby asks Nira for a service you offer, even a customer who&apos;s never heard of you, you&apos;re part of the answer.
+                </p>
+                <StaggerContainer>
+                  <ul className="space-y-3">
+                    {[
+                      'Discovered by customers searching nearby, not just people who already know you',
+                      'Shown with your real rating, right alongside other businesses',
+                      'No extra listing fee — every active business is included automatically',
+                      'Customers can book or order the moment they find you, without leaving the chat',
+                    ].map((item) => (
+                      <StaggerItem key={item}>
+                        <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <Check className="text-mint-dark" />
+                          {item}
+                        </li>
+                      </StaggerItem>
+                    ))}
+                  </ul>
+                </StaggerContainer>
+              </FadeUp>
+            </div>
           </div>
         </div>
       </section>

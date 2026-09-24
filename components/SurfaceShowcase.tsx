@@ -242,7 +242,11 @@ function useDecimalCountUp(target: number, duration = 900) {
   return val
 }
 
-function MarketplaceScreen() {
+// Exported (not just used internally by PhoneShowcase below) so the
+// homepage's "Get Found by New Customers" feature block can reuse this
+// exact animation in its own standalone phone mockup, instead of
+// duplicating the radar-ping/business-card sequence a second time.
+export function MarketplaceScreen() {
   const [phase, setPhase] = useState(0)
   const rating = useDecimalCountUp(4.9)
 
