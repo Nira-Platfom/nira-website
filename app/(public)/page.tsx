@@ -131,37 +131,51 @@ export default function HomePage() {
                   className="font-serif text-5xl lg:text-[58px] leading-[1.1] mb-6"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Your Beauty Business,{' '}
-                  <span className="text-coral">Always On.</span>
+                  The Beauty World,{' '}
+                  <span className="text-coral">In One Conversation.</span>
                 </h1>
               </FadeUp>
 
               <FadeUp delay={0.4}>
+                <p className="text-lg leading-relaxed mb-2 max-w-lg" style={{ color: 'var(--text-secondary)' }}>
+                  Discover beauty businesses. Understand products. Get personalized guidance. Book services. Shop with confidence.
+                </p>
                 <p className="text-lg leading-relaxed mb-8 max-w-lg" style={{ color: 'var(--text-secondary)' }}>
-                  Nira talks with your customers on WhatsApp like a real person would, books their appointments, and helps new customers find you nearby. In Swahili or English.
+                  Nira brings customers, beauty businesses, products, and information together — through one intelligent beauty experience.
                 </p>
               </FadeUp>
 
               <FadeUp delay={0.55}>
-                <div className="flex flex-wrap gap-4 mb-10">
+                <div className="flex flex-wrap gap-4 mb-5">
                   <MagneticButton>
                     <Link
-                      href={DASHBOARD_REGISTER_URL}
+                      href={WHATSAPP_CHAT_URL}
                       className="btn-shimmer btn-press inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
                     >
-                      Own a Salon, Spa or Shop? Get Started
+                      Explore Beauty
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
                     </Link>
                   </MagneticButton>
                   <Link
-                    href="/#how-it-works"
+                    href={DASHBOARD_REGISTER_URL}
                     className="btn-press inline-flex items-center gap-2 border border-nira-border font-medium px-7 py-3.5 rounded-full transition-colors hover:border-coral hover:text-coral"
                     style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)' }}
                   >
-                    See how it works
+                    Grow Your Business
                   </Link>
+                </div>
+              </FadeUp>
+
+              <FadeUp delay={0.6}>
+                <div className="flex flex-wrap items-center gap-2 mb-10 text-sm font-medium uppercase tracking-[1.5px]" style={{ color: 'var(--text-muted)' }}>
+                  {['Discover', 'Ask', 'Book', 'Shop'].map((step, i) => (
+                    <span key={step} className="flex items-center gap-2">
+                      {i > 0 && <span className="text-coral">·</span>}
+                      {step}
+                    </span>
+                  ))}
                 </div>
               </FadeUp>
 
