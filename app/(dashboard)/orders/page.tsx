@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Search, Download, ShoppingBag, Phone, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
-import { Card, DataTable, Badge, EmptyState, Modal, Button, Avatar, PillTabs } from "@/components/ui";
+import { Card, DataTable, Badge, EmptyState, Modal, Button, Avatar, PillTabs, NiraSourceBadge } from "@/components/ui";
 import { formatTZS, formatDate, cn } from "@/lib/utils";
 
 interface OrderItem {
@@ -27,6 +27,9 @@ interface Order {
   payment_status: string;
   items: OrderItem[];
   created_at: string;
+  source?: string;
+  nira_ref?: string | null;
+  fulfillment?: string | null;
 }
 
 const STATUS_OPTIONS = ["pending", "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"];
@@ -102,7 +105,12 @@ export default function OrdersPage() {
     {
       accessorKey: "id",
       header: "Order #",
-      cell: ({ row }) => <span className="font-medium text-charcoal">#{row.original.id.slice(-6).toUpperCase()}</span>,
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-1">
+          <span className="font-medium text-charcoal">#{row.original.id.slice(-6).toUpperCase()}</span>
+          <NiraSourceBadge source={row.original.source} niraRef={row.original.nira_ref} />
+        </div>
+      ),
     },
     {
       accessorKey: "customer_name",
@@ -172,7 +180,7 @@ export default function OrdersPage() {
         data={filtered}
         loading={loading}
         onRowClick={(o) => setSelected(o)}
-        emptyState={<EmptyState icon={ShoppingBag} title="No orders yet" description="Orders placed through WhatsApp will show up here." />}
+        emptyState={<EmptyState icon={ShoppingBag} title="No orders yet" description="Orders placed through Nira on WhatsApp or the web will show up here." />}
       />
 
       <OrderDetailSheet
@@ -222,6 +230,13 @@ function OrderDetailSheet({
         </div>
 
         <div>
+          {order.source === "nira_agent" && (
+            <div className="mb-3 rounded-xl bg-coral-light/60 px-3 py-2 text-[13px] text-coral-deep">
+              Brought in by Nira{order.nira_ref ? ` · reference ${order.nira_ref}` : ""}
+              {order.fulfillment ? ` · ${order.fulfillment === "pickup" ? "pickup in store" : "delivery"}` : ""}.
+              Confirm it so the customer knows it&apos;s coming; mark it delivered when done.
+            </div>
+          )}
           <h4 className="text-[12px] uppercase tracking-wide text-slate-500 font-medium mb-2">Customer</h4>
           <div className="flex items-center gap-3">
             <Avatar name={order.customer_name || order.customer_phone} size={40} />

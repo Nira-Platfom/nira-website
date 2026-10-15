@@ -1,7 +1,8 @@
 {
-  "name": "Nira · Beauty AI Companion",
-  "short_name": "Nira",
-  "description": "AI-powered WhatsApp assistant for beauty businesses in East Africa.",
+  "id": "/dashboard",
+  "name": "Nira Business",
+  "short_name": "Nira Business",
+  "description": "Run your salon, spa or beauty shop with Nira — bookings, orders, customers and earnings.",
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",

@@ -43,10 +43,12 @@ export const metadata: Metadata = {
   // Safari with the address bar showing, instead of full-screen like a
   // real app. appleWebApp.title also sets the label under the home-screen
   // icon (otherwise iOS uses the full <title>, which gets truncated).
+  // The business app. The customer chat (/chat) overrides this with its own
+  // manifest + title ("Nira Chat") in app/(chat)/layout.tsx.
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Nira',
+    title: 'Nira Business',
   },
 
   openGraph: {

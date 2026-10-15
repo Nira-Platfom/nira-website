@@ -27,6 +27,16 @@ export default function Footer() {
             <h4 className="text-sm font-medium text-white mb-4 tracking-wide">Product</h4>
             <ul className="space-y-3">
               <li>
+                <Link href="/explore" className="text-sm text-slate-400 hover:text-white transition-colors">
+                  Explore businesses
+                </Link>
+              </li>
+              <li>
+                <Link href="/chat" className="text-sm text-slate-400 hover:text-white transition-colors">
+                  Chat with Nira (web)
+                </Link>
+              </li>
+              <li>
                 <Link href="/#features" className="text-sm text-slate-400 hover:text-white transition-colors">
                   Features
                 </Link>

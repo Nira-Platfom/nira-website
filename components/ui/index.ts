@@ -11,3 +11,4 @@ export { default as Switch } from "./Switch";
 export { default as PillTabs } from "./PillTabs";
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as ImageUpload } from "./ImageUpload";
+export { default as NiraSourceBadge } from "./NiraSourceBadge";

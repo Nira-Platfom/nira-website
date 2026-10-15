@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, ChevronLeft, ChevronRight, Search, Check, X as XIcon, List, Grid3x3, PlusCircle, DoorClosed } from "lucide-react";
 import { toast } from "sonner";
 import api, { apiErrorMessage } from "@/lib/api";
-import { Card, Button, Badge, EmptyState, Modal, PillTabs, Input } from "@/components/ui";
+import { Card, Button, Badge, EmptyState, Modal, PillTabs, Input, NiraSourceBadge } from "@/components/ui";
 import { formatDateLong, toLocalISODate, cn } from "@/lib/utils";
 import { Calendar as CalIcon } from "lucide-react";
 
@@ -19,6 +19,9 @@ interface Booking {
   booking_time: string;
   status: string;
   notes: string | null;
+  source?: string;
+  nira_ref?: string | null;
+  price?: number | null;
 }
 
 interface Service {
@@ -279,6 +282,7 @@ export default function BookingsPage() {
                         <p className="text-[12px] text-slate-500 truncate">
                           {b.service_name} · {b.duration_minutes}min
                         </p>
+                        <NiraSourceBadge source={b.source} niraRef={b.nira_ref} className="mt-1" />
                       </div>
                       <Badge status={b.status} />
                       <div className="flex items-center gap-1 shrink-0">

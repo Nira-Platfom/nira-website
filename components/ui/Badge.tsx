@@ -26,6 +26,13 @@ const STYLES: Record<string, string> = {
   sent: "bg-mint-light text-mint-deep",
   scheduled: "bg-lavender-light text-lavender-deep",
   sending: "bg-amber-light text-amber-deep",
+  accrued: "bg-lavender-light text-lavender-deep",
+  invoiced: "bg-lavender-light text-lavender-deep",
+  disputed: "bg-amber-light text-amber-deep",
+  waived: "bg-slate-100 text-slate-600",
+  void: "bg-slate-100 text-slate-600",
+  approved: "bg-lavender-light text-lavender-deep",
+  running: "bg-mint-light text-mint-deep",
 };
 
 function labelize(s: string) {

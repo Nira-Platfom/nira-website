@@ -16,6 +16,8 @@ const TITLES: Record<string, string> = {
   "/analytics": "Analytics",
   "/marketing": "Marketing",
   "/marketplace": "Marketplace",
+  "/earnings": "Nira Earnings",
+  "/growth": "Fill Empty Slots",
   "/settings": "Settings",
   "/subscription": "Subscription",
   "/team": "Team",

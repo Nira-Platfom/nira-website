@@ -36,15 +36,16 @@ export default function MarketplacePage() {
     load();
   }, []);
 
-  const toggleVisibility = async () => {
+  const setVisibility = async (patch: { is_marketplace?: boolean; bot_active?: boolean }) => {
     try {
-      const { data } = await api.put("/marketplace/visibility", { is_marketplace: !profile.is_marketplace });
-      setProfile((p: any) => ({ ...p, is_marketplace: data.is_marketplace }));
-      toast.success(data.is_marketplace ? "You're now visible on Nira Marketplace" : "Hidden from Nira Marketplace");
+      const { data } = await api.put("/marketplace/visibility", patch);
+      setProfile((p: any) => ({ ...p, ...data }));
+      toast.success(data.listing?.live ? "You're live on Nira Marketplace" : "Saved");
     } catch {
       toast.error("Couldn't update visibility");
     }
   };
+  const toggleVisibility = () => setVisibility({ is_marketplace: !profile.is_marketplace });
 
   const saveProfile = async () => {
     setSaving(true);
@@ -112,7 +113,7 @@ export default function MarketplacePage() {
       <Card className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-[15px] font-medium text-charcoal">Visible on Nira Marketplace</h3>
+            <h3 className="text-[15px] font-medium text-charcoal">Show my business on Nira Marketplace</h3>
             <p className="text-sm text-slate-500 mt-1">
               {profile.is_marketplace
                 ? `Visible to customers searching in ${profile.city_area || "your area"}`
@@ -121,6 +122,7 @@ export default function MarketplacePage() {
           </div>
           <Switch checked={profile.is_marketplace} onChange={toggleVisibility} />
         </div>
+        <ListingStatus listing={profile.listing} onGoLive={() => setVisibility({ is_marketplace: true, bot_active: true })} />
         {profile.is_marketplace && (
           <div className="grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-slate-100 text-center">
             <div>
@@ -295,6 +297,39 @@ function ReviewRow({ review, onReply }: { review: any; onReply: (id: string, tex
         <button onClick={() => setReplying(true)} className="text-[13px] text-coral font-medium">
           Reply
         </button>
+      )}
+    </div>
+  );
+}
+
+
+function ListingStatus({ listing, onGoLive }: { listing?: any; onGoLive: () => void }) {
+  if (!listing) return null;
+  return (
+    <div className="mt-5 pt-5 border-t border-slate-100">
+      {listing.live ? (
+        <p className="flex items-center gap-2 text-sm font-medium text-mint-deep">
+          <span className="h-2 w-2 rounded-full bg-mint" /> Live — customers can find, book and order from you on Nira (web + WhatsApp), no code needed.
+          <a href="/explore" target="_blank" className="ml-1 text-coral underline-offset-2 hover:underline">See it</a>
+        </p>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-amber-light/60 p-3">
+          <div>
+            <p className="text-sm font-medium text-amber-deep">Customers can&apos;t find you yet</p>
+            <ul className="text-[13px] text-amber-deep mt-1 list-disc pl-5">
+              {listing.blocking.map((b: any) => <li key={b.key}>{b.message}</li>)}
+            </ul>
+          </div>
+          <Button size="sm" onClick={onGoLive}>Go live</Button>
+        </div>
+      )}
+      {listing.tips?.length > 0 && (
+        <div className="mt-3">
+          <p className="text-[12px] uppercase tracking-wide text-slate-500 font-medium mb-1">Get found more often</p>
+          <ul className="text-[13px] text-slate-600 space-y-0.5">
+            {listing.tips.map((t: any) => <li key={t.key}>• {t.message}</li>)}
+          </ul>
+        </div>
       )}
     </div>
   );

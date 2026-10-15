@@ -44,6 +44,8 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
+          <NavLink href="/explore">Explore</NavLink>
+          <NavLink href="/chat">Ask Nira</NavLink>
           <NavLink href="/#features">Features</NavLink>
           {/* Pricing nav link commented out — free during the pilot, see app/(public)/pricing/page.tsx */}
           <NavLink href="/about">About</NavLink>
@@ -97,6 +99,8 @@ export default function Navbar() {
           >
             <div className="px-6 py-5 flex flex-col gap-4">
               {[
+                { href: '/explore', label: 'Explore' },
+                { href: '/chat', label: 'Ask Nira' },
                 { href: '/#features', label: 'Features' },
                 // Pricing commented out — free during the pilot
                 { href: '/about', label: 'About' },

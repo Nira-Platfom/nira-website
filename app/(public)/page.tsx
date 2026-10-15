@@ -174,7 +174,7 @@ export default function HomePage() {
                 <div className="flex flex-wrap gap-4 mb-5">
                   <MagneticButton>
                     <Link
-                      href={WHATSAPP_CHAT_URL}
+                      href="/explore"
                       className="btn-shimmer btn-press inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
                     >
                       Explore Beauty
@@ -190,6 +190,27 @@ export default function HomePage() {
                   >
                     Grow Your Business
                   </Link>
+                </div>
+                <div className="flex flex-wrap items-center gap-3 mb-5">
+                  <span className="text-sm" style={{ color: 'var(--text-muted)' }}>Ask Nira:</span>
+                  <Link
+                    href="/chat"
+                    className="btn-press inline-flex items-center gap-2 rounded-full bg-coral-light px-4 py-2 text-sm font-medium text-coral-dark hover:bg-coral hover:text-white transition-colors"
+                  >
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h8M8 14h5m-9 6l3.5-3H19a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2" />
+                    </svg>
+                    Chat on the web
+                  </Link>
+                  <a
+                    href={WHATSAPP_CHAT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-press inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors hover:border-coral hover:text-coral"
+                    style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)' }}
+                  >
+                    WhatsApp
+                  </a>
                 </div>
               </FadeUp>
 
@@ -771,10 +792,10 @@ export default function HomePage() {
                     Chat with Nira Now
                   </a>
                   <Link
-                    href="/chat?intent=quiz"
+                    href="/chat"
                     className="btn-press inline-flex items-center gap-2 bg-transparent border border-white/40 text-white font-medium px-7 py-3.5 rounded-full hover:bg-white/10 transition-colors"
                   >
-                    ✨ Take the Beauty Quiz
+                    ✨ Chat on the web
                   </Link>
                 </div>
                 <p className="text-slate-500 text-xs mt-3">Free to chat. No sign-up needed.</p>

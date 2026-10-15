@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nira Chat — offline</title>
+<style>
+  :root { color-scheme: light dark; --bg: #F8F7FF; --fg: #1E293B; --muted: #64748B; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0F172A; --fg: #F1F5F9; --muted: #94A3B8; } }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+         font-family: system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; padding: 24px; }
+  img { width: 72px; height: 72px; border-radius: 18px; }
+  h1 { font-size: 22px; font-weight: 500; margin: 18px 0 6px; }
+  p { color: var(--muted); margin: 0 0 20px; }
+  button { height: 48px; padding: 0 24px; border: 0; border-radius: 999px; background: #FF6B6B; color: #fff; font-size: 15px; }
+</style>
+</head>
+<body>
+  <main>
+    <img src="/chat-icon-192.png" alt="">
+    <h1>You're offline</h1>
+    <p>Hakuna mtandao. Connect to the internet and try again.</p>
+    <button onclick="location.reload()">Try again</button>
+  </main>
+</body>
+</html>
