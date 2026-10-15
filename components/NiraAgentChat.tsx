@@ -93,6 +93,33 @@ function visitorId(): string {
   }
 }
 
+// The Nira Chat home-screen app's own origin (see middleware.ts).
+const CHAT_ORIGIN = process.env.NEXT_PUBLIC_CHAT_ORIGIN || 'https://chat.beautynira.com'
+
+function shouldMoveToChatApp(): boolean {
+  const host = window.location.hostname
+  return !host.startsWith('chat.') && (host === 'beautynira.com' || host.endsWith('.beautynira.com'))
+}
+
+/** Probe the chat origin (any response means it's up), then go there with
+ * this browser's conversation id. Resolves false if it isn't reachable. */
+async function moveToChatApp(vid: string): Promise<boolean> {
+  try {
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 2500)
+    await fetch(`${CHAT_ORIGIN}/chat-app.webmanifest`, { mode: 'no-cors', cache: 'no-store', signal: ctrl.signal })
+    clearTimeout(timer)
+  } catch {
+    return false
+  }
+  const params = new URLSearchParams(window.location.search)
+  if (vid) params.set('vid', vid)
+  const path = window.location.pathname.replace(/^\/chat\/?$/, '/') // /chat -> /, /chat/<code> stays
+  const qs = params.toString()
+  window.location.replace(`${CHAT_ORIGIN}${path}${qs ? `?${qs}` : ''}`)
+  return true
+}
+
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
@@ -334,26 +361,42 @@ export default function NiraAgentChat({ initialBotCode, initialMessage }: { init
   useEffect(() => {
     vidRef.current = visitorId()
     let cancelled = false
-    call<SessionState>(`/agent/web/session?visitor_id=${encodeURIComponent(vidRef.current)}`)
-      .then((s) => {
-        if (cancelled) return
-        setHome(s.home_business)
-        const restoredMsgs: Msg[] = s.messages.map((m) => ({ id: nextId(), role: m.role, text: m.text }))
-        const last = restoredMsgs[restoredMsgs.length - 1]
-        if (last?.role === 'assistant') {
-          last.quick = s.messages[s.messages.length - 1].quick_replies
-          if (s.card) {
-            last.card = s.card
-            last.buttons = s.buttons
-          }
-        }
-        setMessages(restoredMsgs)
-        scrollDown()
+    if (shouldMoveToChatApp()) {
+      // www.beautynira.com/chat belongs to the Nira Business app's scope, so
+      // "Add to Home screen" there installs Nira Business. Move to the chat
+      // app's own origin (conversation carried over) — but only once that
+      // origin is actually reachable, so nothing breaks before it's set up.
+      moveToChatApp(vidRef.current).then((moved) => {
+        if (!moved && !cancelled) restore()
       })
-      .catch(() => {})
-      .finally(() => !cancelled && setRestored(true))
+      return () => {
+        cancelled = true
+      }
+    }
+    restore()
     return () => {
       cancelled = true
+    }
+
+    function restore() {
+      call<SessionState>(`/agent/web/session?visitor_id=${encodeURIComponent(vidRef.current)}`)
+        .then((s) => {
+          if (cancelled) return
+          setHome(s.home_business)
+          const restoredMsgs: Msg[] = s.messages.map((m) => ({ id: nextId(), role: m.role, text: m.text }))
+          const last = restoredMsgs[restoredMsgs.length - 1]
+          if (last?.role === 'assistant') {
+            last.quick = s.messages[s.messages.length - 1].quick_replies
+            if (s.card) {
+              last.card = s.card
+              last.buttons = s.buttons
+            }
+          }
+          setMessages(restoredMsgs)
+          scrollDown()
+        })
+        .catch(() => {})
+        .finally(() => !cancelled && setRestored(true))
     }
   }, [scrollDown])
 
