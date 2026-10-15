@@ -1,9 +1,9 @@
-// Nira Chat service worker (scope: /chat) — makes the customer chat an
+// Nira Chat service worker (scope: "/" on chat.beautynira.com) — makes the customer chat an
 // installable home-screen app that opens instantly and shows a friendly
 // offline screen instead of a browser error. Deliberately does NOT cache
 // API responses: prices, slots and stock must always be live.
-const CACHE = "nira-chat-v1";
-const SHELL = ["/chat", "/chat-icon-192.png", "/chat-icon-512.png", "/chat-offline.html"];
+const CACHE = "nira-chat-v2";
+const SHELL = ["/", "/chat-icon-192.png", "/chat-icon-512.png", "/chat-offline.html"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -28,11 +28,17 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put("/chat", copy)).catch(() => {});
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(url.pathname, copy)).catch(() => {});
+          }
           return res;
         })
-        .catch(() => caches.match("/chat").then((r) => r || caches.match("/chat-offline.html")))
+        .catch(() =>
+          caches.match(url.pathname)
+            .then((r) => r || caches.match("/"))
+            .then((r) => r || caches.match("/chat-offline.html"))
+        )
     );
     return;
   }

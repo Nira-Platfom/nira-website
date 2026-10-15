@@ -72,6 +72,16 @@ function visitorId(): string {
   const fresh = () => crypto.randomUUID().replace(/-/g, '')
   if (typeof window === 'undefined') return ''
   try {
+    // Arriving from www → chat.beautynira.com ("Install app"): adopt the
+    // conversation's id from the link, then drop it from the address bar.
+    const params = new URLSearchParams(window.location.search)
+    const handoff = params.get('vid')
+    if (handoff && /^[A-Za-z0-9_-]{8,64}$/.test(handoff)) {
+      localStorage.setItem(VISITOR_KEY, handoff)
+      params.delete('vid')
+      const rest = params.toString()
+      window.history.replaceState(null, '', window.location.pathname + (rest ? `?${rest}` : ''))
+    }
     let id = localStorage.getItem(VISITOR_KEY)
     if (!id) {
       id = fresh()

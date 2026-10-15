@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 
 // The customer chat is its own installable app ("Nira Chat"), separate from
 // the business dashboard app ("Nira Business", /site.webmanifest): adding
 // THIS page to a home screen opens straight into the chat, nothing else.
 // No marketing navbar/footer here — NiraAgentChat renders its own slim
 // header and a one-line footer under the composer.
-export const metadata: Metadata = {
-  manifest: '/chat.webmanifest',
+const baseMetadata: Metadata = {
   applicationName: 'Nira Chat',
   appleWebApp: { capable: true, title: 'Nira Chat', statusBarStyle: 'default' },
   icons: {
@@ -16,6 +16,13 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: '/chat-apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
+}
+
+// On chat.beautynira.com the chat app owns the whole origin (scope "/");
+// on www it's scoped to /chat (kept so existing links still work).
+export function generateMetadata(): Metadata {
+  const host = (headers().get('host') || '').toLowerCase()
+  return { ...baseMetadata, manifest: host.startsWith('chat.') ? '/chat-app.webmanifest' : '/chat.webmanifest' }
 }
 
 export const viewport: Viewport = {
