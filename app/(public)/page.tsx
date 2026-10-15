@@ -3,7 +3,8 @@ import { DASHBOARD_REGISTER_URL, WHATSAPP_CHAT_URL, WHATSAPP_NUMBER } from '@/li
 import AnimatedChat    from '@/components/AnimatedChat'
 import AnimatedRevenue from '@/components/AnimatedRevenue'
 import BusinessTypeFeatures from '@/components/BusinessTypeFeatures'
-import BeautyShowcase  from '@/components/BeautyShowcase'
+import HeroAsk         from '@/components/HeroAsk'
+import HeroVisual      from '@/components/HeroVisual'
 import ProductDemo     from '@/components/ProductDemo'
 import SurfaceShowcase, { MarketplaceScreen } from '@/components/SurfaceShowcase'
 // PricingCards import commented out along with the PRICING PREVIEW section below — free during the pilot
@@ -17,10 +18,8 @@ import {
   StaggerContainer,
   StaggerItem,
   ScaleIn,
-  WipeReveal,
   Parallax,
   CountUp,
-  MagneticButton,
   TiltCard,
   AmbientGlow,
 } from '@/components/animations'
@@ -139,119 +138,95 @@ export default function HomePage() {
 
       {/* ── HERO ──────────────────────────────────────────────────────── */}
       <section
-        className="relative pt-28 pb-20 overflow-hidden nira-section-light"
+        className="relative overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-24 nira-section-light"
         style={{ backgroundColor: 'var(--bg-surface)' }}
       >
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-coral opacity-[0.04] translate-x-1/3 -translate-y-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-lavender opacity-[0.06] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
+        {/* ambient brand light */}
+        <div className="pointer-events-none absolute -top-40 right-[-10%] h-[620px] w-[620px] rounded-full bg-coral opacity-[0.07] blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -bottom-40 left-[-10%] h-[480px] w-[480px] rounded-full bg-lavender opacity-[0.10] blur-3xl" aria-hidden="true" />
 
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
 
-            {/* Left */}
-            <div>
+            {/* Left — the promise + the one thing to do: ask */}
+            <div className="max-w-[600px]">
+              <FadeUp delay={0.1}>
+                <span
+                  className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[13px] font-medium"
+                  style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)', backgroundColor: 'var(--bg-card)' }}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-mint opacity-60" style={{ animation: 'radar-ping 1.8s ease-out infinite' }} />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
+                  </span>
+                  Your AI beauty agent · Dar es Salaam
+                </span>
+              </FadeUp>
 
               <FadeUp delay={0.2}>
                 <h1
-                  className="font-serif text-5xl lg:text-[58px] leading-[1.1] mb-6"
+                  className="mt-6 font-serif text-[40px] leading-[1.06] tracking-[-0.01em] sm:text-[52px] lg:text-[56px] xl:text-[60px]"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  The Beauty World,{' '}
-                  <span className="text-coral">In One Conversation.</span>
+                  The beauty world,
+                  <br />
+                  <span className="text-coral sm:whitespace-nowrap">in one conversation.</span>
                 </h1>
               </FadeUp>
 
-              <FadeUp delay={0.4}>
-                <p className="text-lg leading-relaxed mb-2 max-w-lg" style={{ color: 'var(--text-secondary)' }}>
-                  Discover beauty businesses. Understand products. Get personalized guidance. Book services. Shop with confidence.
-                </p>
-                <p className="text-lg leading-relaxed mb-8 max-w-lg" style={{ color: 'var(--text-secondary)' }}>
-                  Nira brings customers, beauty businesses, products, and information together — through one intelligent beauty experience.
+              <FadeUp delay={0.3}>
+                <p className="mt-5 max-w-lg text-[17px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  Tell Nira what you need. She finds the right salon or product, compares prices and reviews,
+                  and books or orders for you — in Kiswahili or English.
                 </p>
               </FadeUp>
 
-              <FadeUp delay={0.55}>
-                <div className="flex flex-wrap gap-4 mb-5">
-                  <MagneticButton>
-                    <Link
-                      href="/explore"
-                      className="btn-shimmer btn-press inline-flex items-center gap-2 text-white font-medium px-7 py-3.5 rounded-full shadow-lg shadow-coral/30 hover:shadow-xl hover:shadow-coral/40 transition-shadow"
-                    >
-                      Explore Beauty
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </Link>
-                  </MagneticButton>
-                  <Link
-                    href={DASHBOARD_REGISTER_URL}
-                    className="btn-press inline-flex items-center gap-2 border border-nira-border font-medium px-7 py-3.5 rounded-full transition-colors hover:border-coral hover:text-coral"
-                    style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)' }}
-                  >
-                    Grow Your Business
-                  </Link>
+              <FadeUp delay={0.4}>
+                <div className="mt-8">
+                  <HeroAsk />
                 </div>
-                <div className="flex flex-wrap items-center gap-3 mb-5">
-                  <span className="text-sm" style={{ color: 'var(--text-muted)' }}>Ask Nira:</span>
-                  <Link
-                    href="/chat"
-                    className="btn-press inline-flex items-center gap-2 rounded-full bg-coral-light px-4 py-2 text-sm font-medium text-coral-dark hover:bg-coral hover:text-white transition-colors"
-                  >
-                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h8M8 14h5m-9 6l3.5-3H19a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2" />
+              </FadeUp>
+
+              <FadeUp delay={0.5}>
+                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-[14px] font-medium">
+                  <Link href="/explore" className="group inline-flex items-center gap-1.5 hover:text-coral" style={{ color: 'var(--text-primary)' }}>
+                    Explore businesses
+                    <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
-                    Chat on the web
                   </Link>
-                  <a
-                    href={WHATSAPP_CHAT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-press inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors hover:border-coral hover:text-coral"
-                    style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)' }}
-                  >
-                    WhatsApp
+                  <a href={WHATSAPP_CHAT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-coral" style={{ color: 'var(--text-secondary)' }}>
+                    <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    Chat on WhatsApp
                   </a>
+                  <Link href={DASHBOARD_REGISTER_URL} className="inline-flex items-center gap-1.5 hover:text-coral" style={{ color: 'var(--text-secondary)' }}>
+                    For businesses
+                  </Link>
                 </div>
               </FadeUp>
 
               <FadeUp delay={0.6}>
-                <div className="flex flex-wrap items-center gap-2 mb-10 text-sm font-medium uppercase tracking-[1.5px]" style={{ color: 'var(--text-muted)' }}>
-                  {['Discover', 'Ask', 'Book', 'Shop'].map((step, i) => (
-                    <span key={step} className="flex items-center gap-2">
-                      {i > 0 && <span className="text-coral">·</span>}
-                      {step}
-                    </span>
-                  ))}
-                </div>
-              </FadeUp>
-
-              <FadeUp delay={0.7}>
-                <div className="flex flex-wrap gap-8">
+                <dl className="mt-10 grid max-w-md grid-cols-3 divide-x border-t pt-6" style={{ borderColor: 'var(--border)' }}>
                   {[
-                    { value: 500, suffix: '+', label: 'Active businesses' },
-                    { value: null, display: '24/7', label: 'AI support' },
-                    { value: null, display: 'Free', label: 'To get started' },
-                  ].map((s) => (
-                    <div key={s.label}>
-                      <p className="font-serif text-2xl" style={{ color: 'var(--text-primary)' }}>
-                        {s.value !== null
-                          ? <CountUp to={s.value} suffix={s.suffix} />
-                          : s.display
-                        }
-                      </p>
-                      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
+                    { value: <CountUp to={500} suffix="+" />, label: 'Businesses' },
+                    { value: '24/7', label: 'Always on' },
+                    { value: 'Free', label: 'To use' },
+                  ].map((st, idx) => (
+                    <div key={st.label} className={idx === 0 ? 'pr-4' : 'px-4'} style={{ borderColor: 'var(--border)' }}>
+                      <dd className="font-serif text-[26px] leading-none" style={{ color: 'var(--text-primary)' }}>{st.value}</dd>
+                      <dt className="mt-1.5 text-[13px]" style={{ color: 'var(--text-muted)' }}>{st.label}</dt>
                     </div>
                   ))}
-                </div>
+                </dl>
               </FadeUp>
             </div>
 
-            {/* Right — beauty showcase, revealed with a diagonal wipe rather than a fade */}
-            <WipeReveal delay={0.5} className="flex justify-center lg:justify-end" >
-              <div style={{ width: '100%', maxWidth: 560, position: 'relative', paddingRight: 20 }}>
-                <BeautyShowcase />
-              </div>
-            </WipeReveal>
+            {/* Right — a live example of Nira at work */}
+            <FadeIn delay={0.3}>
+              <HeroVisual />
+            </FadeIn>
           </div>
         </div>
       </section>
