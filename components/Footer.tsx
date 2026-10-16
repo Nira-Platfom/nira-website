@@ -1,35 +1,37 @@
 import Link from 'next/link'
-import { ArrowUp, ArrowUpRight, MessageCircle } from 'lucide-react'
+import { ArrowUp, ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react'
 import NiraWordmark from '@/components/NiraWordmark'
 import NiraIcon from '@/components/NiraIcon'
 import { DASHBOARD_LOGIN_URL, DASHBOARD_REGISTER_URL, WHATSAPP_CHAT_URL } from '@/lib/links'
 
+const SUPPORT_EMAIL = 'asyahhaji18@gmail.com'
+const SUPPORT_PHONE = '+255 772 630 193'
+const SUPPORT_WA = 'https://wa.me/255772630193'
+
 const COLUMNS: { title: string; links: { label: string; href: string; external?: boolean }[] }[] = [
   {
-    title: 'For customers',
+    title: 'Explore',
     links: [
-      { label: 'Explore businesses', href: '/explore' },
+      { label: 'Find businesses', href: '/explore' },
       { label: 'Ask Nira', href: '/chat' },
-      { label: 'Chat on WhatsApp', href: WHATSAPP_CHAT_URL, external: true },
       { label: 'How it works', href: '/#how-it-works' },
+      { label: 'WhatsApp', href: WHATSAPP_CHAT_URL, external: true },
     ],
   },
   {
     title: 'For businesses',
     links: [
+      { label: 'Features', href: '/#features' },
       { label: 'Pricing', href: '/pricing' },
       { label: 'Get started', href: DASHBOARD_REGISTER_URL },
       { label: 'Sign in', href: DASHBOARD_LOGIN_URL },
-      { label: 'Features', href: '/#features' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
+      { label: 'About Nira', href: '/about' },
+      { label: 'Contact us', href: '/contact' },
     ],
   },
 ]
@@ -61,51 +63,46 @@ function FooterLink({ href, label, external }: { href: string; label: string; ex
   )
 }
 
+function IconButton({ href, label, children, external }: { href: string; label: string; children: React.ReactNode; external?: boolean }) {
+  const cls =
+    'inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-slate-300 transition-all hover:-translate-y-0.5 hover:border-coral/60 hover:bg-white/5 hover:text-white'
+  return external ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label} className={cls}>{children}</a>
+  ) : (
+    <Link href={href} aria-label={label} title={label} className={cls}>{children}</Link>
+  )
+}
+
 export default function Footer() {
+  const year = new Date().getFullYear()
   return (
     <footer className="relative overflow-hidden bg-nira-dark text-white">
-      {/* brand accent line + soft glow */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-coral to-lavender" aria-hidden="true" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[720px] -translate-x-1/2 rounded-full bg-coral/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-coral/70 to-transparent" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-16">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.3fr_2fr]">
-          {/* Brand */}
-          <div className="max-w-sm">
+      <div className="relative mx-auto max-w-6xl px-6">
+        {/* Main */}
+        <div className="grid grid-cols-1 gap-12 pb-12 pt-16 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-4">
             <Link href="/" className="inline-flex items-center gap-2" aria-label="Nira home">
               <NiraIcon size={26} variant="white" />
               <NiraWordmark size="md" variant="white" />
             </Link>
-            <p className="mt-5 font-serif text-[22px] leading-snug text-white">
-              The beauty world, <span className="text-coral">in one conversation.</span>
+            <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-slate-400">
+              The AI beauty companion for East Africa. Find salons, spas and beauty products, and book or order in one
+              conversation. Built in Dar es Salaam.
             </p>
-            <p className="mt-3 text-[14px] leading-relaxed text-slate-400">
-              Find salons, spas and beauty products across Dar es Salaam — Nira compares, books and orders for you.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/chat"
-                className="btn-press inline-flex h-11 items-center gap-2 rounded-full bg-coral px-5 text-[14px] font-medium text-white shadow-btn-coral transition-transform hover:-translate-y-0.5"
-              >
-                <MessageCircle size={16} /> Ask Nira
-              </Link>
-              <a
-                href={WHATSAPP_CHAT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-press inline-flex h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 text-[14px] font-medium text-white transition-colors hover:border-[#25D366] hover:bg-[#25D366]/10"
-              >
-                <WhatsAppIcon /> WhatsApp
-              </a>
+            <div className="mt-6 flex gap-2.5">
+              <IconButton href="/chat" label="Ask Nira"><MessageCircle size={17} /></IconButton>
+              <IconButton href={WHATSAPP_CHAT_URL} label="Nira on WhatsApp" external><WhatsAppIcon size={16} /></IconButton>
+              <IconButton href={`mailto:${SUPPORT_EMAIL}`} label="Email us" external><Mail size={17} /></IconButton>
             </div>
           </div>
 
-          {/* Link columns */}
-          <nav className="grid grid-cols-2 gap-10 sm:grid-cols-3" aria-label="Footer">
+          <nav className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-[1fr_1fr_0.8fr_1.5fr] lg:col-span-8" aria-label="Footer">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h4 className="text-[12px] font-medium uppercase tracking-[0.16em] text-slate-500">{col.title}</h4>
-                <ul className="mt-5 space-y-3.5">
+                <h3 className="text-[15px] font-medium text-white">{col.title}</h3>
+                <ul className="mt-4 space-y-3">
                   {col.links.map((l) => (
                     <li key={l.label}>
                       <FooterLink {...l} />
@@ -114,20 +111,35 @@ export default function Footer() {
                 </ul>
               </div>
             ))}
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="text-[15px] font-medium text-white">Talk to a human</h3>
+              <p className="mt-4 text-[13px] leading-relaxed text-slate-500">Questions about Nira or setting up your business? Reach our team.</p>
+              <ul className="mt-3 space-y-2.5">
+                <li>
+                  <a href={SUPPORT_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[14px] text-slate-300 transition-colors hover:text-white">
+                    <Phone size={14} className="text-coral" /> {SUPPORT_PHONE}
+                  </a>
+                </li>
+                <li>
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className="inline-flex items-center gap-2 text-[14px] text-slate-300 transition-colors hover:text-white">
+                    <Mail size={14} className="shrink-0 text-coral" /> {SUPPORT_EMAIL}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </nav>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 flex flex-col-reverse items-center justify-between gap-5 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="text-[13px] text-slate-500">© {new Date().getFullYear()} Nira · Made in Tanzania 🇹🇿</p>
-          <div className="flex items-center gap-3">
-            <span className="rounded-full border border-white/10 px-3 py-1 text-[12px] text-slate-400">Kiswahili · English</span>
-            <a
-              href="#"
-              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-white/10 px-3 text-[12px] text-slate-400 transition-colors hover:border-coral hover:text-white"
-              aria-label="Back to top"
-            >
-              Back to top <ArrowUp size={13} className="transition-transform group-hover:-translate-y-0.5" />
+        <div className="flex flex-col gap-4 border-t border-white/10 py-6 text-[13px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} Nira. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link href="/privacy" className="transition-colors hover:text-white">Privacy Policy</Link>
+            <Link href="/terms" className="transition-colors hover:text-white">Terms of Service</Link>
+            <span className="hidden text-slate-700 sm:inline">·</span>
+            <span>Made in Dar es Salaam 🇹🇿</span>
+            <a href="#" aria-label="Back to top" className="group inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 transition-colors hover:border-coral hover:text-white">
+              <ArrowUp size={14} className="transition-transform group-hover:-translate-y-0.5" />
             </a>
           </div>
         </div>
