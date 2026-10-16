@@ -366,7 +366,7 @@ export default function AboutPage() {
               Ready to join the Nira family?
             </h2>
             <p className="text-white/80 mb-8">
-              Free to start. No credit card. Set up in minutes.
+              No mandatory monthly subscription. Set up in minutes.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

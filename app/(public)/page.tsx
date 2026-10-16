@@ -7,8 +7,7 @@ import HeroAsk         from '@/components/HeroAsk'
 import HeroVisual      from '@/components/HeroVisual'
 import ProductDemo     from '@/components/ProductDemo'
 import SurfaceShowcase, { MarketplaceScreen } from '@/components/SurfaceShowcase'
-// PricingCards import commented out along with the PRICING PREVIEW section below — free during the pilot
-// import PricingCards    from '@/components/PricingCards'
+import { PRICING } from '@/lib/pricing'
 import HowItWorksFlow  from '@/components/HowItWorksFlow'
 import {
   FadeUp,
@@ -780,28 +779,44 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PRICING PREVIEW commented out — free during the pilot, see
-          app/(public)/pricing/page.tsx for the full preserved section */}
-      {/*
+      {/* ── PRICING PREVIEW ───────────────────────────────────────────── */}
       <section className="py-24" style={{ backgroundColor: 'var(--bg-surface-2)' }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <FadeUp className="text-center mb-14">
-            <span className="text-xs font-medium text-coral uppercase tracking-widest">Pricing</span>
-            <h2 className="font-serif text-4xl mt-3" style={{ color: 'var(--text-primary)' }}>Pick your power level</h2>
-            <p className="mt-4" style={{ color: 'var(--text-secondary)' }}>Start free. Upgrade when you&apos;re ready to grow.</p>
+        <div className="mx-auto max-w-6xl px-6">
+          <FadeUp className="mx-auto mb-12 max-w-2xl text-center">
+            <span className="text-xs font-medium uppercase tracking-widest text-coral">Pricing for businesses</span>
+            <h2 className="mt-3 font-serif text-4xl" style={{ color: 'var(--text-primary)' }}>No monthly pressure</h2>
+            <p className="mt-4" style={{ color: 'var(--text-secondary)' }}>
+              Join once, get listed for free, and pay commission only when Nira brings you a completed booking or order.
+            </p>
           </FadeUp>
 
-          <PricingCards />
+          <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {PRICING.map((item) => (
+              <StaggerItem key={item.id}>
+                <div
+                  className="group flex h-full flex-col rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-coral/50 hover:shadow-card-hover"
+                  style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+                >
+                  <span
+                    className={`w-fit rounded-full px-2.5 py-0.5 text-[11px] font-medium ${item.tier === 'core' ? 'bg-coral-light text-coral-deep' : 'bg-lavender-light text-lavender-deep'}`}
+                  >
+                    {item.tier === 'core' ? item.billing : 'Optional'}
+                  </span>
+                  <p className="mt-4 text-[15px] font-medium" style={{ color: 'var(--text-primary)' }}>{item.title}</p>
+                  <p className="mt-auto pt-3 text-[13px]" style={{ color: 'var(--text-muted)' }}>{item.amount ?? item.label}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
 
           <FadeUp>
-            <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-              All paid plans include a 3-month free trial. No credit card required.{' '}
-              <Link href="/pricing" className="text-coral hover:underline font-medium">View full pricing →</Link>
+            <p className="mt-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+              Standard marketplace listing is always free.{' '}
+              <Link href="/pricing" className="font-medium text-coral hover:underline">See how pricing works →</Link>
             </p>
           </FadeUp>
         </div>
       </section>
-      */}
 
       {/* ── TESTIMONIALS ──────────────────────────────────────────────── */}
       <section className="py-24 overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
@@ -960,12 +975,12 @@ export default function HomePage() {
 
         <div className="max-w-2xl mx-auto px-6 text-center relative">
           <FadeUp>
-            <p className="text-white/70 text-sm font-medium uppercase tracking-widest mb-4">Start Today. It&apos;s Free.</p>
+            <p className="text-white/70 text-sm font-medium uppercase tracking-widest mb-4">Start today · No monthly subscription</p>
             <h2 className="font-serif text-4xl md:text-5xl text-white mb-5">
               Grow Your Beauty Business with AI
             </h2>
             <p className="text-white/80 text-lg mb-10 leading-relaxed">
-              Join 500+ beauty businesses in East Africa using Nira to serve customers 24/7. Free to start, no technical skills needed.
+              Join 500+ beauty businesses in East Africa using Nira to serve customers 24/7. Low-cost to start, no technical skills needed.
             </p>
           </FadeUp>
 
@@ -975,7 +990,7 @@ export default function HomePage() {
               href={DASHBOARD_REGISTER_URL}
               className="btn-press inline-flex items-center gap-2 bg-white text-coral-dark font-medium px-8 py-4 rounded-full shadow-lg hover:bg-coral-light transition-colors mb-6"
             >
-              Get Started — It&apos;s Free
+              Get started with Nira
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

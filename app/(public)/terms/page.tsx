@@ -12,7 +12,7 @@ export default function TermsPage() {
       <div className="max-w-3xl mx-auto px-6 py-16">
         <FadeUp>
           <h1 className="text-4xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Terms of Service</h1>
-          <p className="text-sm mb-12" style={{ color: 'var(--text-muted)' }}>Last updated: April 18, 2026</p>
+          <p className="text-sm mb-12" style={{ color: 'var(--text-muted)' }}>Last updated: October 16, 2026</p>
         </FadeUp>
 
         <Section title="1. Acceptance of terms">
@@ -52,14 +52,17 @@ export default function TermsPage() {
           <p>We reserve the right to suspend or terminate accounts that violate these rules without notice.</p>
         </Section>
 
-        <Section title="5. Payment and subscription">
+        <Section title="5. Fees">
           <ul>
-            <li>New accounts receive a <strong>3-month free trial</strong> with no credit card required</li>
-            <li>After the trial, continued use requires a paid subscription (Free, Pro, or Business plan)</li>
-            <li>Subscription fees are billed in advance on a monthly or annual basis</li>
+            <li>Nira does not require a monthly subscription, and a standard marketplace listing is free</li>
+            <li><strong>Onboarding:</strong> a low-cost self-service setup, or a one-time fee for assisted onboarding, as quoted before purchase</li>
+            <li><strong>Commission:</strong> charged only on eligible bookings and product orders made through Nira that are completed (service done, or order delivered or collected), at the rates agreed with you or published in our commission policy</li>
+            <li>No commission is charged for customer messages, cancelled bookings or orders, no-shows, or customers who come to you directly</li>
+            <li>Each commission is listed with its Nira reference on your monthly statement, and you may dispute any line before it is settled</li>
+            <li><strong>Optional services</strong> such as featured listings, sponsored placements and campaigns are priced separately and agreed before purchase</li>
+            <li>Customer payments for your services or products are not Nira fees</li>
             <li>All prices are in Tanzanian Shillings (TZS) unless otherwise stated</li>
-            <li>Refunds are provided at our discretion within 7 days of payment for annual plans</li>
-            <li>We reserve the right to change pricing with 30 days&apos; notice</li>
+            <li>We reserve the right to change fees with 30 days&apos; notice</li>
           </ul>
         </Section>
 

@@ -47,7 +47,7 @@ export default function Navbar() {
           <NavLink href="/explore">Explore</NavLink>
           <NavLink href="/chat">Ask Nira</NavLink>
           <NavLink href="/#features">Features</NavLink>
-          {/* Pricing nav link commented out — free during the pilot, see app/(public)/pricing/page.tsx */}
+          <NavLink href="/pricing">Pricing</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>
         </nav>
@@ -102,7 +102,7 @@ export default function Navbar() {
                 { href: '/explore', label: 'Explore' },
                 { href: '/chat', label: 'Ask Nira' },
                 { href: '/#features', label: 'Features' },
-                // Pricing commented out — free during the pilot
+                { href: '/pricing', label: 'Pricing' },
                 { href: '/about', label: 'About' },
                 { href: '/contact', label: 'Contact' },
               ].map((item, i) => (
