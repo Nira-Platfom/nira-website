@@ -6,14 +6,26 @@ import { usePathname } from 'next/navigation'
 import { WHATSAPP_CHAT_URL } from '@/lib/links'
 
 export default function FloatingWhatsApp() {
-  const [visible, setVisible] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [footerInView, setFooterInView] = useState(false)
   const pathname = usePathname()
+  const visible = scrolled && !footerInView
 
   useEffect(() => {
-    const handler = () => setVisible(window.scrollY > 500)
-    window.addEventListener('scroll', handler)
+    const handler = () => setScrolled(window.scrollY > 500)
+    window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
   }, [])
+
+  // The footer has its own Ask Nira + WhatsApp buttons — step aside there
+  // instead of covering its bottom bar.
+  useEffect(() => {
+    const footer = document.querySelector('footer')
+    if (!footer) return
+    const io = new IntersectionObserver(([entry]) => setFooterInView(entry.isIntersecting), { threshold: 0 })
+    io.observe(footer)
+    return () => io.disconnect()
+  }, [pathname])
 
   // Already chatting — the floating button would cover the composer.
   if (pathname?.startsWith('/chat')) return null
