@@ -623,8 +623,8 @@ export default function HomePage() {
               },
               {
                 step: '02',
-                title: 'Get Your Bot Code',
-                desc: 'Nira runs on one shared WhatsApp number for every business on the platform. You get a bot code, like higrace or hinasby, so customers can type it or tap your link to reach your bot directly. No separate WhatsApp Business setup on your end.',
+                title: 'Share Your Nira Link',
+                desc: 'Nira runs on one shared WhatsApp number and a web chat for every business on the platform. Customers just mention your business name, or tap your link, to reach you directly. No separate WhatsApp Business setup on your end.',
                 icon: (
                   <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />

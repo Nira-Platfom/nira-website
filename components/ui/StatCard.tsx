@@ -73,7 +73,7 @@ export default function StatCard({ label, value, sub, trend, icon: Icon, color =
       {trend && TrendI && (
         <div className={cn("flex items-center gap-1 mt-2 text-[12px] font-medium", trendStyle[trend.direction])}>
           <TrendI size={14} />
-          <span>{trend.pct}% vs last period</span>
+          <span>{trend.pct === "New" ? "New this period" : `${trend.pct}% vs last period`}</span>
         </div>
       )}
     </motion.div>

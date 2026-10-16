@@ -13,12 +13,15 @@ import {
   ShoppingBag as OrderIcon,
   Copy,
   Share2,
+  Globe,
+  ExternalLink,
   CheckCircle2,
   Circle,
   Sparkles,
   MessageSquareText,
   Star,
   ArrowRight,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -113,7 +116,33 @@ const INTENT_LABELS: Record<string, string> = {
   HUMAN_REQUEST: "Wanting a human",
   GREETING: "Just saying hi",
   OTHER: "Other",
+  // older bot intents
+  CONTINUE: "Continuing a chat",
+  MENU: "Browsing the menu",
+  ADVICE: "Beauty advice",
+  PRODUCT: "Product questions",
+  ORDER: "Ordering products",
+  OFFER: "Offers & promotions",
+  OFFERS: "Offers & promotions",
+  SERVICES: "Services & prices",
+  PRICE: "Price questions",
+  HUMAN: "Wanting a human",
+  LANGUAGE: "Choosing a language",
+  UNKNOWN: "Other",
 };
+
+function intentLabel(intent: string) {
+  const key = intent.trim().toUpperCase();
+  if (INTENT_LABELS[key]) return INTENT_LABELS[key];
+  const words = intent.replace(/_/g, " ").toLowerCase();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+interface ShareConfig {
+  display_name?: string;
+  whatsapp_link?: string | null;
+  chat_link?: string | null;
+}
 
 export default function OverviewPage() {
   const { user, business } = useAuth();
@@ -123,6 +152,7 @@ export default function OverviewPage() {
   const [intents, setIntents] = useState<IntentRow[]>([]);
   const [catalogCount, setCatalogCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [share, setShare] = useState<ShareConfig | null>(null);
 
   const isSalon = business?.type === "salon_spa";
 
@@ -150,6 +180,12 @@ export default function OverviewPage() {
         /* optional */
       }
       try {
+        const { data } = await api.get("/business/bot-config");
+        if (alive) setShare(data);
+      } catch {
+        /* optional */
+      }
+      try {
         const { data } = await api.get("/analytics/intent-breakdown");
         if (alive) setIntents(data.slice(0, 5));
       } catch {
@@ -172,18 +208,6 @@ export default function OverviewPage() {
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
   const firstName = user?.full_name?.split(" ")[0] || "";
 
-  const copyLink = () => {
-    if (business?.whatsapp_link) {
-      navigator.clipboard.writeText(business.whatsapp_link);
-      toast.success("Bot link copied");
-    }
-  };
-
-  const copyText = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success(`${label} copied`);
-  };
-
   const revenueThisMonth = analytics?.revenue_total ?? 0;
   const revenueTrend = analytics ? trendFrom(revenueThisMonth, analytics.vs_previous_period.revenue_total) : undefined;
   const activityCount = isSalon ? analytics?.bookings_this_month : analytics?.orders_this_month;
@@ -196,7 +220,7 @@ export default function OverviewPage() {
     : undefined;
 
   const checklist = [
-    { done: !!business?.bot_active, label: "Activate your WhatsApp bot", href: "/settings" },
+    { done: !!business?.bot_active, label: "Switch on your Nira Assistant", href: "/settings?section=bot" },
     { done: (catalogCount ?? 0) > 0, label: isSalon ? "Add your first service" : "Add your first product", href: isSalon ? "/services" : "/products" },
     { done: (analytics?.total_customers ?? 0) > 0, label: "Get your first customer message", href: "/customers" },
   ];
@@ -223,7 +247,7 @@ export default function OverviewPage() {
               <Sparkles size={18} />
             </div>
             <div>
-              <h3 className="text-[15px] font-medium text-charcoal">Get your bot ready for customers</h3>
+              <h3 className="text-[15px] font-medium text-charcoal">Get ready for customers</h3>
               <p className="text-[13px] text-slate-500 mt-0.5">
                 {checklistDone} of {checklist.length} done — a few quick steps and you're live.
               </p>
@@ -319,8 +343,8 @@ export default function OverviewPage() {
               )}
               <p className="text-sm text-charcoal">
                 {summary.bot_active
-                  ? "Your WhatsApp bot is active and serving customers"
-                  : "Your bot is inactive — customers cannot reach you"}
+                  ? "Your Nira Assistant is live and serving customers"
+                  : "Your Nira Assistant is off — customers can't reach you through Nira"}
               </p>
             </div>
             {summary.bot_active ? (
@@ -331,8 +355,8 @@ export default function OverviewPage() {
                 </Link>
               </div>
             ) : (
-              <Button size="sm" variant="primary" className="shrink-0" onClick={() => (window.location.href = "/settings")}>
-                Activate Bot
+              <Button size="sm" variant="primary" className="shrink-0" onClick={() => (window.location.href = "/settings?section=bot")}>
+                Switch on
               </Button>
             )}
           </div>
@@ -389,15 +413,41 @@ export default function OverviewPage() {
       )}
 
       {/* Two column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         <div className="lg:col-span-3 space-y-6">
           <Card title="Revenue Overview">
             <RevenueChart />
           </Card>
 
-          <Card title={isSalon ? "Top Services" : "Top Products"} action={<Link href="/analytics" className="text-[13px] text-coral font-medium hover:underline">View analytics →</Link>}>
-            <TopPerformers performers={performers} loading={loading} isSalon={isSalon} />
-          </Card>
+          <div className={cn("grid gap-6 [&>*]:h-full", intents.length > 0 && "md:grid-cols-2")}>
+            <Card
+              title={isSalon ? "Top Services" : "Top Products"}
+              action={<Link href="/analytics" className="text-[13px] text-coral font-medium hover:underline">Analytics →</Link>}
+            >
+              <TopPerformers performers={performers} loading={loading} isSalon={isSalon} />
+            </Card>
+
+            {intents.length > 0 && (
+              <Card title="What Customers Ask">
+                <div className="space-y-3.5">
+                  {intents.map((row) => (
+                    <div key={row.intent}>
+                      <div className="flex items-center justify-between gap-3 mb-1.5">
+                        <span className="text-[13px] text-charcoal truncate">{intentLabel(row.intent)}</span>
+                        <span className="text-[12px] text-slate-400 shrink-0 tabular-nums">{row.percentage}%</span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-page overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-lavender to-coral transition-[width] duration-700"
+                          style={{ width: `${Math.max(row.percentage, 3)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+          </div>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
@@ -418,105 +468,94 @@ export default function OverviewPage() {
             ) : !summary || summary.recent_activity.length === 0 ? (
               <p className="text-sm text-slate-400 py-6 text-center">No activity yet</p>
             ) : (
-              <div className="space-y-1">
-                {summary.recent_activity.map((item) => (
+              <div className="-mx-2">
+                {summary.recent_activity.slice(0, 6).map((item) => (
                   <ActivityRow key={`${item.type}-${item.id}`} item={item} />
                 ))}
               </div>
             )}
           </Card>
 
-          {intents.length > 0 && (
-            <Card title="What Customers Ask">
-              <div className="space-y-3">
-                {intents.map((row) => (
-                  <div key={row.intent} className="flex items-center gap-3">
-                    <MessageSquareText size={14} className="text-lavender-deep shrink-0" />
-                    <span className="text-[13px] text-charcoal flex-1 min-w-0 truncate">
-                      {INTENT_LABELS[row.intent] || row.intent}
-                    </span>
-                    <div className="w-20 h-1.5 rounded-full bg-page overflow-hidden shrink-0">
-                      <div className="h-full bg-lavender rounded-full" style={{ width: `${row.percentage}%` }} />
-                    </div>
-                    <span className="text-[12px] text-slate-400 w-9 text-right shrink-0">{row.percentage}%</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          <Card title="Share Your Bot">
-            <div className="text-center py-2">
-              <div className="font-serif text-[28px] text-coral mb-1">{business?.bot_code || "—"}</div>
-              <p className="text-[13px] text-slate-500 font-mono break-all mb-4">{business?.whatsapp_link}</p>
-              <div className="flex gap-3 justify-center">
-                <Button size="sm" variant="secondary" icon={<Copy size={14} />} onClick={copyLink}>
-                  Copy Link
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  icon={<Share2 size={14} />}
-                  onClick={() => {
-                    if (navigator.share && business?.whatsapp_link) {
-                      navigator.share({ url: business.whatsapp_link, title: business.name });
-                    } else {
-                      copyLink();
-                    }
-                  }}
-                >
-                  Share
-                </Button>
-              </div>
-            </div>
-
-            {(business?.booking_link || business?.order_link) && (
-              <div className="mt-4 pt-4 border-t border-slate-100 space-y-2 text-left">
-                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-1">
-                  Direct Links
-                </p>
-                <p className="text-[12px] text-slate-500 mb-3">
-                  Skip the bot code — these open straight to {isSalon ? "booking" : "ordering"}. Good for your
-                  Instagram bio or WhatsApp status.
-                </p>
-                {business.booking_link && (
-                  <div className="flex items-center justify-between gap-2 rounded-lg bg-page px-3 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-[12px] font-medium text-charcoal">Booking link</p>
-                      <p className="text-[11px] text-slate-500 truncate font-mono">{business.booking_link}</p>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      icon={<Copy size={13} />}
-                      onClick={() => copyText(business.booking_link!, "Booking link")}
-                    >
-                      Copy
-                    </Button>
-                  </div>
-                )}
-                {business.order_link && (
-                  <div className="flex items-center justify-between gap-2 rounded-lg bg-page px-3 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-[12px] font-medium text-charcoal">Order link</p>
-                      <p className="text-[11px] text-slate-500 truncate font-mono">{business.order_link}</p>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      icon={<Copy size={13} />}
-                      onClick={() => copyText(business.order_link!, "Order link")}
-                    >
-                      Copy
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
-          </Card>
+          <ShareCard share={share} businessName={business?.name} />
         </div>
       </div>
     </div>
+  );
+}
+
+function ShareCard({ share, businessName }: { share: ShareConfig | null; businessName?: string }) {
+  const name = share?.display_name || businessName || "your business";
+  const channels = [
+    share?.whatsapp_link && { key: "wa", label: "WhatsApp", hint: "Opens Nira with your name typed in", link: share.whatsapp_link, icon: MessageCircle, tone: "bg-[#25D366]/10 text-[#128C7E]" },
+    share?.chat_link && { key: "web", label: "Web chat", hint: "Chat in the browser, no app needed", link: share.chat_link, icon: Globe, tone: "bg-coral-light text-coral" },
+  ].filter(Boolean) as { key: string; label: string; hint: string; link: string; icon: LucideIcon; tone: string }[];
+
+  const copy = (link: string, label: string) => {
+    navigator.clipboard.writeText(link);
+    toast.success(`${label} link copied`);
+  };
+  const shareLink = (link: string, label: string) => {
+    if (navigator.share) navigator.share({ url: link, title: name }).catch(() => {});
+    else copy(link, label);
+  };
+
+  return (
+    <Card
+      title="Share with customers"
+      action={<Link href="/settings?section=bot" className="text-[13px] text-coral font-medium hover:underline">Settings →</Link>}
+    >
+      <p className="text-[13px] text-slate-500 -mt-1 mb-4">
+        Customers find <span className="font-medium text-charcoal">{name}</span> by name — just share a link.
+      </p>
+      {!share ? (
+        <div className="space-y-2">
+          <div className="h-14 rounded-xl shimmer animate-dash-shimmer" />
+          <div className="h-14 rounded-xl shimmer animate-dash-shimmer" />
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {channels.map((c) => {
+            const Icon = c.icon;
+            return (
+              <div
+                key={c.key}
+                className="group flex items-center gap-3 rounded-xl border border-slate-100 bg-page/60 p-2.5 pl-3 transition-colors hover:border-coral/30 hover:bg-white"
+              >
+                <span className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", c.tone)}>
+                  <Icon size={16} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] font-medium text-charcoal">{c.label}</p>
+                  <p className="text-[11px] text-slate-500 truncate">{c.hint}</p>
+                </div>
+                <div className="flex items-center gap-0.5 shrink-0">
+                  {[
+                    { title: "Copy link", icon: Copy, run: () => copy(c.link, c.label) },
+                    { title: "Share", icon: Share2, run: () => shareLink(c.link, c.label) },
+                    { title: "Open", icon: ExternalLink, run: () => window.open(c.link, "_blank", "noopener") },
+                  ].map((a) => {
+                    const A = a.icon;
+                    return (
+                      <button
+                        key={a.title}
+                        type="button"
+                        title={a.title}
+                        aria-label={`${a.title} — ${c.label}`}
+                        onClick={a.run}
+                        className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-coral hover:bg-coral-light/60 transition-colors"
+                      >
+                        <A size={15} />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+          {channels.length === 0 && <p className="text-sm text-slate-400 py-4 text-center">Links appear once your assistant is set up.</p>}
+        </div>
+      )}
+    </Card>
   );
 }
 
@@ -563,20 +602,22 @@ function TopPerformers({ performers, loading, isSalon }: { performers: Performer
     );
   }
   return (
-    <div className="space-y-3">
+    <div className="space-y-3.5">
       {performers.slice(0, 5).map((p, i) => {
         const name = p.service_name || p.product_name || "—";
         const count = p.bookings_count ?? p.units_sold ?? 0;
         return (
           <div key={p.service_id || p.product_id || name} className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-amber-light text-amber-deep flex items-center justify-center shrink-0 text-[11px] font-medium">
-              {i === 0 ? <Star size={12} /> : i + 1}
+            <div className="w-8 h-8 rounded-lg bg-amber-light text-amber-deep flex items-center justify-center shrink-0 text-[12px] font-medium">
+              {i === 0 ? <Star size={14} /> : i + 1}
             </div>
-            <span className="text-[13px] text-charcoal flex-1 min-w-0 truncate">{name}</span>
-            <span className="text-[12px] text-slate-400 shrink-0">
-              {count} {isSalon ? "booking" + (count === 1 ? "" : "s") : "sold"}
-            </span>
-            <span className="text-[13px] font-medium text-charcoal shrink-0 w-24 text-right">{formatTZS(p.revenue)}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] text-charcoal truncate">{name}</p>
+              <p className="text-[11px] text-slate-400">
+                {count} {isSalon ? "booking" + (count === 1 ? "" : "s") : "sold"}
+              </p>
+            </div>
+            <span className="text-[13px] font-medium text-charcoal shrink-0 tabular-nums">{formatTZS(p.revenue)}</span>
           </div>
         );
       })}
@@ -593,7 +634,7 @@ function ActivityRow({ item }: { item: ActivityItem }) {
   const Icon = meta.icon;
 
   return (
-    <div className="flex items-center gap-3 py-2.5">
+    <div className="flex items-center gap-3 rounded-lg px-2 py-2.5 hover:bg-page/70 transition-colors">
       <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${meta.color}`}>
         <Icon size={16} />
       </div>
