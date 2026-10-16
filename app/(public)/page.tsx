@@ -3,6 +3,7 @@ import { DASHBOARD_REGISTER_URL, WHATSAPP_CHAT_URL, WHATSAPP_NUMBER } from '@/li
 import AnimatedChat    from '@/components/AnimatedChat'
 import AnimatedRevenue from '@/components/AnimatedRevenue'
 import BusinessTypeFeatures from '@/components/BusinessTypeFeatures'
+import Testimonials from '@/components/Testimonials'
 import HeroAsk         from '@/components/HeroAsk'
 import HeroVisual      from '@/components/HeroVisual'
 import ProductDemo     from '@/components/ProductDemo'
@@ -819,198 +820,48 @@ export default function HomePage() {
       </section>
 
       {/* ── TESTIMONIALS ──────────────────────────────────────────────── */}
-      <section className="py-24 overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
-        <div className="max-w-6xl mx-auto px-6">
-
-          <FadeUp className="text-center mb-14">
-            <span className="text-xs font-medium text-coral uppercase tracking-widest">Testimonials</span>
-            <h2 className="font-serif text-4xl mt-3" style={{ color: 'var(--text-primary)' }}>
-              Loved by Beauty Businesses
-            </h2>
-          </FadeUp>
-
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: 'Nira imebadilisha biashara yangu kabisa. Sasa wateja wanaweza kupanga miadi usiku wa manane na bot inawajibu papo hapo!',
-                name: 'Grace Mwangi',
-                business: 'Glam Beauty Salon · Dar es Salaam',
-                avatar: (
-                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                    <defs><clipPath id="av-grace"><circle cx="26" cy="26" r="26"/></clipPath></defs>
-                    <g clipPath="url(#av-grace)">
-                      <rect width="52" height="52" fill="#F0ECFB"/>
-                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#8B5E3C"/>
-                      <ellipse cx="26" cy="28" rx="13" ry="14" fill="#8B5E3C"/>
-                      <ellipse cx="26" cy="16" rx="14" ry="8" fill="#2C1810"/>
-                      <ellipse cx="14" cy="22" rx="5" ry="7" fill="#2C1810"/>
-                      <ellipse cx="38" cy="22" rx="5" ry="7" fill="#2C1810"/>
-                      <ellipse cx="21" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="31" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="21.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="31.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="26" cy="31" rx="2" ry="1.2" fill="#7A5030"/>
-                      <path d="M22 34 Q26 37 30 34" stroke="#5C2E0A" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                      <circle cx="13" cy="29" r="2" fill="#FF6B6B"/>
-                      <circle cx="39" cy="29" r="2" fill="#FF6B6B"/>
-                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#6B4226"/>
-                    </g>
-                  </svg>
-                ),
-              },
-              {
-                quote: 'I used to spend 3 hours a day just answering WhatsApp messages. Now Nira handles everything and I focus on my clients. Best decision I made.',
-                name: 'Amina Hassan',
-                business: 'Pure Glow Spa · Nairobi',
-                avatar: (
-                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                    <defs><clipPath id="av-amina"><circle cx="26" cy="26" r="26"/></clipPath></defs>
-                    <g clipPath="url(#av-amina)">
-                      <rect width="52" height="52" fill="#FFE8E8"/>
-                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#A0673A"/>
-                      <ellipse cx="26" cy="28" rx="13" ry="14" fill="#A0673A"/>
-                      <rect x="10" y="16" width="5" height="22" rx="2.5" fill="#3D1F00"/>
-                      <rect x="37" y="16" width="5" height="22" rx="2.5" fill="#3D1F00"/>
-                      <ellipse cx="26" cy="15" rx="14" ry="7" fill="#3D1F00"/>
-                      <rect x="23.5" y="8" width="5" height="18" rx="2.5" fill="#3D1F00"/>
-                      <ellipse cx="21" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="31" cy="27" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="21.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="31.5" cy="26.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="26" cy="31" rx="2" ry="1.2" fill="#8B5A2B"/>
-                      <path d="M22 34 Q26 37.5 30 34" stroke="#6B3F15" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                      <circle cx="13" cy="28" r="2.5" fill="none" stroke="#F5C842" strokeWidth="1.5"/>
-                      <circle cx="39" cy="28" r="2.5" fill="none" stroke="#F5C842" strokeWidth="1.5"/>
-                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#7A4F25"/>
-                    </g>
-                  </svg>
-                ),
-              },
-              {
-                quote: 'My cosmetics shop doubled orders in 2 months. Customers love how easy it is to order through WhatsApp. Nira is simply the best.',
-                name: 'Zainab Ali',
-                business: 'Zainab Beauty · Mombasa',
-                avatar: (
-                  <svg width="44" height="44" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                    <defs><clipPath id="av-zainab"><circle cx="26" cy="26" r="26"/></clipPath></defs>
-                    <g clipPath="url(#av-zainab)">
-                      <rect width="52" height="52" fill="#E4F7F3"/>
-                      <rect x="21" y="35" width="10" height="10" rx="3" fill="#5C3317"/>
-                      <ellipse cx="26" cy="29" rx="13" ry="13" fill="#5C3317"/>
-                      <ellipse cx="26" cy="17" rx="16" ry="11" fill="#6BCFB8"/>
-                      <ellipse cx="26" cy="14" rx="14" ry="7" fill="#4DB8A0"/>
-                      <ellipse cx="26" cy="9" rx="7" ry="5" fill="#6BCFB8"/>
-                      <rect x="10" y="20" width="7" height="16" rx="3" fill="#6BCFB8"/>
-                      <rect x="35" y="20" width="7" height="16" rx="3" fill="#6BCFB8"/>
-                      <ellipse cx="21" cy="28" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="31" cy="28" rx="2.5" ry="2" fill="#1A0A00"/>
-                      <ellipse cx="21.5" cy="27.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="31.5" cy="27.5" rx="0.8" ry="0.6" fill="white"/>
-                      <ellipse cx="26" cy="32" rx="2" ry="1.2" fill="#4A2610"/>
-                      <path d="M22 35 Q26 38 30 35" stroke="#3A1A06" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                      <ellipse cx="26" cy="52" rx="18" ry="8" fill="#4A2610"/>
-                    </g>
-                  </svg>
-                ),
-              },
-            ].map((t) => (
-              <StaggerItem key={t.name}>
-                <TiltCard className="h-full">
-                <div
-                  className="rounded-2xl p-7 h-full flex flex-col transition-shadow duration-300 hover:shadow-xl"
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    boxShadow: 'var(--shadow-md)',
-                  }}
-                >
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <svg key={i} className="w-4 h-4 text-coral" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    ))}
-                  </div>
-
-                  {/* Quote marks */}
-                  <p
-                    className="font-serif leading-none mb-3 select-none"
-                    style={{ fontSize: 48, color: 'var(--coral)', opacity: 0.3 }}
-                  >
-                    &ldquo;
-                  </p>
-
-                  {/* Quote text */}
-                  <p className="leading-[1.7] mb-6 flex-1 text-[15px]" style={{ color: 'var(--text-primary)' }}>
-                    {t.quote}
-                  </p>
-
-                  {/* Author */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex-shrink-0 rounded-full overflow-hidden"
-                      style={{ border: '2px solid var(--coral)', width: 44, height: 44 }}
-                    >
-                      {t.avatar}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t.name}</p>
-                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.business}</p>
-                    </div>
-                  </div>
-                </div>
-                </TiltCard>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      <Testimonials />
 
       {/* ── DOWNLOAD CTA ──────────────────────────────────────────────── */}
-      <section id="download" className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-coral via-[#ff8585] to-[#E55555]" />
-        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white opacity-[0.06] translate-x-1/3 -translate-y-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-white opacity-[0.06] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
+      <section id="download" className="px-4 pb-20 pt-4 sm:px-6" style={{ backgroundColor: 'var(--bg-surface)' }}>
+        <ScaleIn>
+          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[28px] bg-gradient-to-br from-coral via-[#ff7f7f] to-[#E55555] px-6 py-12 sm:px-12 md:py-14">
+            <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full border-[40px] border-white/10" aria-hidden="true" />
+            <div className="pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
 
-        <div className="max-w-2xl mx-auto px-6 text-center relative">
-          <FadeUp>
-            <p className="text-white/70 text-sm font-medium uppercase tracking-widest mb-4">Start today · No monthly subscription</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-white mb-5">
-              Grow Your Beauty Business with AI
-            </h2>
-            <p className="text-white/80 text-lg mb-10 leading-relaxed">
-              Join 500+ beauty businesses in East Africa using Nira to serve customers 24/7. Low-cost to start, no technical skills needed.
-            </p>
-          </FadeUp>
+            <div className="relative grid items-center gap-8 md:grid-cols-[1.6fr_1fr]">
+              <div>
+                <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-white/75">Start today · No monthly subscription</p>
+                <h2 className="mt-3 font-serif text-[32px] leading-tight text-white md:text-[38px]">
+                  Grow your beauty business <span className="whitespace-nowrap">with AI</span>
+                </h2>
+                <p className="mt-3 max-w-lg text-[16px] leading-relaxed text-white/85">
+                  Join 500+ beauty businesses in East Africa using Nira to serve customers 24/7. Low-cost to start, no technical skills needed.
+                </p>
+              </div>
 
-          {/* Scales into place rather than fading, the signature CTA moment of this page */}
-          <ScaleIn delay={0.1}>
-            <Link
-              href={DASHBOARD_REGISTER_URL}
-              className="btn-press inline-flex items-center gap-2 bg-white text-coral-dark font-medium px-8 py-4 rounded-full shadow-lg hover:bg-coral-light transition-colors mb-6"
-            >
-              Get started with Nira
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </ScaleIn>
-
-          <FadeUp delay={0.2}>
-            <p className="text-white/70 text-sm mb-3">
-              Prefer a human? Message us directly and we&apos;ll set your business up.
-            </p>
-            <a
-              href={WHATSAPP_CHAT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-press inline-flex items-center gap-2 bg-transparent border border-white/40 text-white font-medium px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
-            >
-              Chat on WhatsApp
-            </a>
-          </FadeUp>
-        </div>
+              <div className="flex flex-col gap-3 md:items-end">
+                <Link
+                  href={DASHBOARD_REGISTER_URL}
+                  className="btn-press group inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-white px-7 text-[16px] font-medium text-coral-dark shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl md:w-[260px]"
+                >
+                  Get started with Nira
+                  <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <a
+                  href={WHATSAPP_CHAT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-press inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/40 px-7 text-[15px] font-medium text-white transition-colors hover:bg-white/10 md:w-[260px]"
+                >
+                  Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </ScaleIn>
       </section>
 
     </div>
